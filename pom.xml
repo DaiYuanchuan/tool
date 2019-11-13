@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>cn.novelweb</groupId>
+    <artifactId>tool</artifactId>
+    <version>1.0</version>
+
+    <!-- 项目说明 -->
+    <name>${project.artifactId}</name>
+    <description>个人Java工具类库(持续更新中...)</description>
+    <url>https://www.novelweb.cn/</url>
+    <!-- 项目说明 -->
+
+    <!-- JDK版本号 -->
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <java.version>1.8</java.version>
+    </properties>
+    <!-- JDK版本号 -->
+
+    <!-- 设置spring boot的parent start -->
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>2.2.0.RELEASE</version>
+    </parent>
+    <!-- 设置spring boot的parent end -->
+
+    <!-- spring maven 远程仓库 start -->
+    <repositories>
+        <repository>
+            <id>springsource-milestone</id>
+            <url>http://repository.springsource.com/maven/bundles/milestone</url>
+        </repository>
+        <repository>
+            <id>spring-milestone</id>
+            <url>http://repo.spring.io/libs-release</url>
+        </repository>
+        <repository>
+            <id>atlassian-m2-repository</id>
+            <url>https://m2proxy.atlassian.com/repository/public</url>
+        </repository>
+    </repositories>
+    <!-- spring maven 远程仓库 end -->
+
+    <dependencies>
+
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.11</version>
+            <scope>test</scope>
+        </dependency>
+
+        <!-- HTML解析工具 start -->
+        <dependency>
+            <groupId>net.sourceforge.nekohtml</groupId>
+            <artifactId>nekohtml</artifactId>
+            <version>1.9.22</version>
+        </dependency>
+        <!-- HTML解析工具 end -->
+
+        <!-- 添加 spring boot 依赖包 start -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-aop</artifactId>
+        </dependency>
+        <!-- 添加 spring boot 依赖包 end -->
+
+        <!-- 上传文件 start -->
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <version>2.4</version>
+        </dependency>
+        <dependency>
+            <groupId>commons-lang</groupId>
+            <artifactId>commons-lang</artifactId>
+            <version>2.6</version>
+        </dependency>
+        <dependency>
+            <groupId>commons-fileupload</groupId>
+            <artifactId>commons-fileupload</artifactId>
+            <version>1.3.3</version>
+        </dependency>
+        <dependency>
+            <groupId>commons-net</groupId>
+            <artifactId>commons-net</artifactId>
+            <version>3.6</version>
+        </dependency>
+        <!-- 上传文件 end -->
+
+        <!-- lombok start -->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.18.10</version>
+            <scope>provided</scope>
+            <optional>true</optional>
+        </dependency>
+        <!-- lombok end -->
+
+        <!-- Swagger.jar -->
+        <dependency>
+            <groupId>io.springfox</groupId>
+            <artifactId>springfox-swagger2</artifactId>
+            <version>2.9.2</version>
+        </dependency>
+        <!-- 使用自定义的 swagger 样式 -->
+        <dependency>
+            <groupId>com.github.caspar-chen</groupId>
+            <artifactId>swagger-ui-layer</artifactId>
+            <version>1.1.3</version>
+        </dependency>
+        <!-- Swagger.jar end -->
+
+        <!-- 阿里 解析 json 工具 start -->
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>fastjson</artifactId>
+            <version>1.2.62</version>
+        </dependency>
+        <!-- 阿里 解析 json 工具 end -->
+
+    </dependencies>
+
+    <build>
+
+        <!-- maven 打包 命令 (mvn clean install) 这个是打包后的名字 -->
+        <finalName>tool</finalName>
+        <!-- 打包 插件 start -->
+        <plugins>
+
+            <!-- 构建源码jar包 -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>attach-sources</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <attach>true</attach>
+                </configuration>
+            </plugin>
+
+        </plugins>
+        <!-- 打包插件 end -->
+
+    </build>
+
+</project>
