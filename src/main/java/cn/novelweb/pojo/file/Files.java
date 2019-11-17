@@ -9,10 +9,10 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
- * @program: tool
- * @description: 上传的文件信息
- * @author: Dai Yuanchuan
- * @create: 2019-10-28 14:55
+ * <p>上传的文件信息</p>
+ * 2019-10-28 14:55
+ *
+ * @author Dai Yuanchuan
  **/
 @NoArgsConstructor
 @AllArgsConstructor

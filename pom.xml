@@ -13,6 +13,55 @@
     <url>https://www.novelweb.cn/</url>
     <!-- 项目说明 -->
 
+    <!-- 颁发者信息 -->
+    <licenses>
+        <license>
+            <name>The Apache Software License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+
+    <!--SCM(Source Control Management)标签允许你配置你的代码库，供Maven web站点和其它插件使用。-->
+    <scm>
+        <tag>master</tag>
+        <url>git@github.com:DaiYuanchuan/tool.git</url>
+        <connection>scm:git:git@github.com:DaiYuanchuan/tool.git</connection>
+        <developerConnection>scm:git:https://github.com/DaiYuanchuan/tool.git</developerConnection>
+    </scm>
+
+    <!-- 发布者信息 -->
+    <developers>
+        <!--某个项目开发者的信息-->
+        <developer>
+            <!--SCM里项目开发者的唯一标识符-->
+            <name>yuanchuan dai</name>
+            <email>novel-web@novelweb.cn</email>
+            <!--项目开发者所属组织-->
+            <organization>novelweb</organization>
+            <!--项目开发者所属组织的URL-->
+            <organizationUrl>https://www.novelweb.cn/</organizationUrl>
+            <!--项目开发者的主页的URL-->
+            <url>https://github.com/DaiYuanchuan/tool</url>
+        </developer>
+    </developers>
+
+    <!--项目分发信息，在执行mvn deploy后表示要发布的位置。有了这些信息就可以把网站部署到远程服务器或者把构件部署到远程仓库。-->
+    <distributionManagement>
+        <!-- 快照 仓库地址 -->
+        <snapshotRepository>
+            <id>sonatype-snapshots</id>
+            <name>Sonatype Nexus Snapshots</name>
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+        </snapshotRepository>
+        <!-- 正式 仓库地址 -->
+        <repository>
+            <id>sonatype-staging</id>
+            <name>Nexus Release Repository</name>
+            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2</url>
+        </repository>
+    </distributionManagement>
+
     <!-- JDK版本号 -->
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -133,35 +182,99 @@
         </dependency>
         <!-- 阿里 解析 json 工具 end -->
 
+        <!-- 官方通用配置oss-parent -->
+        <dependency>
+            <groupId>org.sonatype.oss</groupId>
+            <artifactId>oss-parent</artifactId>
+            <version>9</version>
+            <type>pom</type>
+        </dependency>
+
     </dependencies>
 
-    <build>
+    <profiles>
+        <profile>
+            <id>tool</id>
+            <build>
+                <!-- 这个是打包后的jar名字 -->
+                <finalName>tool</finalName>
+                <plugins>
+                    <!-- 构建源码jar包 -->
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-shade-plugin</artifactId>
+                        <version>3.2.1</version>
+                        <executions>
+                            <execution>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>shade</goal>
+                                </goals>
+                                <configuration>
+                                    <!-- 创建源码jar -->
+                                    <createSourcesJar>true</createSourcesJar>
+                                    <artifactSet>
+                                        <includes>
+                                            <include>${project.groupId}:*:*</include>
+                                        </includes>
+                                    </artifactSet>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
 
-        <!-- maven 打包 命令 (mvn clean install) 这个是打包后的名字 -->
-        <finalName>tool</finalName>
-        <!-- 打包 插件 start -->
-        <plugins>
+                    <!-- resources plugin,Maven 资源插件 -->
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-source-plugin</artifactId>
+                        <version>3.1.0</version>
+                        <executions>
+                            <execution>
+                                <id>attach-sources</id>
+                                <goals>
+                                    <goal>jar-no-fork</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
 
-            <!-- 构建源码jar包 -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-source-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>attach-sources</id>
-                        <goals>
-                            <goal>jar</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <configuration>
-                    <attach>true</attach>
-                </configuration>
-            </plugin>
+                    <!-- doc plugin,Maven API文档生成插件 -->
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-javadoc-plugin</artifactId>
+                        <version>3.1.1</version>
+                        <executions>
+                            <execution>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>jar</goal>
+                                </goals>
+                                <configuration>
+                                    <additionalJOption>-Xdoclint:none</additionalJOption>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
 
-        </plugins>
-        <!-- 打包插件 end -->
+                    <!-- gpg plugin,用于签名认证 -->
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-gpg-plugin</artifactId>
+                        <version>1.6</version>
+                        <executions>
+                            <execution>
+                                <id>sign-artifacts</id>
+                                <phase>verify</phase>
+                                <goals>
+                                    <goal>sign</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
 
-    </build>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 
 </project>

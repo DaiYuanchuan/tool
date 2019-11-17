@@ -10,10 +10,10 @@ import lombok.NoArgsConstructor;
 import org.springframework.web.multipart.MultipartFile;
 
 /**
- * @program: tool
- * @description: 上传文件需要用的基本参数(包含分片数据)
- * @author: Dai Yuanchuan
- * @create: 2019-10-29 22:23
+ * <p>上传文件需要用的基本参数(包含分片数据)</p>
+ * 2019-10-29 22:23
+ *
+ * @author Dai Yuanchuan
  **/
 @NoArgsConstructor
 @AllArgsConstructor

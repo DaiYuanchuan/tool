@@ -18,10 +18,10 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
- * @program: tool
- * @description: 本地文件上传工具类
- * @author: Dai Yuanchuan
- * @create: 2019-10-28 14:19
+ * <p>本地文件上传工具类</p>
+ * 2019-10-28 14:19
+ *
+ * @author Dai Yuanchuan
  **/
 public class LocalUpload {
 

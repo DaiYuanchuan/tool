@@ -1,10 +1,10 @@
 package cn.novelweb.config;
 
 /**
- * @program: tool
- * @description: 基本常量配置
- * @author: Dai Yuanchuan
- * @create: 2019-10-30 02:02
+ * <p>基本常量配置</p>
+ * 2019-10-30 02:02
+ *
+ * @author Dai Yuanchuan
  **/
 public class ConstantConfiguration {
 

@@ -6,10 +6,10 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 /**
- * @program: tool
- * @description: 状态返回类
- * @author: Dai Yuanchuan
- * @create: 2019-10-30 02:00
+ * <p>状态返回类</p>
+ * 2019-10-30 02:00
+ *
+ * @author Dai Yuanchuan
  **/
 @ApiModel(value = "返回信息")
 @JsonInclude(JsonInclude.Include.NON_NULL)
