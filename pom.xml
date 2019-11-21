@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>cn.novelweb</groupId>
     <artifactId>tool</artifactId>
-    <version>1.0</version>
+    <version>1.1</version>
 
     <!-- 项目说明 -->
     <name>${project.artifactId}</name>
@@ -74,7 +74,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.2.0.RELEASE</version>
+        <version>2.2.1.RELEASE</version>
     </parent>
     <!-- 设置spring boot的parent end -->
 
@@ -181,6 +181,20 @@
             <version>1.2.62</version>
         </dependency>
         <!-- 阿里 解析 json 工具 end -->
+
+        <!-- HuTool工具类 -->
+        <dependency>
+            <groupId>cn.hutool</groupId>
+            <artifactId>hutool-all</artifactId>
+            <version>5.0.6</version>
+        </dependency>
+
+        <!-- IP实际地址位置查询工具(不包含数据源) -->
+        <dependency>
+            <groupId>org.lionsoul</groupId>
+            <artifactId>ip2region</artifactId>
+            <version>1.7.2</version>
+        </dependency>
 
         <!-- 官方通用配置oss-parent -->
         <dependency>
