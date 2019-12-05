@@ -3,7 +3,6 @@ package cn.novelweb.tool.http;
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.lang.Singleton;
 import cn.hutool.core.net.NetUtil;
-import cn.novelweb.pojo.address.Region;
 import org.lionsoul.ip2region.DataBlock;
 import org.lionsoul.ip2region.DbConfig;
 import org.lionsoul.ip2region.DbSearcher;

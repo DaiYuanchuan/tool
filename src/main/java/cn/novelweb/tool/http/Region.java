@@ -1,4 +1,4 @@
-package cn.novelweb.pojo.address;
+package cn.novelweb.tool.http;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import io.swagger.annotations.ApiModel;

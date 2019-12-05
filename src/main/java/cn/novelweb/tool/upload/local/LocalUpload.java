@@ -1,9 +1,9 @@
 package cn.novelweb.tool.upload.local;
 
+import cn.novelweb.tool.upload.file.Files;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import cn.novelweb.pojo.file.Files;
 import cn.novelweb.tool.http.Result;
 import cn.novelweb.tool.upload.local.pojo.UploadFileParam;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;

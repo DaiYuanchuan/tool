@@ -1,4 +1,4 @@
-package cn.novelweb.pojo.file;
+package cn.novelweb.tool.upload.file;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import io.swagger.annotations.ApiModel;
