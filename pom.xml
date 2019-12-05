@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>cn.novelweb</groupId>
     <artifactId>tool</artifactId>
-    <version>1.1</version>
+    <version>1.2</version>
 
     <!-- 项目说明 -->
     <name>${project.artifactId}</name>
@@ -186,7 +186,7 @@
         <dependency>
             <groupId>cn.hutool</groupId>
             <artifactId>hutool-all</artifactId>
-            <version>5.0.6</version>
+            <version>5.0.7</version>
         </dependency>
 
         <!-- IP实际地址位置查询工具(不包含数据源) -->
@@ -195,6 +195,22 @@
             <artifactId>ip2region</artifactId>
             <version>1.7.2</version>
         </dependency>
+
+        <!-- 七牛云SDK包start -->
+        <dependency>
+            <groupId>com.qiniu</groupId>
+            <artifactId>qiniu-java-sdk</artifactId>
+            <version>[7.2.0, 7.2.99]</version>
+        </dependency>
+        <!-- 七牛云SDK包end -->
+
+        <!-- 腾讯云SDK包start -->
+        <dependency>
+            <groupId>com.qcloud</groupId>
+            <artifactId>cos_api</artifactId>
+            <version>5.6.9</version>
+        </dependency>
+        <!-- 腾讯云SDK包end -->
 
         <!-- 官方通用配置oss-parent -->
         <dependency>
