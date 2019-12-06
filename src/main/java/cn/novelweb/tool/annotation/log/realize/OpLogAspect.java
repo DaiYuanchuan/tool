@@ -75,12 +75,14 @@ public class OpLogAspect {
             ServletRequestAttributes requestAttributes = (ServletRequestAttributes)
                     RequestContextHolder.getRequestAttributes();
             if (requestAttributes != null) {
-                opLogInfo.setParameter(JSONObject.toJSONString(requestAttributes.getRequest().getParameterMap()));
+                opLogInfo.setParameter(JSONObject.toJSONString(
+                        requestAttributes.getRequest().getParameterMap()));
             } else {
                 opLogInfo.setParameter("无法获取request信息");
             }
         }
         // 异步执行任务回调
-        ThreadUtil.execAsync(() -> TaskCallback.callback(OpLogCompletionHandler.class, opLogInfo));
+        ThreadUtil.execAsync(() -> TaskCallback
+                .callback(OpLogCompletionHandler.class, opLogInfo));
     }
 }

@@ -59,6 +59,7 @@ public class AccessLogAspect {
                 accessLog.isGetIp(), e);
 
         // 异步执行任务回调
-        ThreadUtil.execAsync(() -> TaskCallback.callback(AccessLogCompletionHandler.class, accessLogInfo));
+        ThreadUtil.execAsync(() -> TaskCallback
+                .callback(AccessLogCompletionHandler.class, accessLogInfo));
     }
 }
