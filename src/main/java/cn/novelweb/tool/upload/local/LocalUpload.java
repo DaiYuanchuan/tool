@@ -1,6 +1,6 @@
 package cn.novelweb.tool.upload.local;
 
-import cn.novelweb.tool.upload.file.Files;
+import cn.novelweb.tool.upload.file.FileInfo;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
@@ -183,14 +183,14 @@ public class LocalUpload {
                 throw new Exception("文件重命名时失败");
             }
             // 全部上传成功后构建文件对象
-            Files files = Files.builder()
+            FileInfo fileInfo = FileInfo.builder()
                     .hash(param.getMd5())
                     .name(param.getName())
                     .type(param.getFile().getContentType())
                     .path(tmpFile.getParent() + File.separatorChar + param.getName())
                     .createTime(System.currentTimeMillis())
                     .build();
-            return Result.ok(HttpStatus.CREATED.toString(), "文件上传完成", files);
+            return Result.ok(HttpStatus.CREATED.toString(), "文件上传完成", fileInfo);
         } catch (IOException e) {
             e.printStackTrace();
             return Result.error("文件上传失败");
@@ -252,14 +252,14 @@ public class LocalUpload {
         }
 
         // 上传成功后构建文件对象
-        Files files = Files.builder()
+        FileInfo fileInfo = FileInfo.builder()
                 .hash(param.getMd5())
                 .name(param.getName())
                 .type(param.getFile().getContentType())
                 .path(uploadFile.getPath())
                 .createTime(System.currentTimeMillis())
                 .build();
-        return Result.ok(HttpStatus.CREATED.toString(), "文件上传完成", files);
+        return Result.ok(HttpStatus.CREATED.toString(), "文件上传完成", fileInfo);
     }
 
     /**

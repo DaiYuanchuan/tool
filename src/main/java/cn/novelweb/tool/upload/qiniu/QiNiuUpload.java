@@ -86,7 +86,7 @@ public class QiNiuUpload {
      * 获取七牛云桶管理器
      * 参考文档：<a href="http://developer.qiniu.com/kodo/api/rs">资源管理</a>
      *
-     * @param region  需要上传到的区域
+     * @param region 需要上传到的区域
      * @return 返回七牛云桶管理器<code>BucketManager</code>类
      */
     public static BucketManager getBucketManager(Region region) {
@@ -177,7 +177,7 @@ public class QiNiuUpload {
      * @throws IOException 抛出IO异常
      */
     public static void uploader(final byte[] data, final String key, final String token, StringMap params,
-                         String mime, boolean checkCrc, UpCompletionHandler handler, Region region) throws IOException {
+                                String mime, boolean checkCrc, UpCompletionHandler handler, Region region) throws IOException {
         buildUploadManager(region).asyncPut(data, key, token, params, mime, checkCrc, handler);
     }
 
@@ -194,7 +194,7 @@ public class QiNiuUpload {
      * @throws IOException 抛出IO异常
      */
     public static void uploader(final byte[] data, final String key, final String token,
-                         UpCompletionHandler handler, Region region) throws IOException {
+                                UpCompletionHandler handler, Region region) throws IOException {
         buildUploadManager(region).asyncPut(data, key, token, null, null, false, handler);
     }
 
@@ -312,6 +312,32 @@ public class QiNiuUpload {
      */
     public static String getUploadToken(String key) {
         return Auth.create(accessKey, secretKey).uploadToken(bucket, key);
+    }
+
+    /**
+     * 生成token
+     * 指定有效时长
+     *
+     * @param expires 有效时长，单位秒。默认3600s
+     * @return 生成的上传token
+     */
+    public static String getUploadToken(long expires) {
+        return Auth.create(accessKey, secretKey)
+                .uploadToken(bucket, null, expires, null, true);
+    }
+
+    /**
+     * 生成token
+     * 指定key、指定有效时长
+     * 同名文件覆盖操作、只能上传指定key的文件
+     *
+     * @param key     七牛云上传唯一标识 ，同名的覆盖，可为null
+     * @param expires 有效时长，单位秒。默认3600s
+     * @return 生成上传的token
+     */
+    public static String getUploadToken(String key, long expires) {
+        return Auth.create(accessKey, secretKey)
+                .uploadToken(bucket, key, expires, null, true);
     }
 
     /**

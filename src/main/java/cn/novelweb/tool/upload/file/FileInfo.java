@@ -20,7 +20,7 @@ import lombok.NoArgsConstructor;
 @Data
 @ApiModel(value = "上传的文件存储信息")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class Files {
+public class FileInfo {
 
     @ApiModelProperty(value = "文件的哈希值,或者MD5值", required = true)
     private String hash;
