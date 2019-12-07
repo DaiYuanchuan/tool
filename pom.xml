@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>cn.novelweb</groupId>
     <artifactId>tool</artifactId>
-    <version>1.2</version>
+    <version>1.2.2</version>
 
     <!-- 项目说明 -->
     <name>${project.artifactId}</name>
@@ -91,19 +91,6 @@
         <repository>
             <id>atlassian-m2-repository</id>
             <url>https://m2proxy.atlassian.com/repository/public</url>
-        </repository>
-        <!-- 添加 指定的 maven 仓库地址 -->
-        <repository>
-            <id>bintray-qcloud-maven-repo</id>
-            <name>qcloud-maven-repo</name>
-            <url>https://dl.bintray.com/qcloud/maven-repo/</url>
-            <layout>default</layout>
-            <releases>
-                <enabled>true</enabled>
-            </releases>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
         </repository>
     </repositories>
     <!-- spring maven 远程仓库 end -->
@@ -222,11 +209,6 @@
             <groupId>com.qcloud</groupId>
             <artifactId>cos_api</artifactId>
             <version>5.6.9</version>
-        </dependency>
-        <dependency>
-            <groupId>com.tencent.cloud</groupId>
-            <artifactId>cos-sts-java</artifactId>
-            <version>3.0.5</version>
         </dependency>
         <!-- 腾讯云SDK包end -->
 

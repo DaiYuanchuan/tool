@@ -12,7 +12,6 @@ import com.qcloud.cos.exception.MultiObjectDeleteException;
 import com.qcloud.cos.model.*;
 import com.qcloud.cos.transfer.TransferManager;
 import com.qcloud.cos.transfer.Upload;
-import com.tencent.cloud.CosStsClient;
 import com.qcloud.cos.auth.COSCredentials;
 import lombok.extern.slf4j.Slf4j;
 import com.qcloud.cos.region.Region;
@@ -84,7 +83,7 @@ public class CosUpload {
      * 使用临时密钥时需要指定
      * 临时密钥允许操作的权限列表
      * 简单上传、表单上传和分片上传需要以下的权限
-     * 其他权限参考{@link //cloud.tencent.com/document/product/436/31923}
+     * 其他权限参考 //cloud.tencent.com/document/product/436/31923
      */
     public static String[] allowActions = new String[]{
             // 简单上传
@@ -123,56 +122,6 @@ public class CosUpload {
     }
 
     /**
-     * 使用 临时密钥 初始化 COSClient
-     * 使用 自定义的 ClientConfig 类
-     * 通过临时密钥方式，则可以方便、有效地解决权限控制问题
-     *
-     * @param clientConfig    自定义的 ClientConfig 类 参考:
-     *                        //cloud.tencent.com/document/product/436/10199
-     *                        //cloud.tencent.com/document/product/436/30746#sdk-.E5.A6.82.E4.BD.95.E5.88.9B.E5.BB.BA.E7.9B.AE.E5.BD.95.EF.BC.9F
-     * @param allowPrefix     允许上传的路径前缀,例子：a.jpg 或者 a/* 或者 *
-     *                        如果填写了“*”，将允许用户访问所有资源
-     * @param durationSeconds 临时密钥有效时长,单位是秒,默认1800秒,最长可设定有效期为7200秒
-     * @return 返回 临时密钥 COSClient 对象
-     */
-    public static COSClient initTemKeyCosClient(ClientConfig clientConfig, String allowPrefix, int durationSeconds) {
-        TreeMap<String, Object> config = new TreeMap<>();
-        config.put("SecretId", secretId);
-        config.put("SecretKey", secretKey);
-        config.put("durationSeconds", durationSeconds);
-        config.put("bucket", bucket);
-        config.put("region", regionName.getRegionName());
-        config.put("allowPrefix", allowPrefix);
-        config.put("allowActions", allowActions);
-        try {
-            org.json.JSONObject credential = CosStsClient.getCredential(config);
-            org.json.JSONObject jsonObject = credential.getJSONObject("credentials");
-            String tmpSecretId = jsonObject.getString("tmpSecretId");
-            String tmpSecretKey = jsonObject.getString("tmpSecretKey");
-            String sessionToken = jsonObject.getString("sessionToken");
-            BasicSessionCredentials cred = new BasicSessionCredentials(tmpSecretId, tmpSecretKey, sessionToken);
-            return new COSClient(cred, clientConfig);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
-
-    /**
-     * 使用 临时密钥 初始化 COSClient
-     * 通过临时密钥方式，则可以方便、有效地解决权限控制问题
-     *
-     * @param allowPrefix     允许上传的路径前缀,例子：a.jpg 或者 a/* 或者 *
-     *                        如果填写了“*”，将允许用户访问所有资源
-     * @param durationSeconds 临时密钥有效时长,单位是秒,默认1800秒,最长可设定有效期为7200秒
-     * @return 返回 临时密钥 COSClient 对象
-     */
-    public static COSClient initTemKeyCosClient(String allowPrefix, int durationSeconds) {
-        ClientConfig clientConfig = new ClientConfig(regionName);
-        return initTemKeyCosClient(clientConfig, allowPrefix, durationSeconds);
-    }
-
-    /**
      * 创建存储桶
      * 用户确定地域和存储桶名称后，即可创建存储桶
      * 创建存储桶需要使用永久密钥初始化的COSClient
@@ -180,7 +129,7 @@ public class CosUpload {
      * @param regionName  cos 地区,定义你要在哪创建这个存储桶 "ap-shanghai"
      * @param bucket      需要创建的存储桶名称,格式：BucketName-APPID
      * @param controlList 存储桶 bucket 的权限 PublicRead(公有读私有写), 其他可选有私有读写, 公有读写
-     * @return
+     * @return 返回存储桶对象
      */
     public static Bucket createBucket(String regionName, String bucket, CannedAccessControlList controlList) {
         // 获取COS客户端实例
