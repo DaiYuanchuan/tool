@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>cn.novelweb</groupId>
     <artifactId>tool</artifactId>
-    <version>1.2.2</version>
+    <version>1.2.3</version>
 
     <!-- 项目说明 -->
     <name>${project.artifactId}</name>
@@ -211,6 +211,20 @@
             <version>5.6.9</version>
         </dependency>
         <!-- 腾讯云SDK包end -->
+
+        <!-- 视频流需要引用的包start -->
+        <!-- 包与包之间存在引用关系:http://bytedeco.org/download/ -->
+        <dependency>
+            <groupId>org.bytedeco</groupId>
+            <artifactId>javacv</artifactId>
+            <version>1.5.2</version>
+        </dependency>
+        <dependency>
+            <groupId>org.bytedeco</groupId>
+            <artifactId>ffmpeg-platform</artifactId>
+            <version>4.2.1-1.5.2</version>
+        </dependency>
+        <!-- 视频流需要引用的包end -->
 
         <!-- 官方通用配置oss-parent -->
         <dependency>
