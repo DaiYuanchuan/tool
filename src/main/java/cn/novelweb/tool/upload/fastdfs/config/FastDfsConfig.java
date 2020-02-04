@@ -2,7 +2,6 @@ package cn.novelweb.tool.upload.fastdfs.config;
 
 import cn.novelweb.tool.upload.fastdfs.FastDfsClient;
 import cn.novelweb.tool.upload.fastdfs.utils.IniFileReader;
-import cn.novelweb.tool.upload.fastdfs.utils.Log;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -34,7 +33,6 @@ public class FastDfsConfig {
     private static final String FAST_DFS_MAX_TOTAL_PER_KEY = "fastdfs.maxTotalPerKey";
     private static final String FAST_DFS_MAX_IDLE_PER_KEY = "fastdfs.maxIdlePerKey";
     private static final String FAST_DFS_TRACKERS = "fastdfs.tracker_servers";
-    private static final String FAST_DFS_URL_PREFIX = "fastdfs.url_prefix";
 
     /**
      * 设置debug日志是否显示
@@ -61,7 +59,6 @@ public class FastDfsConfig {
 
     private Boolean debugLog;
     private String trackerServers;
-    private String urlPrefix;
 
     public static void init(String confFileName) {
         if (StringUtils.isBlank(confFileName)) {
@@ -77,7 +74,6 @@ public class FastDfsConfig {
             DFS_CONFIG.maxIdlePerKey = iniReader.getIntValue(FAST_DFS_MAX_IDLE_PER_KEY, DEFAULT_MAX_IDLE_PER_KEY);
             DFS_CONFIG.debugLog = iniReader.getBoolValue(FAST_DFS_DEBUG_LOG,true);
             DFS_CONFIG.trackerServers = iniReader.getStrValue(FAST_DFS_TRACKERS);
-            DFS_CONFIG.urlPrefix = iniReader.getStrValue(FAST_DFS_URL_PREFIX);
         } catch (Exception e) {
             e.printStackTrace();
         }

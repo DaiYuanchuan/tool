@@ -54,7 +54,7 @@ public class DefaultStorageClient implements StorageClient {
             return commandExecutor.execute(storageNodeInfo.getInetSocketAddress(), command);
         } catch (Throwable e) {
             log.error("获取文件元信息", e);
-            return new HashSet<MateData>();
+            return new HashSet<>();
         }
     }
 

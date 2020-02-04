@@ -1,6 +1,7 @@
 package cn.novelweb.tool.upload.fastdfs;
 
 import cn.hutool.core.io.FileUtil;
+import cn.hutool.core.io.IoUtil;
 import cn.hutool.core.thread.ThreadUtil;
 import cn.novelweb.tool.io.FileUtils;
 import cn.novelweb.tool.upload.fastdfs.callback.FastDfsUploadCompletionHandler;
@@ -17,7 +18,6 @@ import cn.novelweb.tool.upload.fastdfs.pool.ConnectionPool;
 import cn.novelweb.tool.upload.fastdfs.pool.PooledConnectionFactory;
 import cn.novelweb.tool.upload.fastdfs.protocol.storage.callback.DownloadCallback;
 import cn.novelweb.tool.upload.fastdfs.utils.Log;
-import com.alibaba.fastjson.JSON;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.pool2.impl.GenericKeyedObjectPoolConfig;
 
@@ -129,6 +129,36 @@ public class FastDfsClient {
     }
 
     /**
+     * 字符串上传
+     * 自定义组名称
+     *
+     * @param group       自定义组名
+     * @param str         需要上传的字符串
+     * @param ext         文件的扩展名(如:json)
+     * @param charsetName 字符集(如:UTF-8)
+     * @return 返回存储文件的路径信息
+     */
+    public static StorePath characterStringUploader(String group, String str,
+                                                    String ext, String charsetName) {
+        ByteArrayInputStream inputStream = IoUtil.toStream(str, charsetName);
+        return uploader(group, inputStream, inputStream.available(), ext);
+    }
+
+    /**
+     * 字符串上传
+     * 默认使用group1
+     * 默认字符集UTF-8
+     *
+     * @param str 需要上传的字符串
+     * @param ext 文件的扩展名(如:json)
+     * @return 返回存储文件的路径信息
+     */
+    public static StorePath characterStringUploader(String str, String ext) {
+        ByteArrayInputStream inputStream = IoUtil.toStream(str, "UTF-8");
+        return uploader(GROUP, inputStream, inputStream.available(), ext);
+    }
+
+    /**
      * 直接上传文件
      * group默认为group1
      *
@@ -191,7 +221,7 @@ public class FastDfsClient {
             return false;
         }
         int i = fileId.indexOf("/");
-        return storageClient.deleteFile(fileId.substring(0, i), fileId.substring(i) + 1);
+        return storageClient.deleteFile(fileId.substring(0, i), fileId.substring(i + 1));
     }
 
     /**
@@ -238,24 +268,21 @@ public class FastDfsClient {
     }
 
     /**
-     * 读取JSON类型的文件
-     * 如果是json类型的文件
+     * 字符串下载
+     * 将下载下的数据转为字符串
      *
      * @param groupName 组名称
      * @param path      主文件路径
      * @return 返回文本数据
      */
-    public static String readJsonFile(String groupName, String path) {
+    public static String characterStringDownload(String groupName, String path) {
         if (!successInit()) {
             return "";
         }
         return storageClient.downloadFile(groupName, path, (InputStream inputStream) -> {
             String string = FileUtils.inputStreamToString(inputStream);
             inputStream.close();
-            if (JSON.isValid(string)) {
-                return string;
-            }
-            return "";
+            return string;
         });
     }
 

@@ -103,7 +103,7 @@ public class TrackerLocator {
     public void setActive(InetSocketAddress address, boolean available) {
         TrackerAddressState holder = trackerAddressMap.get(address.toString());
         if (holder == null) {
-            log.warn("TrackerAddressMap获取TrackerAddressState为null, key={}, 设置连接是否有效失败[{}]", address, available);
+            Log.debug("TrackerAddressMap获取TrackerAddressState为null, key={}, 设置连接是否有效失败[{}]", address, available);
             return;
         }
         holder.setAvailable(available);

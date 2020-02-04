@@ -324,7 +324,7 @@ public class ReflectionsUtils {
                     return (Class) type;
                 }
             }
-            log.warn(clazz.getSimpleName() + "没有设置超泛型参数的实际类");
+            Log.debug(clazz.getSimpleName() + "没有设置超泛型参数的实际类");
             return Object.class;
         }
 
