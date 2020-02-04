@@ -2,9 +2,11 @@ package cn.novelweb.tool.io;
 
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.io.file.FileWriter;
+import org.apache.commons.lang.StringUtils;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
@@ -96,6 +98,42 @@ public class FileUtils {
     public static File write(File file, String content) {
         FileWriter writer = new FileWriter(file);
         return writer.write(content);
+    }
+
+    /**
+     * 将input流转为String字符串
+     * 默认使用UTF-8字符集
+     *
+     * @param inputStream 需要转换的input流
+     * @return 返回String字符串
+     */
+    public static String inputStreamToString(InputStream inputStream) {
+        return inputStreamToString(inputStream, "UTF-8");
+    }
+
+    /**
+     * 将input流转为String字符串
+     *
+     * @param inputStream 需要转换的input流
+     * @param charsetName 字符集名称[默认:UTF-8]
+     * @return 返回String字符串
+     */
+    public static String inputStreamToString(InputStream inputStream, String charsetName) {
+        java.io.ByteArrayOutputStream result = new java.io.ByteArrayOutputStream();
+        byte[] buffer = new byte[1024];
+        int length;
+        try {
+            while ((length = inputStream.read(buffer)) != -1) {
+                result.write(buffer, 0, length);
+            }
+            if (StringUtils.isBlank(charsetName)) {
+                return result.toString("UTF-8");
+            }
+            return result.toString(charsetName);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return "";
     }
 
     /**

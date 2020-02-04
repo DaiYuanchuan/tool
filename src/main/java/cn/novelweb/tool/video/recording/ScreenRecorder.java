@@ -8,6 +8,7 @@ import org.apache.commons.lang.StringUtils;
 import org.bytedeco.ffmpeg.global.avcodec;
 import org.bytedeco.javacv.FFmpegFrameRecorder;
 import org.bytedeco.javacv.Frame;
+import org.bytedeco.javacv.FrameRecorder;
 import org.bytedeco.javacv.Java2DFrameConverter;
 
 import javax.sound.sampled.*;
@@ -432,12 +433,16 @@ public class ScreenRecorder {
         recorder.setAudioBitrate(this.audioBitrate);
         // 重定向当前状态为 start
         current = start;
+        // 初始化Robot
         try {
-            // 初始化Robot
             robot = new Robot();
-            // 创建并设置编码器、打开编码器、申请必要的编码缓存区
+        } catch (AWTException e) {
+            log.error("初始化屏幕截图异常:"+e.getMessage());
+        }
+        // 创建并设置编码器、打开编码器、申请必要的编码缓存区
+        try {
             recorder.start();
-        } catch (Exception e) {
+        } catch (FrameRecorder.Exception e) {
             log.error("初始化编码器异常:" + e.getMessage());
         }
     }
