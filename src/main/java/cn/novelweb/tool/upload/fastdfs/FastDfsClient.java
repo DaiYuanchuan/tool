@@ -13,6 +13,7 @@ import cn.novelweb.tool.upload.fastdfs.config.FastDfsConfig;
 import cn.novelweb.tool.upload.fastdfs.conn.DefaultCommandExecutor;
 import cn.novelweb.tool.upload.fastdfs.model.FileInfo;
 import cn.novelweb.tool.upload.fastdfs.model.MateData;
+import cn.novelweb.tool.upload.fastdfs.model.StorageNode;
 import cn.novelweb.tool.upload.fastdfs.model.StorePath;
 import cn.novelweb.tool.upload.fastdfs.pool.ConnectionPool;
 import cn.novelweb.tool.upload.fastdfs.pool.PooledConnectionFactory;
@@ -38,10 +39,6 @@ public class FastDfsClient {
     private static TrackerClient trackerClient;
     private static StorageClient storageClient;
 
-    /**
-     * 未指定group时默认值
-     */
-    private static final String GROUP = "group1";
     private static boolean isSuccessInit = false;
 
     /**
@@ -78,7 +75,7 @@ public class FastDfsClient {
 
     /**
      * 上传input流
-     * group默认为group1
+     * 获取默认的group
      *
      * @param stream 需要上传的文件输入流
      * @param length 文件大小
@@ -86,7 +83,11 @@ public class FastDfsClient {
      * @return 返回存储文件的路径信息
      */
     public static StorePath uploader(InputStream stream, long length, String ext) {
-        return uploader(GROUP, stream, length, ext);
+        StorageNode node = trackerClient.getStorageNode();
+        if (node == null) {
+            return null;
+        }
+        return uploader(node.getGroupName(), stream, length, ext);
     }
 
     /**
@@ -146,7 +147,7 @@ public class FastDfsClient {
 
     /**
      * 字符串上传
-     * 默认使用group1
+     * 获取默认的使用group
      * 默认字符集UTF-8
      *
      * @param str 需要上传的字符串
@@ -155,12 +156,16 @@ public class FastDfsClient {
      */
     public static StorePath characterStringUploader(String str, String ext) {
         ByteArrayInputStream inputStream = IoUtil.toStream(str, "UTF-8");
-        return uploader(GROUP, inputStream, inputStream.available(), ext);
+        StorageNode node = trackerClient.getStorageNode();
+        if (node == null) {
+            return null;
+        }
+        return uploader(node.getGroupName(), inputStream, inputStream.available(), ext);
     }
 
     /**
      * 直接上传文件
-     * group默认为group1
+     * 获取默认的group
      *
      * @param file 需要上传的文件
      * @return 返回存储文件的路径信息
@@ -168,7 +173,11 @@ public class FastDfsClient {
     public static StorePath uploader(File file) {
         try {
             InputStream stream = new FileInputStream(file.getAbsolutePath());
-            return uploader(GROUP, stream, file.length(),
+            StorageNode node = trackerClient.getStorageNode();
+            if (node == null) {
+                return null;
+            }
+            return uploader(node.getGroupName(), stream, file.length(),
                     FileUtil.extName(file.getAbsolutePath()));
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -284,6 +293,21 @@ public class FastDfsClient {
             inputStream.close();
             return string;
         });
+    }
+
+    /**
+     * 字符串下载
+     * 将下载下的数据转为字符串
+     *
+     * @param fileId 文件id(格式如:group1/M00/00/00/xxx.png)
+     * @return 返回文本数据
+     */
+    public static String characterStringDownload(String fileId) {
+        if (!successInit()) {
+            return "";
+        }
+        int i = fileId.indexOf("/");
+        return characterStringDownload(fileId.substring(0, i), fileId.substring(i + 1));
     }
 
     public static TrackerClient getTrackerClient() {
