@@ -155,12 +155,11 @@ public class FastDfsClient {
      * @return 返回存储文件的路径信息
      */
     public static StorePath characterStringUploader(String str, String ext) {
-        ByteArrayInputStream inputStream = IoUtil.toStream(str, "UTF-8");
         StorageNode node = trackerClient.getStorageNode();
         if (node == null) {
             return null;
         }
-        return uploader(node.getGroupName(), inputStream, inputStream.available(), ext);
+        return characterStringUploader(node.getGroupName(), str, ext, "UTF-8");
     }
 
     /**

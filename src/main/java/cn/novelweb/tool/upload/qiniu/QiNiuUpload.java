@@ -1,6 +1,8 @@
 package cn.novelweb.tool.upload.qiniu;
 
+import cn.hutool.core.io.IoUtil;
 import cn.hutool.core.lang.Singleton;
+import cn.hutool.http.HttpUtil;
 import com.alibaba.fastjson.JSON;
 import com.qiniu.common.QiniuException;
 import com.qiniu.http.Response;
@@ -15,6 +17,7 @@ import com.qiniu.util.StringMap;
 import com.qiniu.util.StringUtils;
 import lombok.extern.slf4j.Slf4j;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -143,6 +146,50 @@ public class QiNiuUpload {
         }
         return putRet(buildUploadManager(region).put(cosFile, key, upToken, null, null));
     }
+
+    /**
+     * 字符串数据上传
+     *
+     * @param key         上传的路径,默认不指定key的情况下，以文件内容的hash值作为文件名
+     * @param upToken     七牛云上传的token
+     * @param region      需要上传到的区域
+     * @param str         需要上传的字符串
+     * @param charsetName 字符集(如:UTF-8)
+     * @return 返回null为上传失败, 否则返回默认上传接口回复对象DefaultPutRet
+     * @throws QiniuException 抛出七牛云异常
+     */
+    public static DefaultPutRet stringUploader(String key, String upToken, Region region,
+                                               String str, String charsetName) throws QiniuException {
+        ByteArrayInputStream inputStream = IoUtil.toStream(str, charsetName);
+        return uploader(inputStream, key, upToken, region);
+    }
+
+    /**
+     * 字符串数据上传
+     * 使用默认字符集编码(UTF-8)
+     *
+     * @param key     上传的路径,默认不指定key的情况下，以文件内容的hash值作为文件名
+     * @param upToken 七牛云上传的token
+     * @param region  需要上传到的区域
+     * @param str     需要上传的字符串
+     * @return 返回null为上传失败, 否则返回默认上传接口回复对象DefaultPutRet
+     */
+    public static DefaultPutRet stringUploader(String key, String upToken,
+                                               Region region, String str) throws QiniuException {
+        return stringUploader(key, upToken, region, str, "UTF-8");
+    }
+
+    /**
+     * 下载远程文本
+     *
+     * @param url               请求的url
+     * @param customCharsetName 自定义的字符集
+     * @return 文本
+     */
+    public static String downloadString(String url, String customCharsetName) {
+        return HttpUtil.downloadString(url, customCharsetName);
+    }
+
 
     /**
      * 七牛云字节数组文件上传
