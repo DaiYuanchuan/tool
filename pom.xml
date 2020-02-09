@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>cn.novelweb</groupId>
     <artifactId>tool</artifactId>
-    <version>1.2.7</version>
+    <version>1.2.8</version>
 
     <!-- 项目说明 -->
     <name>${project.artifactId}</name>

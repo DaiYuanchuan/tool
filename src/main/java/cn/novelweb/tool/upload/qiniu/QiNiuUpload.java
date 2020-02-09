@@ -32,21 +32,6 @@ import java.io.InputStream;
 public class QiNiuUpload {
 
     /**
-     * 七牛云accessKey信息，可以在{https://portal.qiniu.com/user/key}查看
-     */
-    public static String accessKey;
-
-    /**
-     * 七牛云secretKey信息，可以在{https://portal.qiniu.com/user/key}查看
-     */
-    public static String secretKey;
-
-    /**
-     * 七牛云存储桶名称
-     */
-    public static String bucket;
-
-    /**
      * Region对应机房:华东
      */
     public static Region huaDong = Region.region0();
@@ -71,6 +56,25 @@ public class QiNiuUpload {
      */
     public static Region xinJiaPo = Region.regionAs0();
 
+    /**
+     * 七牛云accessKey信息，可以在{https://portal.qiniu.com/user/key}查看
+     */
+    public static String accessKey;
+
+    /**
+     * 七牛云secretKey信息，可以在{https://portal.qiniu.com/user/key}查看
+     */
+    public static String secretKey;
+
+    /**
+     * 七牛云存储桶名称
+     */
+    public static String bucket;
+
+    /**
+     * 设置默认region
+     */
+    public static Region region = huaDong;
 
     /**
      * 构建七牛云文件上传管理器
@@ -130,6 +134,19 @@ public class QiNiuUpload {
     }
 
     /**
+     * 服务端本地文件直接上传到七牛云
+     * 使用默认upToken、默认的region为华东
+     *
+     * @param cosFile 需要上传的文件对象
+     * @param key     上传文件保存的文件名
+     * @return 返回null为上传失败, 否则返回默认上传接口回复对象DefaultPutRet
+     * @throws QiniuException 抛出七牛云异常
+     */
+    public static DefaultPutRet uploader(File cosFile, String key) throws QiniuException {
+        return uploader(cosFile, key, getUploadToken(), region);
+    }
+
+    /**
      * 七牛云数据流文件上传
      * 适用于所有的InputStream子类
      *
@@ -148,6 +165,20 @@ public class QiNiuUpload {
     }
 
     /**
+     * 七牛云数据流文件上传
+     * 适用于所有的InputStream子类
+     * 使用默认upToken、默认的region为华东
+     *
+     * @param cosFile 需要上传的数据流
+     * @param key     上传的路径,默认不指定key的情况下，以文件内容的hash值作为文件名
+     * @return 返回null为上传失败, 否则返回默认上传接口回复对象DefaultPutRet
+     * @throws QiniuException 抛出七牛云异常
+     */
+    public static DefaultPutRet uploader(InputStream cosFile, String key) throws QiniuException {
+        return uploader(cosFile, key, getUploadToken(), region);
+    }
+
+    /**
      * 字符串数据上传
      *
      * @param key         上传的路径,默认不指定key的情况下，以文件内容的hash值作为文件名
@@ -160,8 +191,25 @@ public class QiNiuUpload {
      */
     public static DefaultPutRet stringUploader(String key, String upToken, Region region,
                                                String str, String charsetName) throws QiniuException {
+        if (org.apache.commons.lang.StringUtils.isBlank(str)) {
+            return null;
+        }
         ByteArrayInputStream inputStream = IoUtil.toStream(str, charsetName);
         return uploader(inputStream, key, upToken, region);
+    }
+
+    /**
+     * 字符串数据上传
+     * 使用默认upToken、默认的region为华东
+     *
+     * @param key         上传的路径,默认不指定key的情况下，以文件内容的hash值作为文件名
+     * @param str         需要上传的字符串
+     * @param charsetName 字符集(如:UTF-8)
+     * @return 返回null为上传失败, 否则返回默认上传接口回复对象DefaultPutRet
+     * @throws QiniuException 抛出七牛云异常
+     */
+    public static DefaultPutRet stringUploader(String key, String str, String charsetName) throws QiniuException {
+        return stringUploader(key, getUploadToken(), region, str, charsetName);
     }
 
     /**
@@ -173,10 +221,25 @@ public class QiNiuUpload {
      * @param region  需要上传到的区域
      * @param str     需要上传的字符串
      * @return 返回null为上传失败, 否则返回默认上传接口回复对象DefaultPutRet
+     * @throws QiniuException 抛出七牛云异常
      */
     public static DefaultPutRet stringUploader(String key, String upToken,
                                                Region region, String str) throws QiniuException {
         return stringUploader(key, upToken, region, str, "UTF-8");
+    }
+
+    /**
+     * 字符串数据上传
+     * 使用默认字符集编码(UTF-8)
+     * 使用默认upToken、默认的region为华东
+     *
+     * @param key 上传的路径,默认不指定key的情况下，以文件内容的hash值作为文件名
+     * @param str 需要上传的字符串
+     * @return 返回null为上传失败, 否则返回默认上传接口回复对象DefaultPutRet
+     * @throws QiniuException 抛出七牛云异常
+     */
+    public static DefaultPutRet stringUploader(String key, String str) throws QiniuException {
+        return stringUploader(key, getUploadToken(), region, str);
     }
 
     /**
@@ -210,6 +273,20 @@ public class QiNiuUpload {
     }
 
     /**
+     * 七牛云字节数组文件上传
+     * 可以支持将内存中的字节数组上传到空间中。
+     * 使用默认upToken、默认的region为华东
+     *
+     * @param uploadBytes 需要上传的字节数组文件
+     * @param key         上传的路径,默认不指定key的情况下，以文件内容的hash值作为文件名
+     * @return 返回null为上传失败, 否则返回默认上传接口回复对象DefaultPutRet
+     * @throws QiniuException 抛出七牛云异常
+     */
+    public static DefaultPutRet uploader(final byte[] uploadBytes, String key) throws QiniuException {
+        return uploader(uploadBytes, key, getUploadToken(), region);
+    }
+
+    /**
      * 七牛云异步上传数据
      * 将内存中的字节数组异步上传到空间中
      *
@@ -226,6 +303,24 @@ public class QiNiuUpload {
     public static void uploader(final byte[] data, final String key, final String token, StringMap params,
                                 String mime, boolean checkCrc, UpCompletionHandler handler, Region region) throws IOException {
         buildUploadManager(region).asyncPut(data, key, token, params, mime, checkCrc, handler);
+    }
+
+    /**
+     * 七牛云异步上传数据
+     * 将内存中的字节数组异步上传到空间中
+     * 使用默认upToken、默认的region为华东
+     *
+     * @param data     上传的数据
+     * @param key      上传数据保存的文件名
+     * @param params   自定义参数，如 params.put("x:foo", "foo")
+     * @param mime     指定文件mimeType
+     * @param checkCrc 是否验证crc32
+     * @param handler  上传完成的回调函数
+     * @throws IOException 抛出IO异常
+     */
+    public static void uploader(final byte[] data, final String key, StringMap params, String mime,
+                                boolean checkCrc, UpCompletionHandler handler) throws IOException {
+        uploader(data, key, getUploadToken(), params, mime, checkCrc, handler, region);
     }
 
     /**
@@ -246,6 +341,21 @@ public class QiNiuUpload {
     }
 
     /**
+     * 七牛云异步上传数据精简版
+     * 将内存中的字节数组异步上传到空间中
+     * 取消一些不常用的参数
+     * 使用默认upToken、默认的region为华东
+     *
+     * @param data    上传的数据
+     * @param key     上传数据保存的文件名
+     * @param handler 上传完成的回调函数
+     * @throws IOException 抛出IO异常
+     */
+    public static void uploader(final byte[] data, final String key, UpCompletionHandler handler) throws IOException {
+        uploader(data, key, getUploadToken(), handler, region);
+    }
+
+    /**
      * 获取七牛云文件信息
      *
      * @param key    key值
@@ -255,6 +365,18 @@ public class QiNiuUpload {
      */
     public static FileInfo getFileInfo(String key, Region region) throws QiniuException {
         return getBucketManager(region).stat(bucket, key);
+    }
+
+    /**
+     * 获取七牛云文件信息
+     * 使用默认upToken、默认的region为华东
+     *
+     * @param key key值
+     * @return 返回null为获取失败, 否则返回com.qiniu.storage.model.FileInfo实体信息
+     * @throws QiniuException 抛出七牛云异常
+     */
+    public static FileInfo getFileInfo(String key) throws QiniuException {
+        return getFileInfo(key, region);
     }
 
     /**
@@ -268,6 +390,19 @@ public class QiNiuUpload {
      */
     public static Response setFileType(String key, Region region, String newMimeType) throws QiniuException {
         return getBucketManager(region).changeMime(bucket, key, newMimeType);
+    }
+
+    /**
+     * 修改文件类型
+     * 使用默认upToken、默认的region为华东
+     *
+     * @param key         key值
+     * @param newMimeType 需要修改的新的文件类型
+     * @return 返回定义HTTP请求的信息
+     * @throws QiniuException 抛出七牛云异常
+     */
+    public static Response setFileType(String key, String newMimeType) throws QiniuException {
+        return setFileType(key, region, newMimeType);
     }
 
     /**
@@ -298,6 +433,19 @@ public class QiNiuUpload {
     }
 
     /**
+     * 获取空间文件列表
+     * 使用默认upToken、默认的region为华东
+     *
+     * @param prefix    文件名前缀
+     * @param limit     每次迭代的长度限制，最大1000，推荐值 1000
+     * @param delimiter 指定目录分隔符，列出所有公共前缀（模拟列出目录效果）。缺省值为空字符串
+     * @return 返回文件列表迭代器(getFilesList.hasNext ())
+     */
+    public static BucketManager.FileListIterator getFilesList(String prefix, int limit, String delimiter) {
+        return getFilesList(prefix, limit, delimiter, region);
+    }
+
+    /**
      * 抓取网络资源到空间
      *
      * @param remoteSrcUrl 远程url、需要抓取的远程url
@@ -312,6 +460,20 @@ public class QiNiuUpload {
     }
 
     /**
+     * 抓取网络资源到空间
+     * 使用默认upToken、默认的region为华东
+     *
+     * @param remoteSrcUrl 远程url、需要抓取的远程url
+     * @param key          你的文件的key值
+     * @return 返回fetch 接口的回复对象
+     * 参考文档：<a href="https://developer.qiniu.com/kodo/api/fetch">资源抓取</a>
+     * @throws QiniuException 抛出七牛云异常
+     */
+    public static FetchRet fetch(String remoteSrcUrl, String key) throws QiniuException {
+        return fetch(remoteSrcUrl, key, region);
+    }
+
+    /**
      * 删除空间中的文件
      *
      * @param key    你的文件的key值
@@ -321,6 +483,18 @@ public class QiNiuUpload {
      */
     public static Response delete(String key, Region region) throws QiniuException {
         return getBucketManager(region).delete(bucket, key);
+    }
+
+    /**
+     * 删除空间中的文件
+     * 使用默认upToken、默认的region为华东
+     *
+     * @param key 你的文件的key值
+     * @return 返回定义HTTP请求的信息
+     * @throws QiniuException 抛出七牛云异常
+     */
+    public static Response delete(String key) throws QiniuException {
+        return delete(key, region);
     }
 
     /**
@@ -338,6 +512,19 @@ public class QiNiuUpload {
         batchOperations.addDeleteOp(bucket, keyList);
         Response response = bucketManager.batch(batchOperations);
         return response.jsonToObject(BatchStatus[].class);
+    }
+
+    /**
+     * 批量删除空间中的文件
+     * 使用默认upToken、默认的region为华东
+     *
+     * @param keyList 文件key，单次批量请求的文件数量不得超过1000
+     * @return 返回定义批量请求的状态码
+     * 参考文档：<a href="https://developer.qiniu.com/kodo/api/batch">批量操作</a>
+     * @throws QiniuException 抛出七牛云异常
+     */
+    public static BatchStatus[] delete(String[] keyList) throws QiniuException {
+        return delete(keyList, region);
     }
 
     /**
