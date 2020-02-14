@@ -19,6 +19,11 @@ import java.util.Set;
 public class TaskCallback {
 
     /**
+     * 记录扫描到的包
+     */
+    private static Set<java.lang.Class<?>> packageName;
+
+    /**
      * 异步执行回调接口的实现类
      *
      * @param superClass 需要实现的接口的类
@@ -32,10 +37,11 @@ public class TaskCallback {
             log.error("Unable to get the package where the class file is located");
             return;
         }
-        // 取包名前两位 ，构建包相对路径
-        String path = classPackage[0] + "." + classPackage[1];
-        // 扫描指定包路径下所有指定类或接口的子类或实现类
-        Set<java.lang.Class<?>> packageName = ClassUtil.scanPackageBySuper(path, superClass);
+        // 如果扫描到的包是空的
+        if (packageName == null || packageName.isEmpty()) {
+            // 扫描指定包路径下所有指定类或接口的子类或实现类
+            packageName = ClassUtil.scanPackageBySuper("", superClass);
+        }
         if (packageName.isEmpty()) {
             log.info("If you want to get processing results, implement the {} interface", superClass.getName());
             return;
@@ -51,7 +57,7 @@ public class TaskCallback {
                 // 加载这个类
                 final Class<?> clazz = ClassLoaderUtil.loadClass(pk);
                 if (null == clazz) {
-                    log.error("Load class with name of [" + pk + "] fail !");
+                    log.error("Load class with name of [{}] fail !", pk);
                     return;
                 }
 
