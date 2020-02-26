@@ -30,13 +30,6 @@ public class TaskCallback {
      * @param args       参数
      */
     public static void callback(java.lang.Class<?> superClass, java.lang.Object... args) {
-        // 获取该包路径下第一个class文件所在的包
-        String[] classPackage = ClassUtil.scanPackage().iterator().next()
-                .getName().split("\\.");
-        if (ArrayUtil.isEmpty(classPackage)) {
-            log.error("Unable to get the package where the class file is located");
-            return;
-        }
         // 如果扫描到的包是空的
         if (packageName == null || packageName.isEmpty()) {
             // 扫描指定包路径下所有指定类或接口的子类或实现类

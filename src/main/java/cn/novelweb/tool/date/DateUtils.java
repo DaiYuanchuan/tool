@@ -152,4 +152,28 @@ public class DateUtils {
         }
         return pastDaysList;
     }
+
+    /**
+     * 时间单位换算,将以下格式的时间转换为毫秒
+     * 时:分:秒.毫秒
+     * 如:参数为 01:44:41.42 应该换算为 6281042
+     *
+     * @param time 指定格式的时间字符串
+     * @return 返回对应时间的毫秒数[返回-1时,转换出错]
+     */
+    public static long getTimeConversion(String time) {
+        boolean isTime = isTime(time, DatePattern.NORM_TIME_PATTERN + ".SSS");
+        if (!isTime) {
+            return -1;
+        }
+        // 定义当前的日期
+        String string = new SimpleDateFormat(DatePattern.NORM_DATE_PATTERN).format(DateUtil.date());
+
+        // 起始日期
+        Date beginDate = DateUtil.parse(string + " 00:00:00.000", DatePattern.NORM_DATETIME_MS_PATTERN);
+        // 结束日期
+        Date endDate = DateUtil.parse(string + " " + time, DatePattern.NORM_DATETIME_MS_PATTERN);
+        // 相差的毫秒数
+        return DateUtil.between(beginDate, endDate, DateUnit.MS);
+    }
 }
