@@ -29,7 +29,6 @@ public class TaskHandlerImpl implements TaskHandler {
     @Override
     public CommandTask process(String taskId, String command) {
         try {
-            System.out.println("TaskHandlerImpl:32行:"+command);
             CommandTask commandTask = ExecUtil.createTask(taskId, command, outHandlerMethod);
             Log.debug("任务id:{},执行命令:{}", taskId, command);
             return commandTask;

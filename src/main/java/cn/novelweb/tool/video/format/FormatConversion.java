@@ -183,7 +183,9 @@ public class FormatConversion {
     }
 
     /**
-     * 任意格式的视频转换为mp4
+     * 任意格式的视频转换为h264编码的mp4格式
+     * 部分情况下可能会转换失败
+     * 转换失败时请尝试使用 VideoEditing.converterToMp4()
      *
      * @param inputPath  需要转换的源视频路径
      * @param outputPath 转换后输出的视频路径
@@ -194,7 +196,9 @@ public class FormatConversion {
     }
 
     /**
-     * 任意格式的视频转换为mp4
+     * 任意格式的视频转换为h264编码的mp4格式
+     * 部分情况下可能会转换失败
+     * 转换失败时请尝试使用 VideoEditing.converterToMp4()
      *
      * @param input    需要转换的源视频文件
      * @param output   转换后输出的视频文件

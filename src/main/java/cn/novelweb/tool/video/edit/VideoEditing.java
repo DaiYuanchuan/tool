@@ -26,6 +26,7 @@ import java.io.InputStreamReader;
  * <p>注:如果你是在windows下操作,需要使用相对路径,在Windows下操作不能携带盘符</p>
  * <p>如文件: D:\\video\\Alitalia\\alitalia.mp4 需要转成 /video/Alitalia/alitalia.mp4</p>
  * <p>同时需要注意FFMPEG执行文件的根目录要与视频文件在同一个盘符下,否则会找不到文件.</p>
+ * <p>任何路径中不能存在空格！！！</p>
  * <pre>此类实现对视频的字幕添加、水印添加、视频指定时间截取、
  * 分离视频音频流、每一秒截取一张图片、指定时间帧截图、指定时间将视频帧制作成GIF</pre>
  * <p>2020-02-25 19:34</p>
@@ -61,7 +62,24 @@ public class VideoEditing {
         CommandLineOperations.start(taskId, CommandBuilderFactory.create()
                 .add("-i", input)
                 .add("-vf", "subtitles=" + subtitles)
-                .add("-c copy")
+                .add("-y")
+                .add(output));
+        getProgress(taskId, input, callback);
+    }
+
+    /**
+     * 任意格式的视频转换为h264编码的mp4格式
+     *
+     * @param input    需要转换的源视频文件路径
+     * @param output   转换后输出的视频文件路径
+     * @param callback 任务进度的回调接口
+     */
+    public static void converterToMp4(String input, String output, ProgressCallback callback) {
+        // 生成随机taskId
+        String taskId = System.currentTimeMillis() + RandomUtil.randomNumbers(10);
+        CommandLineOperations.start(taskId, CommandBuilderFactory.create()
+                .add("-i", input)
+                .add("-vcodec", "h264")
                 .add("-y")
                 .add(output));
         getProgress(taskId, input, callback);
@@ -261,6 +279,53 @@ public class VideoEditing {
                 .add("-ss", startTime)
                 .add("-t", duration)
                 .add("-s", resolutionRatio)
+                .add(output));
+        getProgress(taskId, input, callback);
+    }
+
+    /**
+     * 删除音轨
+     * 指定需要保留的音轨
+     *
+     * @param input    需要转换的源视频文件路径
+     * @param output   转换后的输出文件路径
+     * @param needKeep 需要保留第几个音轨[值为1时,指定保留第一个音轨,其他全部删除]
+     * @param callback 任务进度回调
+     */
+    public static void deleteSoundTrack(String input, String output, int needKeep, ProgressCallback callback) {
+        // 生成随机taskId
+        String taskId = System.currentTimeMillis() + RandomUtil.randomNumbers(10);
+        CommandLineOperations.start(taskId, CommandBuilderFactory.create()
+                .add("-i", input)
+                .add("-map", "0:0")
+                .add("-map", "0:" + needKeep)
+                .add("-vcodec", "copy")
+                .add("-acodec", "copy")
+                .add(output));
+        getProgress(taskId, input, callback);
+    }
+
+    /**
+     * 删除音轨
+     * 指定需要保留的音轨
+     * 删除音轨的同时 将视频文件转换为 H264 编码的 MP4 格式.
+     *
+     * @param input    需要转换的源视频文件路径
+     * @param output   转换后的输出文件路径
+     * @param needKeep 需要保留第几个音轨[值为1时,指定保留第一个音轨,其他全部删除]
+     * @param callback 任务进度回调
+     */
+    public static void deleteSoundTrackToMp4(String input, String output, int needKeep, ProgressCallback callback) {
+        // 生成随机taskId
+        String taskId = System.currentTimeMillis() + RandomUtil.randomNumbers(10);
+        CommandLineOperations.start(taskId, CommandBuilderFactory.create()
+                .add("-i", input)
+                .add("-map", "0:0")
+                .add("-map", "0:" + needKeep)
+                .add("-vcodec", "h264")
+                .add("-vcodec", "copy")
+                .add("-acodec", "copy")
+                .add("-y")
                 .add(output));
         getProgress(taskId, input, callback);
     }
