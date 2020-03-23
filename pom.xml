@@ -5,7 +5,17 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>cn.novelweb</groupId>
     <artifactId>tool</artifactId>
+    <packaging>pom</packaging>
     <version>1.3.2</version>
+
+    <!-- 子项目 -->
+    <modules>
+        <module>tool-video</module>
+        <module>tool-core</module>
+        <module>tool-ip</module>
+        <module>tool-annotation</module>
+        <module>tool-all</module>
+    </modules>
 
     <!-- 项目说明 -->
     <name>${project.artifactId}</name>
@@ -66,17 +76,11 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
         <java.version>1.8</java.version>
     </properties>
     <!-- JDK版本号 -->
-
-    <!-- 设置spring boot的parent start -->
-    <parent>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.2.4.RELEASE</version>
-    </parent>
-    <!-- 设置spring boot的parent end -->
 
     <!-- spring maven 远程仓库 start -->
     <repositories>
@@ -95,163 +99,194 @@
     </repositories>
     <!-- spring maven 远程仓库 end -->
 
-    <dependencies>
+    <!-- 子项目的依赖 -->
+    <dependencyManagement>
+        <dependencies>
 
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>4.11</version>
-            <scope>test</scope>
-        </dependency>
+            <dependency>
+                <groupId>junit</groupId>
+                <artifactId>junit</artifactId>
+                <version>4.11</version>
+                <scope>test</scope>
+            </dependency>
 
-        <!-- HTML解析工具 start -->
-        <dependency>
-            <groupId>net.sourceforge.nekohtml</groupId>
-            <artifactId>nekohtml</artifactId>
-            <version>1.9.22</version>
-        </dependency>
-        <!-- HTML解析工具 end -->
+            <!-- HTML解析工具 start -->
+            <dependency>
+                <groupId>net.sourceforge.nekohtml</groupId>
+                <artifactId>nekohtml</artifactId>
+                <version>1.9.22</version>
+            </dependency>
+            <!-- HTML解析工具 end -->
 
-        <!-- 添加 spring boot 依赖包 start -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-aop</artifactId>
-        </dependency>
-        <!-- 添加 spring boot 依赖包 end -->
+            <!-- 添加 spring boot 依赖包 start -->
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-parent</artifactId>
+                <version>2.2.4.RELEASE</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter</artifactId>
+                <version>2.2.4.RELEASE</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-web</artifactId>
+                <version>2.2.4.RELEASE</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-aop</artifactId>
+                <version>2.2.4.RELEASE</version>
+            </dependency>
+            <!-- 添加 spring boot 依赖包 end -->
 
-        <!-- 上传文件 start -->
-        <dependency>
-            <groupId>commons-io</groupId>
-            <artifactId>commons-io</artifactId>
-            <version>2.4</version>
-        </dependency>
-        <dependency>
-            <groupId>commons-lang</groupId>
-            <artifactId>commons-lang</artifactId>
-            <version>2.6</version>
-        </dependency>
-        <dependency>
-            <groupId>commons-fileupload</groupId>
-            <artifactId>commons-fileupload</artifactId>
-            <version>1.3.3</version>
-        </dependency>
-        <dependency>
-            <groupId>commons-net</groupId>
-            <artifactId>commons-net</artifactId>
-            <version>3.6</version>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-pool2</artifactId>
-            <version>2.8.0</version>
-        </dependency>
-        <!-- 上传文件 end -->
+            <!-- 上传文件 start -->
+            <dependency>
+                <groupId>commons-io</groupId>
+                <artifactId>commons-io</artifactId>
+                <version>2.4</version>
+            </dependency>
+            <dependency>
+                <groupId>commons-lang</groupId>
+                <artifactId>commons-lang</artifactId>
+                <version>2.6</version>
+            </dependency>
+            <dependency>
+                <groupId>commons-fileupload</groupId>
+                <artifactId>commons-fileupload</artifactId>
+                <version>1.3.3</version>
+            </dependency>
+            <dependency>
+                <groupId>commons-net</groupId>
+                <artifactId>commons-net</artifactId>
+                <version>3.6</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-pool2</artifactId>
+                <version>2.8.0</version>
+            </dependency>
+            <!-- 上传文件 end -->
 
-        <!-- lombok start -->
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-            <version>1.18.12</version>
-            <scope>provided</scope>
-            <optional>true</optional>
-        </dependency>
-        <!-- lombok end -->
+            <!-- lombok start -->
+            <dependency>
+                <groupId>org.projectlombok</groupId>
+                <artifactId>lombok</artifactId>
+                <version>1.18.12</version>
+                <scope>provided</scope>
+                <optional>true</optional>
+            </dependency>
+            <!-- lombok end -->
 
-        <!-- Swagger.jar -->
-        <dependency>
-            <groupId>io.springfox</groupId>
-            <artifactId>springfox-swagger2</artifactId>
-            <version>2.9.2</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>io.swagger</groupId>
-                    <artifactId>swagger-models</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-        <!-- springfox-swagger2自带的swagger-models有BUG,移除后重新引入 -->
-        <dependency>
-            <groupId>io.swagger</groupId>
-            <artifactId>swagger-models</artifactId>
-            <version>1.6.0</version>
-        </dependency>
-        <!-- 使用自定义的 swagger 样式 -->
-        <dependency>
-            <groupId>com.github.caspar-chen</groupId>
-            <artifactId>swagger-ui-layer</artifactId>
-            <version>1.1.3</version>
-        </dependency>
-        <!-- Swagger.jar end -->
+            <!-- Swagger.jar -->
+            <dependency>
+                <groupId>io.springfox</groupId>
+                <artifactId>springfox-swagger2</artifactId>
+                <version>2.9.2</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>io.swagger</groupId>
+                        <artifactId>swagger-models</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+            <!-- springfox-swagger2自带的swagger-models有BUG,移除后重新引入 -->
+            <dependency>
+                <groupId>io.swagger</groupId>
+                <artifactId>swagger-models</artifactId>
+                <version>1.6.0</version>
+            </dependency>
+            <!-- 使用自定义的 swagger 样式 -->
+            <dependency>
+                <groupId>com.github.caspar-chen</groupId>
+                <artifactId>swagger-ui-layer</artifactId>
+                <version>1.1.3</version>
+            </dependency>
+            <!-- Swagger.jar end -->
 
-        <!-- 阿里 解析 json 工具 start -->
-        <dependency>
-            <groupId>com.alibaba</groupId>
-            <artifactId>fastjson</artifactId>
-            <version>1.2.62</version>
-        </dependency>
-        <!-- 阿里 解析 json 工具 end -->
+            <!-- 阿里 解析 json 工具 start -->
+            <dependency>
+                <groupId>com.alibaba</groupId>
+                <artifactId>fastjson</artifactId>
+                <version>1.2.62</version>
+            </dependency>
+            <!-- 阿里 解析 json 工具 end -->
 
-        <!-- HuTool工具类 -->
-        <dependency>
-            <groupId>cn.hutool</groupId>
-            <artifactId>hutool-all</artifactId>
-            <version>5.1.4</version>
-        </dependency>
+            <!-- HuTool工具类 -->
+            <dependency>
+                <groupId>cn.hutool</groupId>
+                <artifactId>hutool-all</artifactId>
+                <version>5.2.3</version>
+            </dependency>
 
-        <!-- IP实际地址位置查询工具(不包含数据源) -->
-        <dependency>
-            <groupId>org.lionsoul</groupId>
-            <artifactId>ip2region</artifactId>
-            <version>1.7.2</version>
-        </dependency>
+            <!-- IP实际地址位置查询工具(不包含数据源) -->
+            <dependency>
+                <groupId>org.lionsoul</groupId>
+                <artifactId>ip2region</artifactId>
+                <version>1.7.2</version>
+            </dependency>
 
-        <!-- 七牛云SDK包start -->
-        <dependency>
-            <groupId>com.qiniu</groupId>
-            <artifactId>qiniu-java-sdk</artifactId>
-            <version>[7.2.0, 7.2.99]</version>
-        </dependency>
-        <!-- 七牛云SDK包end -->
+            <!-- 七牛云SDK包start -->
+            <dependency>
+                <groupId>com.qiniu</groupId>
+                <artifactId>qiniu-java-sdk</artifactId>
+                <version>[7.2.0, 7.2.99]</version>
+            </dependency>
+            <!-- 七牛云SDK包end -->
 
-        <!-- 腾讯云SDK包start -->
-        <dependency>
-            <groupId>com.qcloud</groupId>
-            <artifactId>cos_api</artifactId>
-            <version>5.6.15</version>
-        </dependency>
-        <!-- 腾讯云SDK包end -->
+            <!-- 腾讯云SDK包start -->
+            <dependency>
+                <groupId>com.qcloud</groupId>
+                <artifactId>cos_api</artifactId>
+                <version>5.6.15</version>
+            </dependency>
+            <!-- 腾讯云SDK包end -->
 
-        <!-- 视频流需要引用的包start -->
-        <!-- 包与包之间存在引用关系:http://bytedeco.org/download/ -->
-        <dependency>
-            <groupId>org.bytedeco</groupId>
-            <artifactId>javacv</artifactId>
-            <version>1.5.2</version>
-        </dependency>
-        <dependency>
-            <groupId>org.bytedeco</groupId>
-            <artifactId>ffmpeg-platform</artifactId>
-            <version>4.2.1-1.5.2</version>
-        </dependency>
-        <!-- 视频流需要引用的包end -->
+            <!-- 视频流需要引用的包start -->
+            <!-- 包与包之间存在引用关系:http://bytedeco.org/download/ -->
+            <dependency>
+                <groupId>org.bytedeco</groupId>
+                <artifactId>javacv</artifactId>
+                <version>1.5.2</version>
+            </dependency>
 
-        <!-- 官方通用配置oss-parent -->
-        <dependency>
-            <groupId>org.sonatype.oss</groupId>
-            <artifactId>oss-parent</artifactId>
-            <version>9</version>
-            <type>pom</type>
-        </dependency>
+            <dependency>
+                <groupId>org.bytedeco</groupId>
+                <artifactId>ffmpeg-platform</artifactId>
+                <version>4.2.1-1.5.2</version>
+            </dependency>
+            <!-- 视频流需要引用的包end -->
 
-    </dependencies>
+            <!-- 包poi 操作office start -->
+            <dependency>
+                <groupId>org.apache.poi</groupId>
+                <artifactId>poi</artifactId>
+                <version>4.1.2</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.poi</groupId>
+                <artifactId>poi-scratchpad</artifactId>
+                <version>4.1.2</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.poi</groupId>
+                <artifactId>poi-ooxml</artifactId>
+                <version>4.1.2</version>
+            </dependency>
+            <!-- 包poi 操作office end -->
+
+            <!-- 官方通用配置oss-parent -->
+            <dependency>
+                <groupId>org.sonatype.oss</groupId>
+                <artifactId>oss-parent</artifactId>
+                <version>9</version>
+                <type>pom</type>
+            </dependency>
+
+        </dependencies>
+    </dependencyManagement>
+    <!-- 子项目的依赖 -->
 
     <profiles>
         <profile>
@@ -260,29 +295,6 @@
                 <!-- 这个是打包后的jar名字 -->
                 <finalName>tool</finalName>
                 <plugins>
-                    <!-- 构建源码jar包 -->
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-shade-plugin</artifactId>
-                        <version>3.2.1</version>
-                        <executions>
-                            <execution>
-                                <phase>package</phase>
-                                <goals>
-                                    <goal>shade</goal>
-                                </goals>
-                                <configuration>
-                                    <!-- 创建源码jar -->
-                                    <createSourcesJar>true</createSourcesJar>
-                                    <artifactSet>
-                                        <includes>
-                                            <include>${project.groupId}:*:*</include>
-                                        </includes>
-                                    </artifactSet>
-                                </configuration>
-                            </execution>
-                        </executions>
-                    </plugin>
 
                     <!-- resources plugin,Maven 资源插件 -->
                     <plugin>
