@@ -48,8 +48,16 @@ public class Result<T> {
         return new Result(code, message);
     }
 
+    public static Result ok(int code, String message) {
+        return new Result(String.valueOf(code), message);
+    }
+
     public static Result ok(String code, String message, Object data) {
         return new Result<>(code, message, data);
+    }
+
+    public static Result ok(int code, String message, Object data) {
+        return new Result<>(String.valueOf(code), message, data);
     }
 
     public static Result fail(Object data) {
@@ -64,8 +72,16 @@ public class Result<T> {
         return new Result<>(code, message);
     }
 
+    public static Result fail(int code, String message) {
+        return new Result<>(String.valueOf(code), message);
+    }
+
     public static Result fail(String code, String message, Object data) {
         return new Result<>(code, message, data);
+    }
+
+    public static Result fail(int code, String message, Object data) {
+        return new Result<>(String.valueOf(code), message, data);
     }
 
     public static Result authority(String message) {

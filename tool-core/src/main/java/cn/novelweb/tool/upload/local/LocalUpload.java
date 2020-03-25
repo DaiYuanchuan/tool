@@ -1,11 +1,13 @@
 package cn.novelweb.tool.upload.local;
 
+import cn.hutool.core.io.FileUtil;
 import cn.novelweb.tool.upload.file.FileInfo;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import cn.novelweb.tool.http.Result;
 import cn.novelweb.tool.upload.local.pojo.UploadFileParam;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.StringUtils;
@@ -23,6 +25,7 @@ import java.util.List;
  *
  * @author Dai Yuanchuan
  **/
+@Slf4j
 public class LocalUpload {
 
     /**
@@ -45,10 +48,10 @@ public class LocalUpload {
      * 404:文件不存在、文件没有被上传过、第一次上传
      * @throws Exception 抛出自定义Exception异常
      */
-    public static Result checkFileMd5(String fileMd5,
-                                      String fileName,
-                                      String confFilePath,
-                                      String tmpFilePath) throws Exception {
+    public static Result<?> checkFileMd5(String fileMd5,
+                                         String fileName,
+                                         String confFilePath,
+                                         String tmpFilePath) throws Exception {
         boolean isParamEmpty = StringUtils.isBlank(fileMd5)
                 || StringUtils.isBlank(fileName)
                 || StringUtils.isBlank(confFilePath)
@@ -56,7 +59,6 @@ public class LocalUpload {
         if (isParamEmpty) {
             throw new Exception("参数值为空");
         }
-
         // 构建分片配置文件对象
         File confFile = new File(confFilePath + File.separatorChar + fileName + ".conf");
 
@@ -74,7 +76,8 @@ public class LocalUpload {
                 }
             }
             JSONArray jsonArray = JSON.parseArray(JSONObject.toJSONString(missChunkList));
-            return Result.ok(HttpStatus.PARTIAL_CONTENT.toString(), "文件已经上传了一部分",
+
+            return Result.ok(HttpStatus.PARTIAL_CONTENT.value(), "文件已经上传了一部分",
                     jsonArray);
         }
 
@@ -84,9 +87,9 @@ public class LocalUpload {
 
         // 上传的文件 和 配置文件 同时存在 则 当前状态码为 200
         if (isFileEmpty && confFile.exists()) {
-            return Result.ok(HttpStatus.OK.toString(), "文件已上传成功");
+            return Result.ok(HttpStatus.OK.value(), "文件已上传成功");
         }
-        return Result.ok(HttpStatus.NOT_FOUND.toString(), "文件不存在");
+        return Result.ok(HttpStatus.NOT_FOUND.value(), "文件不存在");
     }
 
     /**
@@ -100,8 +103,8 @@ public class LocalUpload {
      * 404:文件不存在、文件没有被上传过、第一次上传
      * @throws Exception 抛出自定义Exception异常
      */
-    public static Result checkFileMd5(String fileMd5,
-                                      String fileName) throws Exception {
+    public static Result<?> checkFileMd5(String fileMd5,
+                                         String fileName) throws Exception {
         return checkFileMd5(fileMd5, fileName,
                 defaultPath + File.separatorChar + fileMd5
                 , defaultPath + File.separatorChar + fileMd5);
@@ -124,15 +127,14 @@ public class LocalUpload {
      * 500:文件上传失败、文件上传异常
      * @throws Exception 抛出自定义Exception异常
      */
-    public static Result fragmentFileUploader(UploadFileParam param, String confFilePath,
-                                              String filePath, long chunkSize,
-                                              HttpServletRequest request) throws Exception {
+    public static synchronized Result<?> fragmentFileUploader(UploadFileParam param, String confFilePath,
+                                                              String filePath, long chunkSize,
+                                                              HttpServletRequest request) throws Exception {
         boolean isParamEmpty = StringUtils.isBlank(filePath)
                 || StringUtils.isBlank(confFilePath) && param.getFile() == null;
         if (isParamEmpty) {
             throw new Exception("参数值为空");
         }
-
         // 判断enctype属性是否为multipart/form-data
         boolean isMultipart = ServletFileUpload.isMultipartContent(request);
         if (!isMultipart) {
@@ -140,12 +142,16 @@ public class LocalUpload {
         }
 
         try {
+            // 分片配置文件
+            File confFile = FileUtil.file(FileUtil.mkdir(confFilePath), String.format("%s.conf", param.getName()));
+            RandomAccessFile accessConfFile = new RandomAccessFile(confFile, "rw");
+            // 把该分段标记为 true 表示完成
+            accessConfFile.setLength(param.getChunks());
+            accessConfFile.seek(param.getChunk());
+            accessConfFile.write(Byte.MAX_VALUE);
+            accessConfFile.close();
             // _tmp的缓存文件对象
-            File tmpFile = new File(filePath, String.format("%s_tmp", param.getName()));
-            File tmpFolder = new File(filePath);
-            if (!tmpFolder.exists()) {
-                tmpFolder.mkdirs();
-            }
+            File tmpFile = FileUtil.file(FileUtil.mkdir(filePath), String.format("%s_tmp", param.getName()));
             // 随机位置写入文件
             RandomAccessFile accessTmpFile = new RandomAccessFile(tmpFile, "rw");
             long offset = chunkSize * param.getChunk();
@@ -153,18 +159,6 @@ public class LocalUpload {
             accessTmpFile.seek(offset);
             accessTmpFile.write(param.getFile().getBytes());
             accessTmpFile.close();
-            // 分片配置文件
-            File confFile = new File(confFilePath, String.format("%s.conf", param.getName()));
-            // 创建文件夹
-            File confFolder = new File(confFilePath);
-            if (!confFolder.exists()) {
-                confFolder.mkdirs();
-            }
-            RandomAccessFile accessConfFile = new RandomAccessFile(confFile, "rw");
-            // 把该分段标记为 true 表示完成
-            accessConfFile.setLength(param.getChunks());
-            accessConfFile.seek(param.getChunk());
-            accessConfFile.write(Byte.MAX_VALUE);
             // 检查是否全部分片都成功上传
             byte[] completeList = FileUtils.readFileToByteArray(confFile);
             byte isComplete = Byte.MAX_VALUE;
@@ -173,9 +167,8 @@ public class LocalUpload {
                 isComplete = (byte) (isComplete & completeList[i]);
             }
 
-            accessConfFile.close();
             if (isComplete != Byte.MAX_VALUE) {
-                return Result.ok(HttpStatus.OK.toString(), "文件上传成功");
+                return Result.ok(HttpStatus.OK.value(), "文件上传成功");
             }
 
             boolean isSuccess = renameFile(tmpFile, param.getName());
@@ -190,7 +183,7 @@ public class LocalUpload {
                     .path(tmpFile.getParent() + File.separatorChar + param.getName())
                     .createTime(System.currentTimeMillis())
                     .build();
-            return Result.ok(HttpStatus.CREATED.toString(), "文件上传完成", fileInfo);
+            return Result.ok(HttpStatus.CREATED.value(), "文件上传完成", fileInfo);
         } catch (IOException e) {
             e.printStackTrace();
             return Result.error("文件上传失败");
@@ -209,8 +202,8 @@ public class LocalUpload {
      * 500:文件上传失败、文件上传异常
      * @throws Exception 抛出自定义Exception异常
      */
-    public static Result fragmentFileUploader(UploadFileParam param, long chunkSize,
-                                              HttpServletRequest request) throws Exception {
+    public static Result<?> fragmentFileUploader(UploadFileParam param, long chunkSize,
+                                                 HttpServletRequest request) throws Exception {
         return fragmentFileUploader(param, defaultPath + File.separatorChar + param.getMd5(),
                 defaultPath + File.separatorChar + param.getMd5(),
                 chunkSize, request);
@@ -226,7 +219,7 @@ public class LocalUpload {
      * 500:文件上传失败、传输异常
      * @throws Exception 抛出自定义Exception异常
      */
-    public static Result regularFileUploader(UploadFileParam param, String filePath) throws Exception {
+    public static Result<?> regularFileUploader(UploadFileParam param, String filePath) throws Exception {
         boolean isParamEmpty = StringUtils.isBlank(filePath)
                 || StringUtils.isBlank(param.getName()) && param.getFile() == null;
         if (isParamEmpty) {
@@ -236,8 +229,8 @@ public class LocalUpload {
         // 上传的文件夹
         File uploadFolder = new File(filePath);
         // 创建文件夹
-        if (!uploadFolder.exists()) {
-            uploadFolder.mkdirs();
+        if (!uploadFolder.exists() && !uploadFolder.mkdirs()) {
+            return Result.fail(HttpStatus.FORBIDDEN.value(), "上传所需文件夹创建失败");
         }
 
         // 上传的文件
@@ -259,7 +252,7 @@ public class LocalUpload {
                 .path(uploadFile.getPath())
                 .createTime(System.currentTimeMillis())
                 .build();
-        return Result.ok(HttpStatus.CREATED.toString(), "文件上传完成", fileInfo);
+        return Result.ok(HttpStatus.CREATED.value(), "文件上传完成", fileInfo);
     }
 
     /**
@@ -271,7 +264,7 @@ public class LocalUpload {
      * 500:文件上传失败、传输异常
      * @throws Exception 抛出自定义Exception异常
      */
-    public static Result regularFileUploader(UploadFileParam param) throws Exception {
+    public static Result<?> regularFileUploader(UploadFileParam param) throws Exception {
         boolean isParamEmpty = StringUtils.isBlank(param.getName()) && param.getFile() == null;
         if (isParamEmpty) {
             throw new Exception("参数值为空");
