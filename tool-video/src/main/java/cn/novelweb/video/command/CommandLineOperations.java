@@ -126,6 +126,11 @@ public class CommandLineOperations {
         return commandHandler.start(map);
     }
 
+    /**
+     * 停止任务
+     * @param taskId 需要停止的任务id
+     * @return 任务是否被停止
+     */
     public static boolean stop(String taskId) {
         if (!isSuccessInit) {
             log.error("请先调用.init()方法初始化配置");

@@ -20,17 +20,15 @@ import java.io.File;
 @Slf4j
 public class FormatConversion {
 
-    private static boolean isInit = false;
-
     /**
-     * 初始化获取视频文件的各种参数
+     * 获取视频文件的各种参数
      *
      * @param filePath 文件路径
      * @return 视频参数 VideoParameters 实体类
      */
-    public static VideoParameters init(String filePath) {
+    public static VideoParameters getVideoParameters(String filePath) {
         File file = new File(filePath);
-        return init(file);
+        return getVideoParameters(file);
     }
 
     /**
@@ -39,7 +37,7 @@ public class FormatConversion {
      * @param file 视频文件
      * @return 视频参数 VideoParameters 实体类
      */
-    public static VideoParameters init(File file) {
+    public static VideoParameters getVideoParameters(File file) {
         if (!file.isFile()) {
             log.error("它不是一个标准的文件");
             return null;
@@ -84,7 +82,6 @@ public class FormatConversion {
                     .preset(Preset.slow)
                     .build();
             fFmpegFrameGrabber.stop();
-            isInit = true;
             return videoParameters;
         } catch (FrameGrabber.Exception e) {
             e.printStackTrace();
@@ -106,14 +103,8 @@ public class FormatConversion {
             log.error("它不是一个标准的文件");
             return;
         }
-
         if (output.isFile()) {
             log.error("需要输出的文件已存在");
-            return;
-        }
-
-        if (!isInit) {
-            log.error("请先调用FormatConversion.init()方法初始化参数");
             return;
         }
         try {
@@ -206,7 +197,7 @@ public class FormatConversion {
      */
     public static void converterToMp4(File input, File output, ProgressCallback callback) {
         // 定义初始化参数
-        VideoParameters parameters = FormatConversion.init(input);
+        VideoParameters parameters = FormatConversion.getVideoParameters(input);
         if (parameters == null) {
             return;
         }

@@ -384,29 +384,29 @@ public class ScreenRecorder {
      * 初始化状态代号
      * 用来与当前状态做判断的
      */
-    private static final String init = "init";
+    private static final String INIT = "init";
 
     /**
      * 开始录制时的状态代号
      * 用来与当前状态做判断的
      */
-    private static final String start = "start";
+    private static final String START = "start";
 
     /**
      * 暂停录制时的状态代号
      */
-    private static final String pause = "pause";
+    private static final String PAUSE = "pause";
 
     /**
      * 结束录制时的状态代号
      */
-    private static final String stop = "stop";
+    private static final String STOP = "stop";
 
     /**
      * 用来记录当前的运行时的状态
      * 默认为:初始化状态init
      */
-    private static String current = init;
+    private static String current = INIT;
 
     /**
      * 初始化格式、编码器、比特率、采样率;分配AVPacket空间
@@ -434,12 +434,12 @@ public class ScreenRecorder {
         recorder.setGopSize(this.gopSize);
         recorder.setAudioBitrate(this.audioBitrate);
         // 重定向当前状态为 start
-        current = start;
+        current = START;
         // 初始化Robot
         try {
             robot = new Robot();
         } catch (AWTException e) {
-            log.error("初始化屏幕截图异常:"+e.getMessage());
+            log.error("初始化屏幕截图异常:" + e.getMessage());
         }
         // 创建并设置编码器、打开编码器、申请必要的编码缓存区
         try {
@@ -464,15 +464,15 @@ public class ScreenRecorder {
         if (StringUtils.isBlank(file)) {
             file = String.valueOf(System.currentTimeMillis());
         }
-        if (current.equals(init)) {
+        if (current.equals(INIT)) {
             init(file);
         }
         // 判断当前状态是否等于 start
-        if (!current.equals(start) && !current.equals(pause)) {
+        if (!current.equals(START) && !current.equals(PAUSE)) {
             return;
         }
         // 重定向当前状态为:stop
-        current = stop;
+        current = STOP;
         // 指定开启录音
         if (isAudioRecorder) {
             ThreadUtil.execute(this::soundRecorder);
@@ -567,10 +567,10 @@ public class ScreenRecorder {
      */
     public void pause() {
         // 当前正在录屏
-        if (!current.equals(stop)) {
+        if (!current.equals(STOP)) {
             return;
         }
-        current = pause;
+        current = PAUSE;
         // 关闭用于录屏的线程
         if (screenThreadPool != null) {
             screenThreadPool.shutdown();
@@ -587,10 +587,10 @@ public class ScreenRecorder {
      */
     public void stop() {
         // 当前正在录屏
-        if (!current.equals(stop) && !current.equals(pause)) {
+        if (!current.equals(STOP) && !current.equals(PAUSE)) {
             return;
         }
-        current = init;
+        current = INIT;
         try {
             if (screenThreadPool != null) {
                 screenThreadPool.shutdownNow();

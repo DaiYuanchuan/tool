@@ -152,11 +152,11 @@ public class CommandHandlerImpl implements CommandHandler {
             return null;
         }
         if (taskId != null && command != null) {
-            CommandTask commandTask = taskHandler.process(taskId, hasPath ? command : programConfig.getPath() + command);
+            CommandTask commandTask = taskHandler.process(taskId, hasPath ? command : programConfig.getPath() + " " + command);
             if (commandTask != null && !commandTask.getThread().isInterrupted()) {
                 int ret = taskDao.add(commandTask);
                 if (ret > 0) {
-                    return commandTask.getTaskId();
+                    return commandTask.getCommand();
                 } else {
                     // 持久化信息失败，停止处理
                     taskHandler.stop(commandTask.getProcess());

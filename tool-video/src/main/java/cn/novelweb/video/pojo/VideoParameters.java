@@ -116,10 +116,10 @@ public class VideoParameters {
     private int gopSize;
 
     @ApiModelProperty(value = "视频质量")
-    private int videoQuality = -1;
+    private double videoQuality = -1;
 
     @ApiModelProperty(value = "音频的质量")
-    private int audioQuality = -1;
+    private double audioQuality = -1;
 
     @ApiModelProperty(value = "权衡 视频质量 和 编码速度 的值")
     private Preset preset = Preset.slow;

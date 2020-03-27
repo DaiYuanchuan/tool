@@ -337,7 +337,7 @@ public class VideoEditing {
      * @param input    需要转换的源视频文件路径
      * @param callback 任务进度的回调接口
      */
-    private static void getProgress(String taskId, String input, ProgressCallback callback) {
+    public static void getProgress(String taskId, String input, ProgressCallback callback) {
         CommandTask commandTask = CommandLineOperations.get(taskId);
         if (commandTask == null) {
             log.error("任务id: {} 查询失败", taskId);
