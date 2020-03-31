@@ -33,4 +33,14 @@ public class ConstantConfiguration {
      */
     public static final String SERVICE_ERROR = "500";
 
+    /**
+     * 常量 正则 url验证
+     */
+    public static final String URL_REGULARIZATION = "^(http|https|ftp)://[-A-Za-z0-9+&@#/%?=~_|!:,.;]+[-A-Za-z0-9+&@#/%=~_|]";
+
+    /**
+     * 常量 正则 不含小数 数字
+     */
+    public static final String NUMBER_REGULARIZATION = "[0-9]*";
+
 }

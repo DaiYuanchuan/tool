@@ -1,36 +1,194 @@
 package cn.novelweb.tool.img;
 
-import cn.hutool.core.img.ImgUtil;
+import cn.hutool.core.codec.Base64;
 import cn.hutool.core.io.FileTypeUtil;
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.util.ArrayUtil;
+import cn.hutool.core.util.ReUtil;
+import cn.hutool.core.util.StrUtil;
+import cn.novelweb.config.ConstantConfiguration;
 import lombok.extern.slf4j.Slf4j;
+import net.coobird.thumbnailator.Thumbnails;
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
+import java.io.File;
+import java.io.IOException;
+import java.util.List;
 
 /**
  * <p>图片处理工具类</p>
- * <p>2020-03-25 16:48</p>
+ * <p>2020-03-31 11:07</p>
  *
  * @author Dai Yuanchuan
  **/
 @Slf4j
-public class ImageUtil extends ImgUtil {
+public class ImagesUtil {
 
     /**
      * 支持的图片类型数组
      */
     private static final String[] IMAGES_TYPE = {"jpg", "png"};
+
+    // -------------------------------------------------------------------------- 图片压缩
+
+    /**
+     * 压缩至指定图片尺寸(例如：横500高500)，保持图片不变形，多余部分裁剪掉
+     *
+     * @param input  图片流
+     * @param suffix 文件后缀 jpg、png等等
+     * @param width  压缩至:宽度(最小为1)
+     * @param height 压缩至:高度(最小为1)
+     * @return 返回Base64图片编码
+     */
+    public static String compressPictures(InputStream input, String suffix, Integer width, Integer height) {
+        if (input == null) {
+            log.error("图片为null");
+            return "";
+        }
+        // 设置宽高最小值为1
+        width = Math.max(width, 1);
+        height = Math.max(height, 1);
+        ByteArrayOutputStream outputStream = null;
+        try {
+            //压缩至指定图片尺寸（例如：横500高500），保持图片不变形，多余部分裁剪掉
+            java.awt.image.BufferedImage image = ImageIO.read(input);
+            net.coobird.thumbnailator.Thumbnails.Builder<java.awt.image.BufferedImage> builder;
+            int imageWidth = image.getWidth();
+            int imageHeight = image.getHeight();
+            boolean isRatio = 0.75 != (float) imageWidth / imageHeight;
+            if (isRatio) {
+                if (imageWidth > imageHeight) {
+                    image = Thumbnails.of(image).height(height).asBufferedImage();
+                } else {
+                    image = Thumbnails.of(image).width(width).asBufferedImage();
+                }
+                builder = Thumbnails.of(image).sourceRegion(net.coobird.thumbnailator.geometry.Positions.CENTER, width, height).size(width, height);
+            } else {
+                builder = Thumbnails.of(image).size(width, height);
+            }
+            outputStream = new ByteArrayOutputStream();
+            builder.outputFormat(suffix).toOutputStream(outputStream);
+            return StrUtil.format("data:image/{};base64,{}", suffix, Base64.encode(outputStream.toByteArray()));
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+            log.error("压缩指定宽高图片出错:{}", e.getMessage());
+        } finally {
+            IOUtils.closeQuietly(outputStream);
+        }
+        return "";
+    }
+
+    /**
+     * 压缩指定 网络 图片 大小(例如：横500高500)，保持图片不变形，多余部分裁剪掉
+     *
+     * @param url    网络图片URL
+     * @param width  压缩至:宽度(最小为10)
+     * @param height 压缩至:高度(最小为10)
+     * @return 返回Base64图片编码
+     */
+    public static String compressNetworkPictures(String url, Integer width, Integer height) {
+        if (ReUtil.get(ConstantConfiguration.URL_REGULARIZATION, url, 0) == null) {
+            log.error("url不符合规则");
+            return "";
+        }
+        BufferedInputStream bufferedInputStream = null;
+        try {
+            bufferedInputStream = new BufferedInputStream(new java.net.URL(url).openStream());
+            return compressPictures(bufferedInputStream, FileTypeUtil.getType(new java.net.URL(url).openStream()), Math.max(width, 1), Math.max(height, 1));
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error("压缩网络图片出错:{}", e.getMessage());
+            return "";
+        } finally {
+            IOUtils.closeQuietly(bufferedInputStream);
+        }
+    }
+
+
+    /**
+     * 按照比例进行缩放...图片尺寸不变
+     *
+     * @param imgFile 文件流
+     * @param suffix  文件后缀 jpg、png等等
+     * @param scaling 缩放比例(1为最高质量,大于1就是变大,小于1就是缩小)
+     * @return 返回Base64图片编码
+     */
+    public String scaleToScale(InputStream imgFile, String suffix, double scaling) {
+        ByteArrayOutputStream outputStream = null;
+        try {
+            outputStream = new ByteArrayOutputStream();
+            Thumbnails.of(imgFile).scale(scaling).outputFormat(suffix).toOutputStream(outputStream);
+            return StrUtil.format("data:image/{};base64,{}", suffix, Base64.encode(outputStream.toByteArray()));
+        } catch (IOException e) {
+            e.printStackTrace();
+            log.error("压缩网络图片出错:{}", e.getMessage());
+            return "";
+        } finally {
+            IOUtils.closeQuietly(outputStream);
+        }
+    }
+
+    /**
+     * 不按照比例，指定大小进行缩放
+     *
+     * @param imgFile   文件流
+     * @param suffix    文件后缀 jpg、png等等
+     * @param width     压缩至:宽
+     * @param height    压缩至:高
+     * @param isScaling 是否按照比例缩放(true按照比例缩放 : false不按照比例缩放)
+     * @return 返回Base64图片编码
+     */
+    public String scaleToScale(InputStream imgFile, String suffix, Integer width, Integer height, boolean isScaling) {
+        ByteArrayOutputStream outputStream = null;
+        try {
+            outputStream = new ByteArrayOutputStream();
+            Thumbnails.of(imgFile).size(width, height).keepAspectRatio(isScaling).outputFormat(suffix).toOutputStream(outputStream);
+            return StrUtil.format("data:image/{};base64,{}", suffix, Base64.encode(outputStream.toByteArray()));
+        } catch (IOException e) {
+            e.printStackTrace();
+            log.error("不按照比例缩放图片出错:{}", e.getMessage());
+            return "";
+        } finally {
+            IOUtils.closeQuietly(outputStream);
+        }
+    }
+
+    /**
+     * 压缩图片大小 图片尺寸抱持不变
+     *
+     * @param imgFile          文件流
+     * @param compressionRatio 压缩比例[设置缩略图的缩放因子,值大于0.0]
+     * @param scaling          缩放比例[取值范围 0.0 ~ 1.0 之间]
+     * @return 返回Base64图片编码
+     */
+    public String compressionSize(InputStream imgFile, String suffix, double compressionRatio, double scaling) {
+        ByteArrayOutputStream outputStream = null;
+        try {
+            compressionRatio = Math.max(compressionRatio, 0.0);
+            scaling = Math.min(1.0, Math.max(scaling, 0.0));
+            outputStream = new ByteArrayOutputStream();
+            Thumbnails.of(imgFile).scale(compressionRatio).outputQuality(scaling).outputFormat(suffix).toOutputStream(outputStream);
+            return StrUtil.format("data:image/{};base64,{}", suffix, Base64.encode(outputStream.toByteArray()));
+        } catch (IOException e) {
+            e.printStackTrace();
+            log.error("压缩图片大小图片尺寸不变出错:{}", e.getMessage());
+            return "";
+        } finally {
+            IOUtils.closeQuietly(outputStream);
+        }
+    }
+
+    // -------------------------------------------------------------------------- 图片背景图替换
 
     /**
      * 背景移除
