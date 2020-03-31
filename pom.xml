@@ -258,24 +258,6 @@
             </dependency>
             <!-- 视频流需要引用的包end -->
 
-            <!-- 包poi 操作office start -->
-            <dependency>
-                <groupId>org.apache.poi</groupId>
-                <artifactId>poi</artifactId>
-                <version>4.1.2</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.poi</groupId>
-                <artifactId>poi-scratchpad</artifactId>
-                <version>4.1.2</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.poi</groupId>
-                <artifactId>poi-ooxml</artifactId>
-                <version>4.1.2</version>
-            </dependency>
-            <!-- 包poi 操作office end -->
-
             <!-- 官方通用配置oss-parent -->
             <dependency>
                 <groupId>org.sonatype.oss</groupId>

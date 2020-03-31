@@ -139,12 +139,12 @@ public class TimingTask {
     /**
      * 更新Task的执行时间规则
      *
-     * @param id      Task的ID
-     * @param pattern {@link CronPattern}
+     * @param id             Task的ID
+     * @param cronExpression Cron 表达式
      * @since 4.0.10
      */
-    public static void updatePattern(String id, CronPattern pattern) {
-        SCHEDULER.updatePattern(id, pattern);
+    public static void updatePattern(String id, String cronExpression) {
+        SCHEDULER.updatePattern(id, new CronPattern(cronExpression));
     }
 
     /**
