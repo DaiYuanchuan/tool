@@ -17,9 +17,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.*;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
@@ -219,6 +217,20 @@ public class ImagesUtil {
      * @return 返回处理结果 true:图片处理完成 false:图片处理失败
      */
     public static boolean backgroundRemoval(File input, File output, int tolerance) {
+        return backgroundRemoval(input, output, null, tolerance);
+    }
+
+    /**
+     * 背景移除、背景替换工具
+     * 指定需要替换的背景、或者纯色背景
+     *
+     * @param input     需要进行操作的图片
+     * @param output    最后输出的文件
+     * @param override  指定替换成的背景颜色 为null时背景为透明
+     * @param tolerance 容差值[根据图片的主题色,加入容差值,值的取值范围在0~255之间]
+     * @return 返回处理结果 true:图片处理完成 false:图片处理失败
+     */
+    public static boolean backgroundRemoval(File input, File output, Color override, int tolerance) {
         if (!input.exists()) {
             log.error("没有要进行操作的图片");
             return false;
@@ -257,7 +269,7 @@ public class ImagesUtil {
                     boolean isTrue = ArrayUtil.contains(removeRgb, hex) ||
                             areColorsWithinTolerance(hexToRgb(mainColor), new Color(Integer.parseInt(hex.substring(1), 16)), tolerance);
                     if (isTrue) {
-                        rgb = ((alpha + 1) << 24) | (rgb & 0x00ffffff);
+                        rgb = override == null ? ((alpha + 1) << 24) | (rgb & 0x00ffffff) : override.getRGB();
                     }
                     image.setRGB(x, y, rgb);
                 }
