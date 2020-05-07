@@ -673,6 +673,9 @@ public class ImagesUtil {
     /**
      * 图片拼接
      * 多张图片进行 横向或纵向拼接
+     * 根据需求图像的宽高需要保持一致
+     * 注意:横向合并时 高度必须要保持一致
+     * 纵向合并时 宽度必须要保持一致
      *
      * @param files                需要进行拼接的文件数组
      * @param horizontalOrVertical 布尔值 true:进行横向拼接 false:进行纵向拼接
@@ -700,6 +703,7 @@ public class ImagesUtil {
             imageArrays[i] = new int[width * height];
             imageArrays[i] = images[i].getRGB(0, 0, width, height, imageArrays[i], 0, width);
         }
+        // 获取最高的 高、宽
         int newHeight = 0, newWidth = 0;
         for (BufferedImage image : images) {
             if (horizontalOrVertical) {
@@ -713,7 +717,9 @@ public class ImagesUtil {
             }
         }
 
-        if ((horizontalOrVertical && newWidth < 1) || (!horizontalOrVertical && newHeight < 1)) {
+        // 判断宽高是否存在值
+        boolean judgeWidthAndHeight = (horizontalOrVertical && newWidth < 1) || (!horizontalOrVertical && newHeight < 1);
+        if (judgeWidthAndHeight) {
             return null;
         }
 
