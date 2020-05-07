@@ -6,7 +6,7 @@
     <groupId>cn.novelweb</groupId>
     <artifactId>tool</artifactId>
     <packaging>pom</packaging>
-    <version>1.3.4</version>
+    <version>1.3.6</version>
 
     <!-- 子项目 -->
     <modules>

@@ -11,32 +11,42 @@ public class ConstantConfiguration {
     /**
      * 常量 请求成功时 返回的状态码
      */
-    public static final String SUCCESS = "0";
+    public static String success = "0";
 
     /**
      * 常量 请求失败时 返回的状态码
      */
-    public static final String FAIL = "1";
+    public static String fail = "1";
 
     /**
      * 常量 token过期时 返回的状态码
      */
-    public static final String REFUSE = "403";
+    public static String refuse = "403";
 
     /**
      * 常量 无权限异常时 返回的状态码
      */
-    public static final String NO_AUTHORITY = "401";
+    public static String noAuthority = "401";
 
     /**
      * 常量 服务器出错时 返回的状态码
      */
-    public static final String SERVICE_ERROR = "500";
+    public static String systemError = "500";
 
     /**
      * 常量 正则 url验证
      */
     public static final String URL_REGULARIZATION = "^(http|https|ftp)://[-A-Za-z0-9+&@#/%?=~_|!:,.;]+[-A-Za-z0-9+&@#/%=~_|]";
+
+    /**
+     * 常量 最大的银行卡号长度
+     */
+    public static final int MAX_BANK_CARD_NUMBER_LENGTH = 19;
+
+    /**
+     * 常量 最小的银行卡号长度
+     */
+    public static final int MIN_BANK_CARD_NUMBER_LENGTH = 15;
 
     /**
      * 常量 正则 不含小数 数字

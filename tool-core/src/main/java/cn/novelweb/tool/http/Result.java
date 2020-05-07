@@ -37,11 +37,11 @@ public class Result<T> {
     }
 
     public static Result ok(Object data) {
-        return new Result<>(ConstantConfiguration.SUCCESS, "请求成功", data);
+        return new Result<>(ConstantConfiguration.success, "请求成功", data);
     }
 
     public static Result ok() {
-        return new Result<>(ConstantConfiguration.SUCCESS, "请求成功", "success");
+        return new Result<>(ConstantConfiguration.success, "请求成功", "success");
     }
 
     public static Result ok(String code, String message) {
@@ -61,11 +61,15 @@ public class Result<T> {
     }
 
     public static Result fail(Object data) {
-        return new Result<>(ConstantConfiguration.FAIL, "请求失败", data);
+        return new Result<>(ConstantConfiguration.fail, "请求失败", data);
+    }
+
+    public static Result fail() {
+        return new Result<>(ConstantConfiguration.fail, "请求失败", "");
     }
 
     public static Result fail(String message) {
-        return new Result<>(ConstantConfiguration.FAIL, message, "");
+        return new Result<>(ConstantConfiguration.fail, message, "");
     }
 
     public static Result fail(String code, String message) {
@@ -85,15 +89,23 @@ public class Result<T> {
     }
 
     public static Result authority(String message) {
-        return new Result<>(ConstantConfiguration.NO_AUTHORITY, message, "");
+        return new Result<>(ConstantConfiguration.noAuthority, message, "");
+    }
+
+    public static Result authority() {
+        return new Result<>(ConstantConfiguration.noAuthority, "抱歉！您没有对应的权限", "");
+    }
+
+    public static Result refuse() {
+        return new Result<>(ConstantConfiguration.refuse, "登录过期！请重新登录", "");
     }
 
     public static Result refuse(String message) {
-        return new Result<>(ConstantConfiguration.REFUSE, message, "");
+        return new Result<>(ConstantConfiguration.refuse, message, "");
     }
 
     public static Result error(String message) {
-        return new Result<>(ConstantConfiguration.SERVICE_ERROR, message, "");
+        return new Result<>(ConstantConfiguration.systemError, message, "");
     }
 
     public String getCode() {

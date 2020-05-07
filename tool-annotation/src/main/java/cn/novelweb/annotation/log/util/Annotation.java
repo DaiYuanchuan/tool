@@ -95,8 +95,15 @@ public class Annotation {
         accessLogInfo.setCreateTime(new Date());
 
         // 访问出现的异常信息
-        accessLogInfo.setErrorCause(e != null ? e.getCause().toString() : "");
-        accessLogInfo.setErrorMsg(e != null ? e.getCause().getMessage() : "");
+        if (e != null) {
+            if (e.getCause() != null) {
+                accessLogInfo.setErrorCause(e.getCause().toString());
+                accessLogInfo.setErrorMsg(e.getCause().getMessage());
+            }
+        } else {
+            accessLogInfo.setErrorCause("");
+            accessLogInfo.setErrorMsg("");
+        }
 
         if (future != null) {
             try {

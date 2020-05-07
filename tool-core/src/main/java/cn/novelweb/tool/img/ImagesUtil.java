@@ -1,11 +1,9 @@
 package cn.novelweb.tool.img;
 
-import cn.hutool.core.codec.Base64;
 import cn.hutool.core.io.FileTypeUtil;
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.util.ArrayUtil;
 import cn.hutool.core.util.ReUtil;
-import cn.hutool.core.util.StrUtil;
 import cn.novelweb.config.ConstantConfiguration;
 import lombok.extern.slf4j.Slf4j;
 import net.coobird.thumbnailator.Thumbnails;
@@ -13,10 +11,14 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
 
 import javax.imageio.ImageIO;
+import javax.imageio.ImageReadParam;
+import javax.imageio.ImageReader;
+import javax.imageio.stream.ImageInputStream;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.*;
+import java.net.URL;
 import java.util.*;
 import java.io.File;
 import java.io.IOException;
@@ -45,12 +47,26 @@ public class ImagesUtil {
      * @param suffix 文件后缀 jpg、png等等
      * @param width  压缩至:宽度(最小为1)
      * @param height 压缩至:高度(最小为1)
-     * @return 返回Base64图片编码
+     * @return 返回图片的byte类型数组
      */
-    public static String compressPictures(InputStream input, String suffix, Integer width, Integer height) {
+    public static byte[] compressPicturesOutByte(InputStream input, String suffix, Integer width, Integer height) {
+        ByteArrayOutputStream byteArrayOutputStream = compressPicturesOutStream(input, suffix, width, height);
+        return byteArrayOutputStream == null ? null : byteArrayOutputStream.toByteArray();
+    }
+
+    /**
+     * 压缩至指定图片尺寸(例如：横500高500)，保持图片不变形，多余部分裁剪掉
+     *
+     * @param input  图片流
+     * @param suffix 文件后缀 jpg、png等等
+     * @param width  压缩至:宽度(最小为1)
+     * @param height 压缩至:高度(最小为1)
+     * @return 返回图片的字节数组输出流
+     */
+    public static ByteArrayOutputStream compressPicturesOutStream(InputStream input, String suffix, Integer width, Integer height) {
         if (input == null) {
             log.error("图片为null");
-            return "";
+            return null;
         }
         // 设置宽高最小值为1
         width = Math.max(width, 1);
@@ -58,8 +74,9 @@ public class ImagesUtil {
         ByteArrayOutputStream outputStream = null;
         try {
             //压缩至指定图片尺寸（例如：横500高500），保持图片不变形，多余部分裁剪掉
-            java.awt.image.BufferedImage image = ImageIO.read(input);
-            net.coobird.thumbnailator.Thumbnails.Builder<java.awt.image.BufferedImage> builder;
+            BufferedImage image = ImageIO.read(input);
+            Thumbnails.Builder<BufferedImage> builder;
+            // 定义宽高变量
             int imageWidth = image.getWidth();
             int imageHeight = image.getHeight();
             boolean isRatio = 0.75 != (float) imageWidth / imageHeight;
@@ -75,7 +92,7 @@ public class ImagesUtil {
             }
             outputStream = new ByteArrayOutputStream();
             builder.outputFormat(suffix).toOutputStream(outputStream);
-            return StrUtil.format("data:image/{};base64,{}", suffix, Base64.encode(outputStream.toByteArray()));
+            return outputStream;
         } catch (IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -83,7 +100,7 @@ public class ImagesUtil {
         } finally {
             IOUtils.closeQuietly(outputStream);
         }
-        return "";
+        return null;
     }
 
     /**
@@ -92,26 +109,39 @@ public class ImagesUtil {
      * @param url    网络图片URL
      * @param width  压缩至:宽度(最小为10)
      * @param height 压缩至:高度(最小为10)
-     * @return 返回Base64图片编码
+     * @return 返回图片的byte类型数组
      */
-    public static String compressNetworkPictures(String url, Integer width, Integer height) {
+    public static byte[] compressNetworkPicturesOutByte(String url, Integer width, Integer height) {
+        ByteArrayOutputStream byteArrayOutputStream = compressNetworkPicturesOutStream(url, width, height);
+        return byteArrayOutputStream == null ? null : byteArrayOutputStream.toByteArray();
+    }
+
+    /**
+     * 压缩指定 网络 图片 大小(例如：横500高500)，保持图片不变形，多余部分裁剪掉
+     *
+     * @param url    网络图片URL
+     * @param width  压缩至:宽度(最小为10)
+     * @param height 压缩至:高度(最小为10)
+     * @return 返回图片的字节数组输出流
+     */
+    public static ByteArrayOutputStream compressNetworkPicturesOutStream(String url, Integer width, Integer height) {
         if (ReUtil.get(ConstantConfiguration.URL_REGULARIZATION, url, 0) == null) {
             log.error("url不符合规则");
-            return "";
+            return null;
         }
         BufferedInputStream bufferedInputStream = null;
         try {
-            bufferedInputStream = new BufferedInputStream(new java.net.URL(url).openStream());
-            return compressPictures(bufferedInputStream, FileTypeUtil.getType(new java.net.URL(url).openStream()), Math.max(width, 1), Math.max(height, 1));
+            bufferedInputStream = new BufferedInputStream(new URL(url).openStream());
+            return compressPicturesOutStream(bufferedInputStream, FileTypeUtil.getType(new URL(url).openStream()),
+                    Math.max(width, 1), Math.max(height, 1));
         } catch (Exception e) {
             e.printStackTrace();
             log.error("压缩网络图片出错:{}", e.getMessage());
-            return "";
+            return null;
         } finally {
             IOUtils.closeQuietly(bufferedInputStream);
         }
     }
-
 
     /**
      * 按照比例进行缩放...图片尺寸不变
@@ -119,18 +149,31 @@ public class ImagesUtil {
      * @param imgFile 文件流
      * @param suffix  文件后缀 jpg、png等等
      * @param scaling 缩放比例(1为最高质量,大于1就是变大,小于1就是缩小)
-     * @return 返回Base64图片编码
+     * @return 返回图片的byte类型数组
      */
-    public String scaleToScale(InputStream imgFile, String suffix, double scaling) {
+    public static byte[] scaleToScaleOutByte(InputStream imgFile, String suffix, double scaling) {
+        ByteArrayOutputStream byteArrayOutputStream = scaleToScaleOutStream(imgFile, suffix, scaling);
+        return byteArrayOutputStream == null ? null : byteArrayOutputStream.toByteArray();
+    }
+
+    /**
+     * 按照比例进行缩放...图片尺寸不变
+     *
+     * @param imgFile 文件流
+     * @param suffix  文件后缀 jpg、png等等
+     * @param scaling 缩放比例(1为最高质量,大于1就是变大,小于1就是缩小)
+     * @return 返回图片的字节数组输出流
+     */
+    public static ByteArrayOutputStream scaleToScaleOutStream(InputStream imgFile, String suffix, double scaling) {
         ByteArrayOutputStream outputStream = null;
         try {
             outputStream = new ByteArrayOutputStream();
             Thumbnails.of(imgFile).scale(scaling).outputFormat(suffix).toOutputStream(outputStream);
-            return StrUtil.format("data:image/{};base64,{}", suffix, Base64.encode(outputStream.toByteArray()));
+            return outputStream;
         } catch (IOException e) {
             e.printStackTrace();
             log.error("压缩网络图片出错:{}", e.getMessage());
-            return "";
+            return null;
         } finally {
             IOUtils.closeQuietly(outputStream);
         }
@@ -144,18 +187,33 @@ public class ImagesUtil {
      * @param width     压缩至:宽
      * @param height    压缩至:高
      * @param isScaling 是否按照比例缩放(true按照比例缩放 : false不按照比例缩放)
-     * @return 返回Base64图片编码
+     * @return 返回图片的byte类型数组
      */
-    public String scaleToScale(InputStream imgFile, String suffix, Integer width, Integer height, boolean isScaling) {
+    public static byte[] scaleToScaleOutByte(InputStream imgFile, String suffix, Integer width, Integer height, boolean isScaling) {
+        ByteArrayOutputStream byteArrayOutputStream = scaleToScaleOutStream(imgFile, suffix, width, height, isScaling);
+        return byteArrayOutputStream == null ? null : byteArrayOutputStream.toByteArray();
+    }
+
+    /**
+     * 不按照比例，指定大小进行缩放
+     *
+     * @param imgFile   文件流
+     * @param suffix    文件后缀 jpg、png等等
+     * @param width     压缩至:宽
+     * @param height    压缩至:高
+     * @param isScaling 是否按照比例缩放(true按照比例缩放 : false不按照比例缩放)
+     * @return 返回图片的字节数组输出流
+     */
+    public static ByteArrayOutputStream scaleToScaleOutStream(InputStream imgFile, String suffix, Integer width, Integer height, boolean isScaling) {
         ByteArrayOutputStream outputStream = null;
         try {
             outputStream = new ByteArrayOutputStream();
             Thumbnails.of(imgFile).size(width, height).keepAspectRatio(isScaling).outputFormat(suffix).toOutputStream(outputStream);
-            return StrUtil.format("data:image/{};base64,{}", suffix, Base64.encode(outputStream.toByteArray()));
+            return outputStream;
         } catch (IOException e) {
             e.printStackTrace();
             log.error("不按照比例缩放图片出错:{}", e.getMessage());
-            return "";
+            return null;
         } finally {
             IOUtils.closeQuietly(outputStream);
         }
@@ -167,20 +225,33 @@ public class ImagesUtil {
      * @param imgFile          文件流
      * @param compressionRatio 压缩比例[设置缩略图的缩放因子,值大于0.0]
      * @param scaling          缩放比例[取值范围 0.0 ~ 1.0 之间]
-     * @return 返回Base64图片编码
+     * @return 返回图片的byte类型数组
      */
-    public String compressionSize(InputStream imgFile, String suffix, double compressionRatio, double scaling) {
+    public static byte[] compressionSizeOutByte(InputStream imgFile, String suffix, double compressionRatio, double scaling) {
+        ByteArrayOutputStream byteArrayOutputStream = compressionSizeOutStream(imgFile, suffix, compressionRatio, scaling);
+        return byteArrayOutputStream == null ? null : byteArrayOutputStream.toByteArray();
+    }
+
+    /**
+     * 压缩图片大小 图片尺寸抱持不变
+     *
+     * @param imgFile          文件流
+     * @param compressionRatio 压缩比例[设置缩略图的缩放因子,值大于0.0]
+     * @param scaling          缩放比例[取值范围 0.0 ~ 1.0 之间]
+     * @return 返回图片的字节数组输出流
+     */
+    public static ByteArrayOutputStream compressionSizeOutStream(InputStream imgFile, String suffix, double compressionRatio, double scaling) {
         ByteArrayOutputStream outputStream = null;
         try {
             compressionRatio = Math.max(compressionRatio, 0.0);
             scaling = Math.min(1.0, Math.max(scaling, 0.0));
             outputStream = new ByteArrayOutputStream();
             Thumbnails.of(imgFile).scale(compressionRatio).outputQuality(scaling).outputFormat(suffix).toOutputStream(outputStream);
-            return StrUtil.format("data:image/{};base64,{}", suffix, Base64.encode(outputStream.toByteArray()));
+            return outputStream;
         } catch (IOException e) {
             e.printStackTrace();
             log.error("压缩图片大小图片尺寸不变出错:{}", e.getMessage());
-            return "";
+            return null;
         } finally {
             IOUtils.closeQuietly(outputStream);
         }
@@ -191,7 +262,11 @@ public class ImagesUtil {
     /**
      * 背景移除
      * 图片去底工具
-     * 纯色图片变矢量图工具
+     * 将 "纯色背景的图片" 还原成 "透明背景的图片"
+     * 将纯色背景的图片转成矢量图
+     * 取图片边缘的像素点和获取到的图片主题色作为要替换的背景色
+     * 再加入一定的容差值,然后将所有像素点与该颜色进行比较
+     * 发现相同则将颜色不透明度设置为0,使颜色完全透明.
      *
      * @param inputPath  要处理图片的路径
      * @param outputPath 输出图片的路径
@@ -221,8 +296,13 @@ public class ImagesUtil {
     }
 
     /**
-     * 背景移除、背景替换工具
-     * 指定需要替换的背景、或者纯色背景
+     * 背景移除
+     * 图片去底工具
+     * 将 "纯色背景的图片" 还原成 "透明背景的图片"
+     * 将纯色背景的图片转成矢量图
+     * 取图片边缘的像素点和获取到的图片主题色作为要替换的背景色
+     * 再加入一定的容差值,然后将所有像素点与该颜色进行比较
+     * 发现相同则将颜色不透明度设置为0,使颜色完全透明.
      *
      * @param input     需要进行操作的图片
      * @param output    最后输出的文件
@@ -231,54 +311,85 @@ public class ImagesUtil {
      * @return 返回处理结果 true:图片处理完成 false:图片处理失败
      */
     public static boolean backgroundRemoval(File input, File output, Color override, int tolerance) {
-        if (!input.exists()) {
-            log.error("没有要进行操作的图片");
+        if (fileTypeValidation(input, IMAGES_TYPE)) {
             return false;
         }
-        // 获取图片类型
-        String type = FileTypeUtil.getType(input);
-        // 类型对比
-        if (!ArrayUtil.contains(IMAGES_TYPE, type)) {
-            log.error("文件类型不被支持");
-            return false;
-        }
-
-        // 容差值 最大255 最小0
-        tolerance = Math.min(255, Math.max(tolerance, 0));
-
         try {
             // 获取图片左上、中上、右上、右中、右下、下中、左下、左中、8个像素点rgb的16进制值
             BufferedImage bufferedImage = ImageIO.read(input);
-            // 绘制icon
-            ImageIcon imageIcon = new ImageIcon(bufferedImage);
-            BufferedImage image = new BufferedImage(imageIcon.getIconWidth(), imageIcon.getIconHeight(),
-                    BufferedImage.TYPE_4BYTE_ABGR);
-            // 绘图工具
-            Graphics graphics = image.getGraphics();
-            graphics.drawImage(imageIcon.getImage(), 0, 0, imageIcon.getImageObserver());
-            // 需要删除的RGB元素
-            String[] removeRgb = getRemoveRgb(bufferedImage);
-            // 获取图片的大概主色调
-            String mainColor = getMainColor(bufferedImage);
-            int alpha = 0;
-            for (int y = image.getMinY(); y < image.getHeight(); y++) {
-                for (int x = image.getMinX(); x < image.getWidth(); x++) {
-                    // 获取像素的16进制
-                    int rgb = image.getRGB(x, y);
-                    String hex = rgbToHex((rgb & 0xff0000) >> 16, (rgb & 0xff00) >> 8, (rgb & 0xff));
-                    boolean isTrue = ArrayUtil.contains(removeRgb, hex) ||
-                            areColorsWithinTolerance(hexToRgb(mainColor), new Color(Integer.parseInt(hex.substring(1), 16)), tolerance);
-                    if (isTrue) {
-                        rgb = override == null ? ((alpha + 1) << 24) | (rgb & 0x00ffffff) : override.getRGB();
-                    }
-                    image.setRGB(x, y, rgb);
-                }
-            }
-            graphics.drawImage(image, 0, 0, imageIcon.getImageObserver());
-            return ImageIO.write(image, FileUtil.extName(input.getAbsolutePath()), output);
+            return ImageIO.write(backgroundRemoval(bufferedImage, override, tolerance), FileUtil.extName(input.getAbsolutePath()), output);
         } catch (IOException e) {
             e.printStackTrace();
             return false;
+        }
+    }
+
+    /**
+     * 背景移除
+     * 图片去底工具
+     * 将 "纯色背景的图片" 还原成 "透明背景的图片"
+     * 将纯色背景的图片转成矢量图
+     * 取图片边缘的像素点和获取到的图片主题色作为要替换的背景色
+     * 再加入一定的容差值,然后将所有像素点与该颜色进行比较
+     * 发现相同则将颜色不透明度设置为0,使颜色完全透明.
+     *
+     * @param bufferedImage 需要进行处理的图片流
+     * @param override      指定替换成的背景颜色 为null时背景为透明
+     * @param tolerance     容差值[根据图片的主题色,加入容差值,值的取值范围在0~255之间]
+     * @return 返回处理好的图片流
+     */
+    public static BufferedImage backgroundRemoval(BufferedImage bufferedImage, Color override, int tolerance) {
+        // 容差值 最大255 最小0
+        tolerance = Math.min(255, Math.max(tolerance, 0));
+        // 绘制icon
+        ImageIcon imageIcon = new ImageIcon(bufferedImage);
+        BufferedImage image = new BufferedImage(imageIcon.getIconWidth(), imageIcon.getIconHeight(),
+                BufferedImage.TYPE_4BYTE_ABGR);
+        // 绘图工具
+        Graphics graphics = image.getGraphics();
+        graphics.drawImage(imageIcon.getImage(), 0, 0, imageIcon.getImageObserver());
+        // 需要删除的RGB元素
+        String[] removeRgb = getRemoveRgb(bufferedImage);
+        // 获取图片的大概主色调
+        String mainColor = getMainColor(bufferedImage);
+        int alpha = 0;
+        for (int y = image.getMinY(); y < image.getHeight(); y++) {
+            for (int x = image.getMinX(); x < image.getWidth(); x++) {
+                // 获取像素的16进制
+                int rgb = image.getRGB(x, y);
+                String hex = rgbToHex((rgb & 0xff0000) >> 16, (rgb & 0xff00) >> 8, (rgb & 0xff));
+                boolean isTrue = ArrayUtil.contains(removeRgb, hex) ||
+                        areColorsWithinTolerance(hexToRgb(mainColor), new Color(Integer.parseInt(hex.substring(1), 16)), tolerance);
+                if (isTrue) {
+                    rgb = override == null ? ((alpha + 1) << 24) | (rgb & 0x00ffffff) : override.getRGB();
+                }
+                image.setRGB(x, y, rgb);
+            }
+        }
+        graphics.drawImage(image, 0, 0, imageIcon.getImageObserver());
+        return image;
+    }
+
+    /**
+     * 背景移除
+     * 图片去底工具
+     * 将 "纯色背景的图片" 还原成 "透明背景的图片"
+     * 将纯色背景的图片转成矢量图
+     * 取图片边缘的像素点和获取到的图片主题色作为要替换的背景色
+     * 再加入一定的容差值,然后将所有像素点与该颜色进行比较
+     * 发现相同则将颜色不透明度设置为0,使颜色完全透明.
+     *
+     * @param outputStream 需要进行处理的图片字节数组流
+     * @param override     指定替换成的背景颜色 为null时背景为透明
+     * @param tolerance    容差值[根据图片的主题色,加入容差值,值的取值范围在0~255之间]
+     * @return 返回处理好的图片流
+     */
+    public static BufferedImage backgroundRemoval(ByteArrayOutputStream outputStream, Color override, int tolerance) {
+        try {
+            return backgroundRemoval(ImageIO.read(new ByteArrayInputStream(outputStream.toByteArray())), override, tolerance);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
         }
     }
 
@@ -461,5 +572,284 @@ public class ImagesUtil {
                     Integer.parseInt(strings[2]));
         }
         return "";
+    }
+
+    // -------------------------------------------------------------------------- 图片裁剪
+
+    /**
+     * 图片指定 X轴，Y轴  裁剪、切割
+     * 给定 X轴、Y轴、裁剪后的 宽、高
+     * 进行指定位置的裁剪
+     *
+     * @param input  指定需要进行操作的图片文件
+     * @param x      x轴 图片从指定 x轴 开始切割
+     * @param y      y轴 图片从指定 y轴 开始切割
+     * @param width  图片需要切割的 宽度
+     * @param height 图片需要切割的 高度
+     * @return 返回切割后的图片流 java.awt.image.BufferedImage
+     */
+    public static BufferedImage cutPictureOutStream(File input, Integer x, Integer y, Integer width, Integer height) {
+        if (fileTypeValidation(input, IMAGES_TYPE)) {
+            return null;
+        }
+
+        // 设置默认值
+        x = Math.max(x, 0);
+        y = Math.max(y, 0);
+        width = Math.max(width, 0);
+        height = Math.max(height, 0);
+
+        // 取得图片读入器
+        Iterator<ImageReader> readers = ImageIO.getImageReadersByFormatName(FileTypeUtil.getType(input));
+        ImageReader reader = readers.next();
+        // 取得图片读入流
+        try (ImageInputStream imageInputStream = ImageIO.createImageInputStream(new FileInputStream(input))) {
+            reader.setInput(imageInputStream, true);
+            // 图片参数对象
+            ImageReadParam param = reader.getDefaultReadParam();
+            Rectangle rectangle = new Rectangle(x, y, width, height);
+            param.setSourceRegion(rectangle);
+            return reader.read(0, param);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    /**
+     * 图片指定 X轴，Y轴  裁剪、切割
+     * 给定 X轴、Y轴、裁剪后的 宽、高
+     * 进行指定位置的裁剪
+     *
+     * @param input  指定需要进行操作的图片文件
+     * @param x      x轴 图片从指定 x轴 开始切割
+     * @param y      y轴 图片从指定 y轴 开始切割
+     * @param width  图片需要切割的 宽度
+     * @param height 图片需要切割的 高度
+     * @return 返回切割后的图片字节数组
+     */
+    public static byte[] cutPictureOutByte(File input, Integer x, Integer y, Integer width, Integer height) {
+        BufferedImage bufferedImage = cutPictureOutStream(input, x, y, width, height);
+        if (bufferedImage == null) {
+            return null;
+        }
+        try (ByteArrayOutputStream out = new ByteArrayOutputStream()) {
+            ImageIO.write(bufferedImage, FileTypeUtil.getType(input), out);
+            return out.toByteArray();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    /**
+     * 图片指定 X轴，Y轴  裁剪、切割
+     * 给定 X轴、Y轴、裁剪后的 宽、高
+     * 进行指定位置的裁剪
+     *
+     * @param input  指定需要进行操作的图片文件
+     * @param output 指定切割后需要输出的文件
+     * @param x      x轴 图片从指定 x轴 开始切割
+     * @param y      y轴 图片从指定 y轴 开始切割
+     * @param width  图片需要切割的 宽度
+     * @param height 图片需要切割的 高度
+     * @return 返回布尔值 文件是否写入成功标识 true:文件成功写入 false:文件写入失败
+     */
+    public static boolean cutPictureOutFile(File input, File output, Integer x, Integer y, Integer width, Integer height) {
+        BufferedImage bufferedImage = cutPictureOutStream(input, x, y, width, height);
+        if (bufferedImage == null) {
+            return false;
+        }
+        try {
+            return ImageIO.write(bufferedImage, FileTypeUtil.getType(input), output);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    // -------------------------------------------------------------------------- 图片拼接、合并
+
+    /**
+     * 图片拼接
+     * 多张图片进行 横向或纵向拼接
+     *
+     * @param files                需要进行拼接的文件数组
+     * @param horizontalOrVertical 布尔值 true:进行横向拼接 false:进行纵向拼接
+     * @return 返回拼接后的图片流 java.awt.image.BufferedImage
+     */
+    public static BufferedImage mergeOutStream(File[] files, boolean horizontalOrVertical) {
+        boolean eligible = false;
+        for (File file : files) {
+            eligible = fileTypeValidation(file, IMAGES_TYPE);
+        }
+        if (eligible) {
+            return null;
+        }
+        // 图片流数组
+        BufferedImage[] images = new BufferedImage[files.length];
+        int[][] imageArrays = new int[files.length][];
+        for (int i = 0; i < files.length; i++) {
+            try {
+                images[i] = ImageIO.read(files[i]);
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+            int width = images[i].getWidth();
+            int height = images[i].getHeight();
+            imageArrays[i] = new int[width * height];
+            imageArrays[i] = images[i].getRGB(0, 0, width, height, imageArrays[i], 0, width);
+        }
+        int newHeight = 0, newWidth = 0;
+        for (BufferedImage image : images) {
+            if (horizontalOrVertical) {
+                // 图片横向拼接
+                newHeight = Math.max(newHeight, image.getHeight());
+                newWidth += image.getWidth();
+            } else {
+                // 图片纵向拼接
+                newWidth = Math.max(newWidth, image.getWidth());
+                newHeight += image.getHeight();
+            }
+        }
+
+        if ((horizontalOrVertical && newWidth < 1) || (!horizontalOrVertical && newHeight < 1)) {
+            return null;
+        }
+
+        // 生成新图片流
+        BufferedImage newPictureStream = new BufferedImage(newWidth, newHeight, BufferedImage.TYPE_INT_RGB);
+        int height = 0, width = 0;
+        // 进行图片拼接操作
+        for (int i = 0; i < images.length; i++) {
+            if (horizontalOrVertical) {
+                // 横向合并时 高度必须要保持一致
+                newPictureStream.setRGB(width, 0, images[i].getWidth(), newHeight, imageArrays[i], 0, images[i].getWidth());
+                width += images[i].getWidth();
+            } else {
+                // 纵向合并时 宽度必须要保持一致
+                newPictureStream.setRGB(0, height, newWidth, images[i].getHeight(), imageArrays[i], 0, newWidth);
+                height += images[i].getHeight();
+            }
+        }
+        return newPictureStream;
+    }
+
+    /**
+     * 图片拼接
+     * 多张图片进行 横向或纵向拼接
+     *
+     * @param files                需要进行拼接的文件路径数组
+     * @param horizontalOrVertical 布尔值 true:进行横向拼接 false:进行纵向拼接
+     * @return 返回拼接后的图片流 java.awt.image.BufferedImage
+     */
+    public static BufferedImage mergeOutStream(String[] files, boolean horizontalOrVertical) {
+        return mergeOutStream(arrayTypeConversion(files), horizontalOrVertical);
+    }
+
+    /**
+     * 图片拼接
+     * 多张图片进行 横向或纵向拼接
+     *
+     * @param files                需要进行拼接的文件数组
+     * @param horizontalOrVertical 布尔值 true:进行横向拼接 false:进行纵向拼接
+     * @return 返回切割后的图片字节数组
+     */
+    public static byte[] mergeOutByte(File[] files, boolean horizontalOrVertical) {
+        BufferedImage bufferedImage = mergeOutStream(files, horizontalOrVertical);
+        if (bufferedImage == null) {
+            return null;
+        }
+        try (ByteArrayOutputStream out = new ByteArrayOutputStream()) {
+            ImageIO.write(bufferedImage, FileTypeUtil.getType(files[0]), out);
+            return out.toByteArray();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    /**
+     * 图片拼接
+     * 多张图片进行 横向或纵向拼接
+     *
+     * @param files                需要进行拼接的文件路径数组
+     * @param horizontalOrVertical 布尔值 true:进行横向拼接 false:进行纵向拼接
+     * @return 返回切割后的图片字节数组
+     */
+    public static byte[] mergeOutByte(String[] files, boolean horizontalOrVertical) {
+        return mergeOutByte(arrayTypeConversion(files), horizontalOrVertical);
+    }
+
+    /**
+     * 图片拼接
+     * 多张图片进行 横向或纵向拼接
+     *
+     * @param files                需要进行拼接的文件数组
+     * @param output               指定图片拼接后需要输出的文件
+     * @param horizontalOrVertical 布尔值 true:进行横向拼接 false:进行纵向拼接
+     * @return 返回布尔值 文件是否写入成功标识 true:文件成功写入 false:文件写入失败
+     */
+    public static boolean mergeOutFile(File[] files, File output, boolean horizontalOrVertical) {
+        BufferedImage bufferedImage = mergeOutStream(files, horizontalOrVertical);
+        if (bufferedImage == null) {
+            return false;
+        }
+        try {
+            return ImageIO.write(bufferedImage, FileTypeUtil.getType(files[0]), output);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+
+    /**
+     * 图片拼接
+     * 多张图片进行 横向或纵向拼接
+     *
+     * @param files                需要进行拼接的文件路径数组
+     * @param output               指定图片拼接后需要输出的文件
+     * @param horizontalOrVertical 布尔值 true:进行横向拼接 false:进行纵向拼接
+     * @return 返回布尔值 文件是否写入成功标识 true:文件成功写入 false:文件写入失败
+     */
+    public static boolean mergeOutFile(String[] files, String output, boolean horizontalOrVertical) {
+        return mergeOutFile(arrayTypeConversion(files), new File(output), horizontalOrVertical);
+    }
+
+    // -------------------------------------------------------------------------- 图片工具类私有方法
+
+    /**
+     * 文件类型验证
+     * 根据给定文件类型数据，验证给定文件类型.
+     *
+     * @param input      需要进行验证的文件
+     * @param imagesType 文件包含的类型数组
+     * @return 返回布尔值 false:给定文件的文件类型在文件数组中  true:给定文件的文件类型 不在给定数组中。
+     */
+    private static boolean fileTypeValidation(File input, String[] imagesType) {
+        if (!input.exists()) {
+            return true;
+        }
+        // 获取图片类型
+        String type = FileTypeUtil.getType(input);
+        // 类型对比
+        return !ArrayUtil.contains(imagesType, type);
+    }
+
+    /**
+     * 数组类型转换
+     * 将String数组类型的 文件路径数组
+     * 转为File[]
+     *
+     * @param files 文件路径字符串数组
+     * @return 返回文件数组
+     */
+    private static File[] arrayTypeConversion(String[] files) {
+        File[] fileArray = new File[files.length];
+        for (int i = 0; i < files.length; i++) {
+            fileArray[i] = new File(files[i]);
+        }
+        return fileArray;
     }
 }

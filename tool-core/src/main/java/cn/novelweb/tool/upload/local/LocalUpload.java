@@ -1,5 +1,6 @@
 package cn.novelweb.tool.upload.local;
 
+import cn.hutool.core.io.FileTypeUtil;
 import cn.hutool.core.io.FileUtil;
 import cn.novelweb.tool.upload.file.FileInfo;
 import com.alibaba.fastjson.JSON;
@@ -123,7 +124,7 @@ public class LocalUpload {
      * @param request      HTTP Servlet请求
      * @return 返回文件上传状态
      * 200:文件上传成功、单个分片文件上传成功、未全部上传成功
-     * 201:文件全部上传完成、所有分片全部上传完成、文件完成合并后重命名操作(同时返回com.dai.pojo.file.Files信息)
+     * 201:文件全部上传完成、所有分片全部上传完成、文件完成合并后重命名操作(同时返回cn.novelweb.tool.upload.file.FileInfo信息)
      * 500:文件上传失败、文件上传异常
      * @throws Exception 抛出自定义Exception异常
      */
@@ -271,8 +272,7 @@ public class LocalUpload {
         }
 
         // 重构文件名
-        param.setName(System.currentTimeMillis() + param.getName()
-                .substring(param.getName().lastIndexOf(".")));
+        param.setName(System.currentTimeMillis() + "." + FileTypeUtil.getType(param.getFile().getInputStream()));
 
         // 重构文件路径
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(

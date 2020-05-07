@@ -62,6 +62,7 @@ public class VideoEditing {
         CommandLineOperations.start(taskId, CommandBuilderFactory.create()
                 .add("-i", input)
                 .add("-vf", "subtitles=" + subtitles)
+                .add("-movflags", "faststart")
                 .add("-y")
                 .add(output));
         getProgress(taskId, input, callback);
@@ -81,6 +82,7 @@ public class VideoEditing {
                 .add("-i", input)
                 .add("-vcodec", "h264")
                 .add("-y")
+                .add("-movflags", "faststart")
                 .add(output));
         getProgress(taskId, input, callback);
     }

@@ -22,9 +22,9 @@ import java.util.Set;
 public class TaskCallback {
 
     /**
-     * 记录扫描到的包
+     * 记录扫描到的包的路径
      */
-    private static Set<Class<?>> packageName;
+    private static String path = "";
 
     /**
      * 异步执行回调接口的实现类
@@ -33,16 +33,22 @@ public class TaskCallback {
      * @param args       参数
      */
     public static void callback(Class<?> superClass, Object... args) {
-        // 如果扫描到的包是空的
-        if (packageName == null || packageName.isEmpty()) {
-            // 扫描指定包路径下所有指定类或接口的子类或实现类
-            packageName = ClassUtil.scanPackageBySuper("", superClass);
-        }
+        // 记录所有扫描到的包
+        Set<Class<?>> packageName = ClassUtil.scanPackageBySuper(path, superClass);
         if (packageName.isEmpty()) {
             log.info("If you want to get processing results, implement the {} interface", superClass.getName());
             return;
         }
+        // 最小的包路径的位数
+        int minPackage = 2;
         for (Object name : packageName) {
+            String[] packagePath = name.toString().split("\\.");
+            if (packagePath.length < minPackage) {
+                path = packagePath[0];
+            } else {
+                path = StrUtil.format("{}.{}", packagePath[0], packagePath[1]);
+            }
+            path = path.substring(name.toString().indexOf(" ") + 1);
             // 异步执行加载类、加载回调方法等等
             ThreadUtil.execAsync(() -> {
                 String pk = name.toString().substring(name.toString().indexOf(" ") + 1);
@@ -59,7 +65,6 @@ public class TaskCallback {
 
                 // 尝试遍历并调用此类的所有的构造方法，直到构造成功并返回
                 Object obj = ReflectUtil.newInstanceIfPossible(clazz);
-
                 // 加载回调方法
                 ReflectUtil.invoke(obj, "complete", args);
             });
