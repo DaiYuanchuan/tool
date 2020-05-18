@@ -8,6 +8,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
 
 /**
@@ -68,6 +69,15 @@ public class AccessLogInfo {
 
     @ApiModelProperty(value = "访问的状态(0:正常,1:不正常)", example = "0")
     private Integer status;
+
+    @ApiModelProperty(value = "浏览器UA标识")
+    private String userAgent;
+
+    @ApiModelProperty(value = "发出此请求的HTTP方法的名称(如 GET|POST|PUT)")
+    private String method;
+
+    @ApiModelProperty(value = "HTTP请求对象")
+    private HttpServletRequest request;
 
     @ApiModelProperty(value = "访问的时间")
     private Date createTime;

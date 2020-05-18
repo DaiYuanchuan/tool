@@ -25,5 +25,7 @@ public class FixedBusinessType {
     public static final String AUTO_GENERATE = "自动生成";
     public static final String CLEAN = "清空数据";
     public static final String UPLOAD = "上传数据";
+    public static final String SEARCH = "搜索";
+    public static final String SETTING = "设置";
 
 }

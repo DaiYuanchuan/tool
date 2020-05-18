@@ -36,7 +36,7 @@ public class ImagesUtil {
     /**
      * 支持的图片类型数组
      */
-    private static final String[] IMAGES_TYPE = {"jpg", "png"};
+    private static String[] IMAGES_TYPE = {"jpg", "png"};
 
     // -------------------------------------------------------------------------- 图片压缩
 
@@ -220,7 +220,7 @@ public class ImagesUtil {
     }
 
     /**
-     * 压缩图片大小 图片尺寸抱持不变
+     * 压缩图片大小 图片尺寸保持不变
      *
      * @param imgFile          文件流
      * @param compressionRatio 压缩比例[设置缩略图的缩放因子,值大于0.0]
@@ -233,7 +233,7 @@ public class ImagesUtil {
     }
 
     /**
-     * 压缩图片大小 图片尺寸抱持不变
+     * 压缩图片大小 图片尺寸保持不变
      *
      * @param imgFile          文件流
      * @param compressionRatio 压缩比例[设置缩略图的缩放因子,值大于0.0]
@@ -835,12 +835,17 @@ public class ImagesUtil {
      */
     private static boolean fileTypeValidation(File input, String[] imagesType) {
         if (!input.exists()) {
+            log.error("给定文件为空");
             return true;
         }
         // 获取图片类型
         String type = FileTypeUtil.getType(input);
         // 类型对比
-        return !ArrayUtil.contains(imagesType, type);
+        if (ArrayUtil.contains(imagesType, type)) {
+            log.error("文件类型不支持");
+            return true;
+        }
+        return false;
     }
 
     /**

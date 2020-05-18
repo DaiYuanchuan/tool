@@ -49,25 +49,23 @@ public class TaskCallback {
                 path = StrUtil.format("{}.{}", packagePath[0], packagePath[1]);
             }
             path = path.substring(name.toString().indexOf(" ") + 1);
-            // 异步执行加载类、加载回调方法等等
-            ThreadUtil.execAsync(() -> {
-                String pk = name.toString().substring(name.toString().indexOf(" ") + 1);
-                if (StrUtil.isBlank(pk)) {
-                    log.error("Failed to get class name");
-                    return;
-                }
-                // 加载这个类
-                final Class<?> clazz = ClassLoaderUtil.loadClass(pk);
-                if (null == clazz) {
-                    log.error("Load class with name of [{}] fail !", pk);
-                    return;
-                }
+            // 执行加载类、加载回调方法等等
+            String pk = name.toString().substring(name.toString().indexOf(" ") + 1);
+            if (StrUtil.isBlank(pk)) {
+                log.error("Failed to get class name");
+                return;
+            }
+            // 加载这个类
+            final Class<?> clazz = ClassLoaderUtil.loadClass(pk);
+            if (null == clazz) {
+                log.error("Load class with name of [{}] fail !", pk);
+                return;
+            }
 
-                // 尝试遍历并调用此类的所有的构造方法，直到构造成功并返回
-                Object obj = ReflectUtil.newInstanceIfPossible(clazz);
-                // 加载回调方法
-                ReflectUtil.invoke(obj, "complete", args);
-            });
+            // 尝试遍历并调用此类的所有的构造方法，直到构造成功并返回
+            Object obj = ReflectUtil.newInstanceIfPossible(clazz);
+            // 加载回调方法
+            ReflectUtil.invoke(obj, "complete", args);
         }
     }
 }

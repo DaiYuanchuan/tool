@@ -70,6 +70,8 @@ public class Annotation {
             userAgent = requestAttributes.getRequest().getHeader("User-Agent");
             accessLogInfo.setIp(ServletUtil.getClientIP(requestAttributes.getRequest()));
             accessLogInfo.setRequestUri(requestAttributes.getRequest().getRequestURI());
+            accessLogInfo.setMethod(requestAttributes.getRequest().getMethod());
+            accessLogInfo.setRequest(requestAttributes.getRequest());
         }
 
         Future<Region> future = null;
@@ -88,6 +90,8 @@ public class Annotation {
         accessLogInfo.setOs(ua.getOs().toString());
         accessLogInfo.setPlatform(ua.getPlatform().getName());
         accessLogInfo.setSpider(SpiderUtils.parseSpiderType(userAgent));
+
+        accessLogInfo.setUserAgent(userAgent);
 
         // 访问的模块、状态、时间等
         accessLogInfo.setTitle(title);
