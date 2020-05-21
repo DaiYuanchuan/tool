@@ -1,7 +1,6 @@
 package cn.novelweb.tool.img;
 
 import cn.hutool.core.io.FileTypeUtil;
-import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.util.ArrayUtil;
 import cn.hutool.core.util.ReUtil;
 import cn.novelweb.config.ConstantConfiguration;
@@ -35,8 +34,9 @@ public class ImagesUtil {
 
     /**
      * 支持的图片类型数组
+     * 其他格式不保证效果
      */
-    private static String[] IMAGES_TYPE = {"jpg", "png"};
+    public static String[] IMAGES_TYPE = {"jpg", "png"};
 
     // -------------------------------------------------------------------------- 图片压缩
 
@@ -317,7 +317,7 @@ public class ImagesUtil {
         try {
             // 获取图片左上、中上、右上、右中、右下、下中、左下、左中、8个像素点rgb的16进制值
             BufferedImage bufferedImage = ImageIO.read(input);
-            return ImageIO.write(backgroundRemoval(bufferedImage, override, tolerance), FileUtil.extName(input.getAbsolutePath()), output);
+            return ImageIO.write(backgroundRemoval(bufferedImage, override, tolerance), "png", output);
         } catch (IOException e) {
             e.printStackTrace();
             return false;
@@ -841,8 +841,8 @@ public class ImagesUtil {
         // 获取图片类型
         String type = FileTypeUtil.getType(input);
         // 类型对比
-        if (ArrayUtil.contains(imagesType, type)) {
-            log.error("文件类型不支持");
+        if (!ArrayUtil.contains(imagesType, type)) {
+            log.error("文件类型{}不支持", type);
             return true;
         }
         return false;
