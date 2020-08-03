@@ -157,7 +157,7 @@ public class IpUtils {
                 }
             }
             DbSearcher dbSearcher = Singleton.get(DbSearcher.class,
-                    config, tempFile);
+                    config, tempFile.getPath());
             Method method = dbSearcher.getClass().getMethod(algorithm, String.class);
             DataBlock dataBlock = (DataBlock) method.invoke(dbSearcher, ip);
             String[] ipData = dataBlock.getRegion().split("\\|");

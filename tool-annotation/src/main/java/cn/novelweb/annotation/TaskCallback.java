@@ -1,6 +1,5 @@
 package cn.novelweb.annotation;
 
-import cn.hutool.core.thread.ThreadUtil;
 import cn.hutool.core.util.ClassLoaderUtil;
 import cn.hutool.core.util.ClassUtil;
 import cn.hutool.core.util.ReflectUtil;
