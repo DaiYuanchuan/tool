@@ -6,7 +6,7 @@
     <groupId>cn.novelweb</groupId>
     <artifactId>tool</artifactId>
     <packaging>pom</packaging>
-    <version>1.3.8</version>
+    <version>1.3.9</version>
 
     <!-- 子项目 -->
     <modules>
@@ -217,7 +217,7 @@
             <dependency>
                 <groupId>cn.hutool</groupId>
                 <artifactId>hutool-all</artifactId>
-                <version>5.3.5</version>
+                <version>5.3.10</version>
             </dependency>
 
             <!-- IP实际地址位置查询工具(不包含数据源) -->

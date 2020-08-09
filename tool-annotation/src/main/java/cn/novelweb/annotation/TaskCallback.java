@@ -23,7 +23,7 @@ public class TaskCallback {
     /**
      * 记录扫描到的包的路径
      */
-    private static String path = "";
+    public static String path = "";
 
     /**
      * 异步执行回调接口的实现类
@@ -32,6 +32,7 @@ public class TaskCallback {
      * @param args       参数
      */
     public static void callback(Class<?> superClass, Object... args) {
+        log.info("Scanning all packages...");
         // 记录所有扫描到的包
         Set<Class<?>> packageName = ClassUtil.scanPackageBySuper(path, superClass);
         if (packageName.isEmpty()) {

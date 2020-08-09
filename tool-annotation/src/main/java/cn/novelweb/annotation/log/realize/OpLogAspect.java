@@ -8,6 +8,7 @@ import cn.novelweb.annotation.log.callback.OpLogCompletionHandler;
 import cn.novelweb.annotation.log.pojo.OpLogInfo;
 import cn.novelweb.annotation.log.util.Annotation;
 import com.alibaba.fastjson.JSONObject;
+import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.AfterThrowing;
@@ -23,6 +24,7 @@ import org.springframework.web.context.request.ServletRequestAttributes;
  *
  * @author Dai Yuanchuan
  **/
+@Slf4j
 @Aspect
 @Component
 public class OpLogAspect {
@@ -59,6 +61,7 @@ public class OpLogAspect {
         // 获得注解信息
         OpLog opLog = Annotation.getAnnotation(joinPoint, OpLog.class);
         if (opLog == null) {
+            log.info("Failed to get the annotation information correctly...");
             return;
         }
 

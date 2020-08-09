@@ -6,6 +6,7 @@ import cn.novelweb.annotation.log.AccessLog;
 import cn.novelweb.annotation.log.callback.AccessLogCompletionHandler;
 import cn.novelweb.annotation.log.pojo.AccessLogInfo;
 import cn.novelweb.annotation.log.util.Annotation;
+import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.*;
 import org.springframework.stereotype.Component;
@@ -16,6 +17,7 @@ import org.springframework.stereotype.Component;
  *
  * @author Dai Yuanchuan
  **/
+@Slf4j
 @Aspect
 @Component
 public class AccessLogAspect {
@@ -52,6 +54,7 @@ public class AccessLogAspect {
         // 获得注解信息
         AccessLog accessLog = Annotation.getAnnotation(joinPoint, AccessLog.class);
         if (accessLog == null) {
+            log.info("Failed to get the annotation information correctly...");
             return;
         }
         // 初始化日志信息

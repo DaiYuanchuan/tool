@@ -3,6 +3,8 @@ package cn.novelweb.ip;
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.lang.Singleton;
 import cn.hutool.core.net.NetUtil;
+import cn.hutool.core.util.StrUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.lionsoul.ip2region.DataBlock;
 import org.lionsoul.ip2region.DbConfig;
 import org.lionsoul.ip2region.DbSearcher;
@@ -19,6 +21,7 @@ import java.net.InetAddress;
  *
  * @author Dai Yuanchuan
  **/
+@Slf4j
 public class IpUtils {
 
     /**
@@ -138,21 +141,22 @@ public class IpUtils {
      * @return 返回查询到的地区信息，查询出错时返回null
      */
     private static Region getIpLocation(String ip, String algorithm) {
+        String intranetIp = "内网IP";
+        // 判断ip是否为空
+        if (StrUtil.isBlank(ip)) {
+            log.info("The IP address detected is empty...");
+            return new Region(intranetIp, intranetIp, intranetIp, intranetIp);
+        }
+        // 检测是否为局域网IP
         if (isInnerIp(ip)) {
-            String str = "内网IP";
-            return Region.builder()
-                    .country(str)
-                    .province(str)
-                    .city(str)
-                    .isp(str)
-                    .build();
+            return new Region(intranetIp, intranetIp, intranetIp, intranetIp);
         }
         try {
             DbConfig config = Singleton.get(DbConfig.class);
-            final File tempFile = FileUtil.touch(Singleton.get(File.class,"ip2region.db"));
+            final File tempFile = FileUtil.touch(Singleton.get(File.class, "ip2region.db"));
             InputStream inputStream = IpUtils.class.getClassLoader().getResourceAsStream("data/ip2region.db");
             try (FileOutputStream out = new FileOutputStream(tempFile)) {
-                if (inputStream!=null) {
+                if (inputStream != null) {
                     org.apache.commons.io.IOUtils.copy(inputStream, out);
                 }
             }
