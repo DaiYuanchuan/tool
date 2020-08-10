@@ -1,13 +1,14 @@
 package cn.novelweb.annotation.log.realize;
 
 import cn.hutool.core.convert.Convert;
+import cn.hutool.core.map.MapUtil;
 import cn.hutool.core.thread.ThreadUtil;
 import cn.novelweb.annotation.TaskCallback;
 import cn.novelweb.annotation.log.OpLog;
 import cn.novelweb.annotation.log.callback.OpLogCompletionHandler;
-import cn.novelweb.annotation.log.pojo.AccessLogInfo;
 import cn.novelweb.annotation.log.pojo.OpLogInfo;
 import cn.novelweb.annotation.log.util.Annotation;
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
@@ -87,8 +88,13 @@ public class OpLogAspect {
             ServletRequestAttributes requestAttributes = (ServletRequestAttributes)
                     RequestContextHolder.getRequestAttributes();
             if (requestAttributes != null) {
-                opLogInfo.setParameter(JSONObject.toJSONString(
-                        requestAttributes.getRequest().getParameterMap()));
+                // 如果获取到的请求参数为空
+                if (MapUtil.isEmpty(requestAttributes.getRequest().getParameterMap())) {
+                    // 尝试获取body中的参数
+                    opLogInfo.setParameter(JSON.toJSONString(joinPoint.getArgs()));
+                } else {
+                    opLogInfo.setParameter(JSONObject.toJSONString(requestAttributes.getRequest().getParameterMap()));
+                }
             } else {
                 opLogInfo.setParameter("无法获取request信息");
             }
