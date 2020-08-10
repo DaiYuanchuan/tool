@@ -36,7 +36,11 @@ public class AccessLogAspect {
      */
     @AfterReturning(pointcut = "accessLog()")
     public void doBefore(JoinPoint joinPoint) {
-        handleLog(joinPoint, null);
+        try {
+            handleLog(joinPoint, null);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -47,7 +51,11 @@ public class AccessLogAspect {
      */
     @AfterThrowing(value = "accessLog()", throwing = "e")
     public void doAfter(JoinPoint joinPoint, Exception e) {
-        handleLog(joinPoint, e);
+        try {
+            handleLog(joinPoint, e);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
     }
 
     private void handleLog(final JoinPoint joinPoint, final Exception e) {

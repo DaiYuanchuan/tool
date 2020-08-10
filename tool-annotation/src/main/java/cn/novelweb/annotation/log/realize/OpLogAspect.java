@@ -5,6 +5,7 @@ import cn.hutool.core.thread.ThreadUtil;
 import cn.novelweb.annotation.TaskCallback;
 import cn.novelweb.annotation.log.OpLog;
 import cn.novelweb.annotation.log.callback.OpLogCompletionHandler;
+import cn.novelweb.annotation.log.pojo.AccessLogInfo;
 import cn.novelweb.annotation.log.pojo.OpLogInfo;
 import cn.novelweb.annotation.log.util.Annotation;
 import com.alibaba.fastjson.JSONObject;
@@ -43,7 +44,11 @@ public class OpLogAspect {
      */
     @AfterReturning(pointcut = "opLog()")
     public void doBefore(JoinPoint joinPoint) {
-        handleLog(joinPoint, null);
+        try {
+            handleLog(joinPoint, null);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -54,7 +59,11 @@ public class OpLogAspect {
      */
     @AfterThrowing(value = "opLog()", throwing = "e")
     public void doAfter(JoinPoint joinPoint, Exception e) {
-        handleLog(joinPoint, e);
+        try {
+            handleLog(joinPoint, e);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
     }
 
     private void handleLog(final JoinPoint joinPoint, final Exception e) {

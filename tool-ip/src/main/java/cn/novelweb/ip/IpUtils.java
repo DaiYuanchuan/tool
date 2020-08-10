@@ -140,7 +140,7 @@ public class IpUtils {
      * @param algorithm 查询算法(不同算法间有时间差异)
      * @return 返回查询到的地区信息，查询出错时返回null
      */
-    private static Region getIpLocation(String ip, String algorithm) {
+    private static synchronized Region getIpLocation(String ip, String algorithm) {
         String intranetIp = "内网IP";
         // 判断ip是否为空
         if (StrUtil.isBlank(ip)) {
@@ -164,16 +164,20 @@ public class IpUtils {
                     config, tempFile.getPath());
             Method method = dbSearcher.getClass().getMethod(algorithm, String.class);
             DataBlock dataBlock = (DataBlock) method.invoke(dbSearcher, ip);
-            String[] ipData = dataBlock.getRegion().split("\\|");
-            return Region.builder()
-                    .country(ipData[0])
-                    .province(ipData[2])
-                    .city(ipData[3])
-                    .isp(ipData[4])
-                    .build();
+            if (dataBlock != null && StrUtil.isNotBlank(dataBlock.getRegion())) {
+                String[] ipData = dataBlock.getRegion().split("\\|");
+                return Region.builder()
+                        .country(ipData[0])
+                        .province(ipData[2])
+                        .city(ipData[3])
+                        .isp(ipData[4])
+                        .build();
+            } else {
+                return new Region(intranetIp, intranetIp, intranetIp, intranetIp);
+            }
         } catch (Exception e) {
             e.printStackTrace();
-            return null;
+            return new Region(intranetIp, intranetIp, intranetIp, intranetIp);
         }
     }
 }

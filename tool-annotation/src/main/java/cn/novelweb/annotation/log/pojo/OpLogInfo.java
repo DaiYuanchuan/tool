@@ -18,7 +18,7 @@ import lombok.*;
 @ToString(callSuper = true)
 @ApiModel(value = "操作信息")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class OpLogInfo extends AccessLogInfo{
+public class OpLogInfo extends AccessLogInfo {
 
     @ApiModelProperty(value = "业务类型")
     private String businessType;

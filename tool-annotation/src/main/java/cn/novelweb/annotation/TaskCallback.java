@@ -32,7 +32,6 @@ public class TaskCallback {
      * @param args       参数
      */
     public static void callback(Class<?> superClass, Object... args) {
-        log.info("Scanning all packages...");
         // 记录所有扫描到的包
         Set<Class<?>> packageName = ClassUtil.scanPackageBySuper(path, superClass);
         if (packageName.isEmpty()) {
