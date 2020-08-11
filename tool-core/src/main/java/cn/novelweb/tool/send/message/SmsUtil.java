@@ -3,7 +3,6 @@ package cn.novelweb.tool.send.message;
 import cn.hutool.core.lang.Assert;
 import cn.hutool.core.lang.Validator;
 import cn.hutool.http.HttpRequest;
-import cn.hutool.http.HttpUtil;
 import cn.novelweb.tool.send.message.aliyuncs.AliYunSmsConfig;
 import cn.novelweb.tool.send.message.aliyuncs.GenerateAliYunSignature;
 import com.alibaba.fastjson.JSONObject;
@@ -34,6 +33,8 @@ public class SmsUtil {
         Assert.isTrue(Validator.isMobile(phone), "手机号不正确");
         Assert.notBlank(templateCode, "短信模板id为空");
         Assert.notNull(aliYunSmsConfig, "配置信息为空");
+        // 发送短信时系统规定参数 取值:SendSms
+        aliYunSmsConfig.setAction("SendSms");
         // 获取短信签名信息
         JSONObject aliYunSignature = GenerateAliYunSignature.getAliYunSignature(phone, templateCode, outId, smsUpExtendCode, templateParam, aliYunSmsConfig);
         Assert.isFalse(aliYunSignature.isEmpty(), "获取短信签名失败");
