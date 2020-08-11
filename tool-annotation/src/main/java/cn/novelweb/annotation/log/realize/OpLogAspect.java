@@ -3,6 +3,7 @@ package cn.novelweb.annotation.log.realize;
 import cn.hutool.core.convert.Convert;
 import cn.hutool.core.map.MapUtil;
 import cn.hutool.core.thread.ThreadUtil;
+import cn.hutool.core.util.ArrayUtil;
 import cn.novelweb.annotation.TaskCallback;
 import cn.novelweb.annotation.log.OpLog;
 import cn.novelweb.annotation.log.callback.OpLogCompletionHandler;
@@ -19,6 +20,12 @@ import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * <p>操作日志的注解实现类</p>
@@ -90,8 +97,17 @@ public class OpLogAspect {
             if (requestAttributes != null) {
                 // 如果获取到的请求参数为空
                 if (MapUtil.isEmpty(requestAttributes.getRequest().getParameterMap())) {
-                    // 尝试获取body中的参数
-                    opLogInfo.setParameter(JSON.toJSONString(joinPoint.getArgs()));
+                    Object[] args = joinPoint.getArgs();
+                    // 判断是否为空
+                    if (ArrayUtil.isEmpty(args)) {
+                        opLogInfo.setParameter("");
+                    } else {
+                        List<Object> objectList = Arrays.asList(args);
+                        // 尝试获取过滤后body中的参数
+                        opLogInfo.setParameter(JSON.toJSONString(objectList.stream()
+                                .filter(arg -> (!(arg instanceof HttpServletRequest) && !(arg instanceof HttpServletResponse)))
+                                .collect(Collectors.toList())));
+                    }
                 } else {
                     opLogInfo.setParameter(JSONObject.toJSONString(requestAttributes.getRequest().getParameterMap()));
                 }
