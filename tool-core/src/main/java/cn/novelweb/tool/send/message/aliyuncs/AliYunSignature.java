@@ -1,5 +1,7 @@
 package cn.novelweb.tool.send.message.aliyuncs;
 
+import cn.hutool.core.lang.Filter;
+import cn.hutool.core.map.MapUtil;
 import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.JSONObject;
 
@@ -7,18 +9,17 @@ import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.TreeMap;
 
 /**
- * <p>生成阿里大鱼发送短信时的签名</p>
+ * <p>生成阿里大鱼短信操作的签名</p>
  * <p>2020-08-11 22:32</p>
  *
  * @author Dai Yuanchuan
  **/
-public class GenerateAliYunSignature {
+public class AliYunSignature {
 
     /**
      * 生成阿里大鱼发送短信时需要的签名信息
@@ -36,7 +37,7 @@ public class GenerateAliYunSignature {
      * "requestUrl":"最终拼接的url地址"
      * }
      */
-    public static JSONObject getAliYunSignature(String phone, String templateCode, String outId, String smsUpExtendCode, JSONObject templateParam, AliYunSmsConfig aliYunSmsConfig) {
+    public static JSONObject getAliYunSmsSignature(String phone, String templateCode, String outId, String smsUpExtendCode, JSONObject templateParam, AliYunSmsConfig aliYunSmsConfig) {
         // 构建请求参数
         Map<String, String> parameters = new TreeMap<String, String>() {{
             // 第一部分由系统参数组成
@@ -53,16 +54,14 @@ public class GenerateAliYunSignature {
             put("PhoneNumbers", phone);
             put("SignName", aliYunSmsConfig.getSignName());
             put("TemplateCode", templateCode);
-            if (templateParam != null) {
-                put("TemplateParam", templateParam.toJSONString());
-            }
-            if (StrUtil.isNotBlank(outId)) {
-                put("OutId", outId);
-            }
-            if (StrUtil.isNotBlank(smsUpExtendCode)) {
-                put("SmsUpExtendCode", smsUpExtendCode);
-            }
+            put("TemplateParam", templateParam.toJSONString());
+            put("OutId", outId);
+            put("SmsUpExtendCode", smsUpExtendCode);
         }};
+
+        // 过滤Map中为空的参数
+        parameters = MapUtil.filter(parameters, (Filter<Map.Entry<String, String>>) o -> StrUtil.isNotBlank(o.getValue()));
+
         try {
             // 构造待签名的字符串
             Iterator<String> it = parameters.keySet().iterator();

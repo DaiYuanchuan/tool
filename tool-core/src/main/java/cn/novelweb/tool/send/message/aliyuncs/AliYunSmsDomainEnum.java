@@ -7,7 +7,7 @@ package cn.novelweb.tool.send.message.aliyuncs;
  *
  * @author Dai Yuanchuan
  **/
-public enum DomainEnum {
+public enum AliYunSmsDomainEnum {
 
     /**
      * 发送短信时用的域名
@@ -26,7 +26,7 @@ public enum DomainEnum {
 
     private final String domain;
 
-    DomainEnum(String domain) {
+    AliYunSmsDomainEnum(String domain) {
         this.domain = domain;
     }
 

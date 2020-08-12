@@ -6,7 +6,7 @@ package cn.novelweb.tool.send.message.aliyuncs;
  *
  * @author Dai Yuanchuan
  **/
-public enum FormatEnum {
+public enum AliYunSmsFormatEnum {
 
     /**
      * 返回参数使用json格式
@@ -20,7 +20,7 @@ public enum FormatEnum {
 
     private final String format;
 
-    FormatEnum(String format) {
+    AliYunSmsFormatEnum(String format) {
         this.format = format;
     }
 

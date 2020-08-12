@@ -34,7 +34,7 @@ public class AliYunSmsConfig {
     private String accessKeySecret;
 
     @ApiModelProperty(value = "产品域名", required = true)
-    private DomainEnum domain;
+    private AliYunSmsDomainEnum domain;
 
     @ApiModelProperty(value = "短信签名", required = true)
     private String signName;
@@ -49,7 +49,7 @@ public class AliYunSmsConfig {
     private String action;
 
     @ApiModelProperty(value = "返回参数的语言类型")
-    private FormatEnum format;
+    private AliYunSmsFormatEnum format;
 
     @ApiModelProperty(value = "签名方式。取值范围：HMAC-SHA1。", required = true)
     private String signatureMethod;
@@ -72,10 +72,10 @@ public class AliYunSmsConfig {
      */
     public static AliYunSmsConfig init() {
         return AliYunSmsConfig.builder()
-                .domain(DomainEnum.SEND_SMS)
+                .domain(AliYunSmsDomainEnum.SEND_SMS)
                 .regionId("cn-hangzhou")
                 .version("2017-05-25")
-                .format(FormatEnum.JSON)
+                .format(AliYunSmsFormatEnum.JSON)
                 .signatureMethod("HMAC-SHA1")
                 .signatureNonce(IdUtil.objectId())
                 .signatureVersion("1.0")
