@@ -78,41 +78,47 @@ public class SmsUtil {
     public static String tencentCloudSendSms(TencentCloudSmsConfig tencentCloudSmsConfig) {
         Assert.notNull(tencentCloudSmsConfig, "配置信息为空");
 
-        // 获取随机数
-        long randomNumber = (new Random(DateUtil.currentSeconds())).nextLong() % 900000 + 100000;
-        // 当前时间的时间戳（秒）
-        long timeStamp = DateUtil.currentSeconds();
+        try {
+            // 获取随机数
+            long randomNumber = (new Random(DateUtil.currentSeconds())).nextLong() % 900000 + 100000;
+            // 当前时间的时间戳（秒）
+            long timeStamp = DateUtil.currentSeconds();
 
 
-        // 构建需要发送的手机号数据
-        JSONObject mobile = new JSONObject();
-        // 手机号的国家代码
-        mobile.put("nationcode", tencentCloudSmsConfig.getNationCode());
-        mobile.put("mobile", tencentCloudSmsConfig.getPhone());
+            // 构建需要发送的手机号数据
+            JSONObject mobile = new JSONObject();
+            // 手机号的国家代码
+            mobile.put("nationcode", tencentCloudSmsConfig.getNationCode());
+            mobile.put("mobile", tencentCloudSmsConfig.getPhone());
 
-        // 构建请求body
-        JSONObject requestBody = new JSONObject();
-        requestBody.put("tel", mobile);
-        // 短信类型，0 为普通短信，1 营销短信
-        requestBody.put("type", tencentCloudSmsConfig.getType());
-        // 需要发送的短信的内容[使用实际数据替换模板中的参数]
-        requestBody.put("msg", tencentCloudSmsConfig.getContent());
+            // 构建请求body
+            JSONObject requestBody = new JSONObject();
+            requestBody.put("tel", mobile);
+            // 短信类型，0 为普通短信，1 营销短信
+            requestBody.put("type", tencentCloudSmsConfig.getType());
+            // 需要发送的短信的内容[使用实际数据替换模板中的参数]
+            requestBody.put("msg", tencentCloudSmsConfig.getContent());
 
-        // 构建形成签名的字符串
-        String signature = StrUtil.format("appkey={}&random={}&time={}&mobile={}",
-                tencentCloudSmsConfig.getAppKey(), randomNumber, timeStamp, tencentCloudSmsConfig.getPhone());
-        // 加密签名字符串
-        requestBody.put("sig", DigestUtils.sha256Hex(signature));
-        requestBody.put("time", timeStamp);
-        requestBody.put("extend", tencentCloudSmsConfig.getExtend());
-        requestBody.put("ext", tencentCloudSmsConfig.getExt());
+            // 构建形成签名的字符串
+            String signature = StrUtil.format("appkey={}&random={}&time={}&mobile={}",
+                    tencentCloudSmsConfig.getAppKey(), randomNumber, timeStamp, tencentCloudSmsConfig.getPhone());
+            // 加密签名字符串
+            requestBody.put("sig", DigestUtils.sha256Hex(signature));
+            requestBody.put("time", timeStamp);
+            requestBody.put("extend", tencentCloudSmsConfig.getExtend());
+            requestBody.put("ext", tencentCloudSmsConfig.getExt());
 
-        // 构建请求Url
-        String url = StrUtil.format("https://yun.tim.qq.com/v5/tlssmssvr/sendsms?sdkappid={}&random={}",
-                tencentCloudSmsConfig.getAppId(), randomNumber);
+            // 构建请求Url
+            String url = StrUtil.format("https://yun.tim.qq.com/v5/tlssmssvr/sendsms?sdkappid={}&random={}",
+                    tencentCloudSmsConfig.getAppId(), randomNumber);
 
-        // 构建一个POST的链式请求
-        return HttpRequest.post(url).header("Conetent-Type", "application/json")
-                .body(requestBody.toJSONString()).timeout(-1).execute().body();
+            // 构建一个POST的链式请求
+            return HttpRequest.post(url).header("Conetent-Type", "application/json")
+                    .body(requestBody.toJSONString()).timeout(-1).execute().body();
+        } catch (java.lang.NullPointerException e) {
+            e.printStackTrace();
+            Assert.isFalse(Boolean.TRUE, "所需参数为Null");
+            return "NullPointerException";
+        }
     }
 }

@@ -1,7 +1,7 @@
 package cn.novelweb.tool.send.message.aliyuncs;
 
 /**
- * <p>阿里短信发送时通用产品域名配置</p>
+ * <p>阿里通用产品域名配置</p>
  * <p>参考：https://help.aliyun.com/document_detail/101511.html?spm=a2c4g.11186623.6.613.286b3e2cDZz5bK</p>
  * <p>2020-08-11 21:22</p>
  *
