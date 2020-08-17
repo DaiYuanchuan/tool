@@ -103,10 +103,17 @@ public class OpLogAspect {
                         opLogInfo.setParameter("");
                     } else {
                         List<Object> objectList = Arrays.asList(args);
+                        String parameter;
+                        try {
+                            parameter = JSON.toJSONString(objectList.stream()
+                                    .filter(arg -> (!(arg instanceof HttpServletRequest) && !(arg instanceof HttpServletResponse)))
+                                    .collect(Collectors.toList()));
+                        } catch (Exception exception) {
+                            // 如果序列化出现异常时 ，使用空的参数
+                            parameter = "";
+                        }
                         // 尝试获取过滤后body中的参数
-                        opLogInfo.setParameter(JSON.toJSONString(objectList.stream()
-                                .filter(arg -> (!(arg instanceof HttpServletRequest) && !(arg instanceof HttpServletResponse)))
-                                .collect(Collectors.toList())));
+                        opLogInfo.setParameter(parameter);
                     }
                 } else {
                     opLogInfo.setParameter(JSONObject.toJSONString(requestAttributes.getRequest().getParameterMap()));

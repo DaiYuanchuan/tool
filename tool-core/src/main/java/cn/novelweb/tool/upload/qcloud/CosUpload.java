@@ -45,11 +45,6 @@ public class CosUpload {
     public static String secretKey;
 
     /**
-     * 当前密钥的appId信息
-     */
-    public static String appId;
-
-    /**
      * 存储桶的名称 如 qcloud-1256166828
      * 在存储桶列表中的所属地域查看
      * 存储桶名称格式：BucketName-APPID
