@@ -217,7 +217,7 @@
             <dependency>
                 <groupId>cn.hutool</groupId>
                 <artifactId>hutool-all</artifactId>
-                <version>5.3.10</version>
+                <version>[5.4.1, 7.4.1]</version>
             </dependency>
 
             <!-- IP实际地址位置查询工具(不包含数据源) -->
