@@ -17,6 +17,7 @@ import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.AfterThrowing;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -83,8 +84,8 @@ public class OpLogAspect {
         }
 
         // 初始化日志信息
-        OpLogInfo opLogInfo = Convert.convert(OpLogInfo.class, Annotation.initInfo(opLog.title(),
-                opLog.isGetIp(), e));
+        OpLogInfo opLogInfo = new OpLogInfo();
+        BeanUtils.copyProperties(Annotation.initInfo(opLog.title(), opLog.isGetIp(), e), opLogInfo);
         // 设置业务类型、类名、方法名等
         opLogInfo.setBusinessType(opLog.businessType());
         opLogInfo.setClassName(joinPoint.getTarget().getClass().getName());
