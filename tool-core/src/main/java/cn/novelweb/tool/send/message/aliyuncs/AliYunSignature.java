@@ -58,6 +58,23 @@ public class AliYunSignature {
             put("OutId", outId);
             put("SmsUpExtendCode", smsUpExtendCode);
         }};
+        return getAliYunSignature(parameters, aliYunSmsConfig.getAccessKeySecret(), aliYunSmsConfig.getDomain().getDomain());
+    }
+
+    /**
+     * 生成阿里云API请求签名信息
+     *
+     * @param parameters      参与签名构建的参数信息
+     * @param accessKeySecret 加密签名字符串和服务器端验证签名字符串的密钥
+     * @param domain          产品域名
+     * @return 返回构建的签名、参数、请求地址
+     * {
+     * "signature":"构建的签名信息",
+     * "parameters":"请求参数信息",
+     * "requestUrl":"最终拼接的url地址"
+     * }
+     */
+    public static JSONObject getAliYunSignature(Map<String, String> parameters, String accessKeySecret, String domain) {
 
         // 过滤Map中为空的参数
         parameters = MapUtil.filter(parameters, (Filter<Map.Entry<String, String>>) o -> StrUtil.isNotBlank(o.getValue()));
@@ -74,7 +91,7 @@ public class AliYunSignature {
             String stringToSign = "GET&" + specialUrlEncode("/") + "&" + specialUrlEncode(sortQueryStringTmp.substring(1));
             // 构建签名
             Mac mac = Mac.getInstance("HmacSHA1");
-            mac.init(new SecretKeySpec(StrUtil.format("{}&", aliYunSmsConfig.getAccessKeySecret()).getBytes(StandardCharsets.UTF_8), "HmacSHA1"));
+            mac.init(new SecretKeySpec(StrUtil.format("{}&", accessKeySecret).getBytes(StandardCharsets.UTF_8), "HmacSHA1"));
             byte[] signData = mac.doFinal(stringToSign.getBytes(StandardCharsets.UTF_8));
             String sign = new sun.misc.BASE64Encoder().encode(signData);
             // 最终构建的签名数据
@@ -83,7 +100,7 @@ public class AliYunSignature {
             // 签名最后也要做特殊URL编码
             jsonObject.put("signature", signature);
             jsonObject.put("parameters", sortQueryStringTmp);
-            jsonObject.put("requestUrl", StrUtil.format("http://{}/?Signature={}{}", aliYunSmsConfig.getDomain().getDomain(), signature, sortQueryStringTmp));
+            jsonObject.put("requestUrl", StrUtil.format("http://{}/?Signature={}{}", domain, signature, sortQueryStringTmp));
             return jsonObject;
         } catch (Exception e) {
             e.printStackTrace();
