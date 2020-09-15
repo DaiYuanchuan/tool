@@ -3,7 +3,6 @@ package cn.novelweb.tool.send.message.qcloudsms;
 import cn.hutool.core.date.DateTime;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.StrUtil;
-import cn.novelweb.tool.date.DateUtils;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 
@@ -45,7 +44,7 @@ public class TencentCloudSignature {
 
         // 计算时间
         String timestamp = String.valueOf(DateUtil.currentSeconds());
-        String date = DateUtils.format(new DateTime(TimeZone.getTimeZone("UTC")), "yyyy-MM-dd");
+        String date = DateUtil.format(new DateTime(TimeZone.getTimeZone("UTC")), "yyyy-MM-dd");
         String credentialScope = StrUtil.format("{}/{}/tc3_request", date, endpoint.split("\\.")[0]);
         String stringToSign = StrUtil.format("TC3-HMAC-SHA256\n{}\n{}\n{}",
                 timestamp, credentialScope,

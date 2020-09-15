@@ -14,7 +14,7 @@ import java.util.Map;
 import java.util.TreeMap;
 
 /**
- * <p>生成阿里大鱼短信操作的签名</p>
+ * <p>生成阿里云API操作的签名信息</p>
  * <p>2020-08-11 22:32</p>
  *
  * @author Dai Yuanchuan
