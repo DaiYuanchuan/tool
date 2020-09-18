@@ -11,7 +11,6 @@ import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.TreeMap;
 
 /**
  * <p>生成阿里云API操作的签名信息</p>
@@ -20,46 +19,6 @@ import java.util.TreeMap;
  * @author Dai Yuanchuan
  **/
 public class AliYunSignature {
-
-    /**
-     * 生成阿里大鱼发送短信时需要的签名信息
-     *
-     * @param phone           需要发送的手机号
-     * @param templateCode    短信模板ID。请在控制台模板管理页面模板CODE一列查看。[例:SMS_153055065]
-     * @param outId           外部流水扩展字段。
-     * @param smsUpExtendCode 上行短信扩展码，无特殊需要此字段的用户请忽略此字段。
-     * @param templateParam   短信模板变量对应的实际值，JSON格式。[例:{"code":"1111"}]
-     * @param aliYunSmsConfig 阿里大鱼短信配置
-     * @return 返回构建的签名、参数、请求地址
-     * {
-     * "signature":"构建的签名信息",
-     * "parameters":"请求参数信息",
-     * "requestUrl":"最终拼接的url地址"
-     * }
-     */
-    public static JSONObject getAliYunSmsSignature(String phone, String templateCode, String outId, String smsUpExtendCode, JSONObject templateParam, AliYunSmsConfig aliYunSmsConfig) {
-        // 构建请求参数
-        Map<String, String> parameters = new TreeMap<String, String>() {{
-            // 第一部分由系统参数组成
-            put("SignatureMethod", aliYunSmsConfig.getSignatureMethod());
-            put("SignatureNonce", aliYunSmsConfig.getSignatureNonce());
-            put("AccessKeyId", aliYunSmsConfig.getAccessKeyId());
-            put("SignatureVersion", aliYunSmsConfig.getSignatureVersion());
-            put("Timestamp", aliYunSmsConfig.getTimestamp());
-            put("Format", aliYunSmsConfig.getFormat().getFormat());
-            // 第二部分由业务API参数组成
-            put("Action", aliYunSmsConfig.getAction());
-            put("Version", aliYunSmsConfig.getVersion());
-            put("RegionId", aliYunSmsConfig.getRegionId());
-            put("PhoneNumbers", phone);
-            put("SignName", aliYunSmsConfig.getSignName());
-            put("TemplateCode", templateCode);
-            put("TemplateParam", templateParam.toJSONString());
-            put("OutId", outId);
-            put("SmsUpExtendCode", smsUpExtendCode);
-        }};
-        return getAliYunSignature(parameters, aliYunSmsConfig.getAccessKeySecret(), aliYunSmsConfig.getDomain().getDomain());
-    }
 
     /**
      * 生成阿里云API请求签名信息

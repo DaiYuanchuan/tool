@@ -19,6 +19,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
+import java.util.TreeMap;
 
 /**
  * <p>发送短信时调用的工具类</p>
@@ -48,8 +49,27 @@ public class SmsUtil {
         Assert.notNull(aliYunSmsConfig, "配置信息为空");
         // 发送短信时系统规定参数 取值:SendSms
         aliYunSmsConfig.setAction("SendSms");
-        // 获取短信签名信息
-        JSONObject aliYunSignature = AliYunSignature.getAliYunSmsSignature(phone, templateCode, outId, smsUpExtendCode, templateParam, aliYunSmsConfig);
+        // 构建请求参数
+        Map<String, String> parameters = new TreeMap<String, String>() {{
+            // 第一部分由系统参数组成
+            put("SignatureMethod", aliYunSmsConfig.getSignatureMethod());
+            put("SignatureNonce", aliYunSmsConfig.getSignatureNonce());
+            put("AccessKeyId", aliYunSmsConfig.getAccessKeyId());
+            put("SignatureVersion", aliYunSmsConfig.getSignatureVersion());
+            put("Timestamp", aliYunSmsConfig.getTimestamp());
+            put("Format", aliYunSmsConfig.getFormat().getFormat());
+            // 第二部分由业务API参数组成
+            put("Action", aliYunSmsConfig.getAction());
+            put("Version", aliYunSmsConfig.getVersion());
+            put("RegionId", aliYunSmsConfig.getRegionId());
+            put("PhoneNumbers", phone);
+            put("SignName", aliYunSmsConfig.getSignName());
+            put("TemplateCode", templateCode);
+            put("TemplateParam", templateParam.toJSONString());
+            put("OutId", outId);
+            put("SmsUpExtendCode", smsUpExtendCode);
+        }};
+        JSONObject aliYunSignature = AliYunSignature.getAliYunSignature(parameters, aliYunSmsConfig.getAccessKeySecret(), aliYunSmsConfig.getDomain().getDomain());
         Assert.isFalse(aliYunSignature.isEmpty(), "获取短信签名失败");
 
         // 请求最终构建的url,获取请求body

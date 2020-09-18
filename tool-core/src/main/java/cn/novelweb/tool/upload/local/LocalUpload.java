@@ -49,7 +49,7 @@ public class LocalUpload {
      * 404:文件不存在、文件没有被上传过、第一次上传
      * @throws Exception 抛出自定义Exception异常
      */
-    public static Result<?> checkFileMd5(String fileMd5,
+    public static Result<JSONArray> checkFileMd5(String fileMd5,
                                          String fileName,
                                          String confFilePath,
                                          String tmpFilePath) throws Exception {
@@ -104,7 +104,7 @@ public class LocalUpload {
      * 404:文件不存在、文件没有被上传过、第一次上传
      * @throws Exception 抛出自定义Exception异常
      */
-    public static Result<?> checkFileMd5(String fileMd5,
+    public static Result<JSONArray> checkFileMd5(String fileMd5,
                                          String fileName) throws Exception {
         return checkFileMd5(fileMd5, fileName,
                 defaultPath + File.separatorChar + fileMd5
@@ -128,9 +128,9 @@ public class LocalUpload {
      * 500:文件上传失败、文件上传异常
      * @throws Exception 抛出自定义Exception异常
      */
-    public static synchronized Result<?> fragmentFileUploader(UploadFileParam param, String confFilePath,
-                                                              String filePath, long chunkSize,
-                                                              HttpServletRequest request) throws Exception {
+    public static synchronized Result<FileInfo> fragmentFileUploader(UploadFileParam param, String confFilePath,
+                                                                     String filePath, long chunkSize,
+                                                                     HttpServletRequest request) throws Exception {
         boolean isParamEmpty = StringUtils.isBlank(filePath)
                 || StringUtils.isBlank(confFilePath) && param.getFile() == null;
         if (isParamEmpty) {
@@ -203,7 +203,7 @@ public class LocalUpload {
      * 500:文件上传失败、文件上传异常
      * @throws Exception 抛出自定义Exception异常
      */
-    public static Result<?> fragmentFileUploader(UploadFileParam param, long chunkSize,
+    public static Result<FileInfo> fragmentFileUploader(UploadFileParam param, long chunkSize,
                                                  HttpServletRequest request) throws Exception {
         return fragmentFileUploader(param, defaultPath + File.separatorChar + param.getMd5(),
                 defaultPath + File.separatorChar + param.getMd5(),
@@ -220,7 +220,7 @@ public class LocalUpload {
      * 500:文件上传失败、传输异常
      * @throws Exception 抛出自定义Exception异常
      */
-    public static Result<?> regularFileUploader(UploadFileParam param, String filePath) throws Exception {
+    public static Result<FileInfo> regularFileUploader(UploadFileParam param, String filePath) throws Exception {
         boolean isParamEmpty = StringUtils.isBlank(filePath)
                 || StringUtils.isBlank(param.getName()) && param.getFile() == null;
         if (isParamEmpty) {
@@ -265,7 +265,7 @@ public class LocalUpload {
      * 500:文件上传失败、传输异常
      * @throws Exception 抛出自定义Exception异常
      */
-    public static Result<?> regularFileUploader(UploadFileParam param) throws Exception {
+    public static Result<FileInfo> regularFileUploader(UploadFileParam param) throws Exception {
         boolean isParamEmpty = StringUtils.isBlank(param.getName()) && param.getFile() == null;
         if (isParamEmpty) {
             throw new Exception("参数值为空");

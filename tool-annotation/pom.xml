@@ -6,7 +6,7 @@
     <parent>
         <artifactId>tool</artifactId>
         <groupId>cn.novelweb</groupId>
-        <version>1.3.12</version>
+        <version>1.3.13</version>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
@@ -26,11 +26,7 @@
     <dependencies>
         <dependency>
             <groupId>io.springfox</groupId>
-            <artifactId>springfox-swagger2</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>io.swagger</groupId>
-            <artifactId>swagger-models</artifactId>
+            <artifactId>springfox-boot-starter</artifactId>
         </dependency>
         <dependency>
             <groupId>org.projectlombok</groupId>

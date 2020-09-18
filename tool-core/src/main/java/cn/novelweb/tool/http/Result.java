@@ -4,6 +4,12 @@ import cn.novelweb.config.ConstantConfiguration;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.NoArgsConstructor;
+import org.springframework.lang.Nullable;
+import org.springframework.util.ObjectUtils;
+
+import java.io.Serializable;
+import java.util.Optional;
 
 /**
  * <p>状态返回类</p>
@@ -12,8 +18,11 @@ import io.swagger.annotations.ApiModelProperty;
  * @author Dai Yuanchuan
  **/
 @ApiModel(value = "返回信息")
+@NoArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class Result<T> {
+public class Result<T> implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     @ApiModelProperty(value = "状态码")
     private String code;
@@ -36,76 +45,98 @@ public class Result<T> {
         this.data = obj;
     }
 
-    public static Result ok(Object data) {
+    /**
+     * 判断返回是否为成功
+     *
+     * @param result Result
+     * @return 是否成功
+     */
+    public static boolean isSuccess(@Nullable Result<?> result) {
+        return Optional.ofNullable(result)
+                .map(x -> ObjectUtils.nullSafeEquals(ConstantConfiguration.success, x.code))
+                .orElse(Boolean.FALSE);
+    }
+
+    /**
+     * 判断返回是否为成功
+     *
+     * @param result Result
+     * @return 是否成功
+     */
+    public static boolean isNotSuccess(@Nullable Result<?> result) {
+        return !Result.isSuccess(result);
+    }
+
+    public static <T> Result<T> ok(T data) {
         return new Result<>(ConstantConfiguration.success, "请求成功", data);
     }
 
-    public static Result ok() {
-        return new Result<>(ConstantConfiguration.success, "请求成功", "success");
+    public static <T> Result<T> ok() {
+        return new Result<>(ConstantConfiguration.success, "请求成功");
     }
 
-    public static Result ok(String code, String message) {
-        return new Result(code, message);
-    }
-
-    public static Result ok(int code, String message) {
-        return new Result(String.valueOf(code), message);
-    }
-
-    public static Result ok(String code, String message, Object data) {
-        return new Result<>(code, message, data);
-    }
-
-    public static Result ok(int code, String message, Object data) {
-        return new Result<>(String.valueOf(code), message, data);
-    }
-
-    public static Result fail(Object data) {
-        return new Result<>(ConstantConfiguration.fail, "请求失败", data);
-    }
-
-    public static Result fail() {
-        return new Result<>(ConstantConfiguration.fail, "请求失败", "");
-    }
-
-    public static Result fail(String message) {
-        return new Result<>(ConstantConfiguration.fail, message, "");
-    }
-
-    public static Result fail(String code, String message) {
+    public static <T> Result<T> ok(String code, String message) {
         return new Result<>(code, message);
     }
 
-    public static Result fail(int code, String message) {
+    public static <T> Result<T> ok(int code, String message) {
         return new Result<>(String.valueOf(code), message);
     }
 
-    public static Result fail(String code, String message, Object data) {
+    public static <T> Result<T> ok(String code, String message, T data) {
         return new Result<>(code, message, data);
     }
 
-    public static Result fail(int code, String message, Object data) {
+    public static <T> Result<T> ok(int code, String message, T data) {
         return new Result<>(String.valueOf(code), message, data);
     }
 
-    public static Result authority(String message) {
-        return new Result<>(ConstantConfiguration.noAuthority, message, "");
+    public static <T> Result<T> fail(T data) {
+        return new Result<>(ConstantConfiguration.fail, "请求失败", data);
     }
 
-    public static Result authority() {
-        return new Result<>(ConstantConfiguration.noAuthority, "抱歉！您没有对应的权限", "");
+    public static <T> Result<T> fail() {
+        return new Result<>(ConstantConfiguration.fail, "请求失败", null);
     }
 
-    public static Result refuse() {
-        return new Result<>(ConstantConfiguration.refuse, "登录过期！请重新登录", "");
+    public static <T> Result<T> fail(String message) {
+        return new Result<>(ConstantConfiguration.fail, message, null);
     }
 
-    public static Result refuse(String message) {
-        return new Result<>(ConstantConfiguration.refuse, message, "");
+    public static <T> Result<T> fail(String code, String message) {
+        return new Result<>(code, message);
     }
 
-    public static Result error(String message) {
-        return new Result<>(ConstantConfiguration.systemError, message, "");
+    public static <T> Result<T> fail(int code, String message) {
+        return new Result<>(String.valueOf(code), message);
+    }
+
+    public static <T> Result<T> fail(String code, String message, T data) {
+        return new Result<>(code, message, data);
+    }
+
+    public static <T> Result<T> fail(int code, String message, T data) {
+        return new Result<>(String.valueOf(code), message, data);
+    }
+
+    public static <T> Result<T> authority(String message) {
+        return new Result<>(ConstantConfiguration.noAuthority, message, null);
+    }
+
+    public static <T> Result<T> authority() {
+        return new Result<>(ConstantConfiguration.noAuthority, "抱歉！您没有对应的权限", null);
+    }
+
+    public static <T> Result<T> refuse() {
+        return new Result<>(ConstantConfiguration.refuse, "登录过期！请重新登录", null);
+    }
+
+    public static <T> Result<T> refuse(String message) {
+        return new Result<>(ConstantConfiguration.refuse, message, null);
+    }
+
+    public static <T> Result<T> error(String message) {
+        return new Result<>(ConstantConfiguration.systemError, message, null);
     }
 
     public String getCode() {
