@@ -190,11 +190,6 @@
                 <artifactId>springfox-boot-starter</artifactId>
                 <version>3.0.0</version>
             </dependency>
-            <dependency>
-                <groupId>com.github.xiaoymin</groupId>
-                <artifactId>knife4j-spring-ui</artifactId>
-                <version>2.0.5</version>
-            </dependency>
             <!-- Swagger.jar end -->
 
             <!-- 阿里 解析 json 工具 start -->
