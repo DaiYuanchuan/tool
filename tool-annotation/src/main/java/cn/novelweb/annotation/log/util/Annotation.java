@@ -82,15 +82,16 @@ public class Annotation {
 
         // 获取/赋值 浏览器、os系统等信息
         UserAgent ua = UserAgentUtil.parse(userAgent);
-        accessLogInfo.setBrowser(ua.getBrowser().toString());
-        accessLogInfo.setBrowserVersion(ua.getVersion());
-        accessLogInfo.setBrowserEngine(ua.getEngine().toString());
-        accessLogInfo.setBrowserEngineVersion(ua.getEngineVersion());
-        accessLogInfo.setIsMobile(ua.isMobile());
-        accessLogInfo.setOs(ua.getOs().toString());
-        accessLogInfo.setPlatform(ua.getPlatform().getName());
+        if (ua != null) {
+            accessLogInfo.setBrowser(ua.getBrowser().toString());
+            accessLogInfo.setBrowserVersion(ua.getVersion());
+            accessLogInfo.setBrowserEngine(ua.getEngine().toString());
+            accessLogInfo.setBrowserEngineVersion(ua.getEngineVersion());
+            accessLogInfo.setIsMobile(ua.isMobile());
+            accessLogInfo.setOs(ua.getOs().toString());
+            accessLogInfo.setPlatform(ua.getPlatform().getName());
+        }
         accessLogInfo.setSpider(SpiderUtils.parseSpiderType(userAgent));
-
         accessLogInfo.setUserAgent(userAgent);
 
         // 访问的模块、状态、时间等
