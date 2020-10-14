@@ -538,6 +538,20 @@ public class QiNiuUpload {
     }
 
     /**
+     * 一般情况下可通过此方法获取token
+     * <p>
+     * 自定义上传策略
+     * 有效时长默认3600s
+     *
+     * @param policy 上传策略的其它参数，如 new StringMap().put("endUser", "uid").putNotEmpty("returnBody", "")。
+     *               scope通过 bucket、key间接设置，deadline 通过 expires 间接设置
+     * @return 生成的上传token
+     */
+    public static String getUploadToken(StringMap policy) {
+        return Auth.create(accessKey, secretKey).uploadToken(bucket, null, 3600, policy);
+    }
+
+    /**
      * 同名文件覆盖操作、只能上传指定key的文件可以可通过此方法获取token
      * 这个文件名称同时是客户端上传代码中指定的文件名，两者必须一致
      *
@@ -549,6 +563,22 @@ public class QiNiuUpload {
     }
 
     /**
+     * 同名文件覆盖操作、只能上传指定key的文件可以可通过此方法获取token
+     * 这个文件名称同时是客户端上传代码中指定的文件名，两者必须一致
+     * <p>
+     * 自定义上传策略
+     * 有效时长默认3600s
+     *
+     * @param key    七牛云上传路径,可为 null
+     * @param policy 上传策略的其它参数，如 new StringMap().put("endUser", "uid").putNotEmpty("returnBody", "")。
+     *               scope通过 bucket、key间接设置，deadline 通过 expires 间接设置
+     * @return 生成的上传token
+     */
+    public static String getUploadToken(String key, StringMap policy) {
+        return Auth.create(accessKey, secretKey).uploadToken(bucket, key, 3600, policy);
+    }
+
+    /**
      * 生成token
      * 指定有效时长
      *
@@ -556,8 +586,7 @@ public class QiNiuUpload {
      * @return 生成的上传token
      */
     public static String getUploadToken(long expires) {
-        return Auth.create(accessKey, secretKey)
-                .uploadToken(bucket, null, expires, null, true);
+        return Auth.create(accessKey, secretKey).uploadToken(bucket, null, expires, null, true);
     }
 
     /**
@@ -570,8 +599,21 @@ public class QiNiuUpload {
      * @return 生成上传的token
      */
     public static String getUploadToken(String key, long expires) {
-        return Auth.create(accessKey, secretKey)
-                .uploadToken(bucket, key, expires, null, true);
+        return Auth.create(accessKey, secretKey).uploadToken(bucket, key, expires, null, true);
+    }
+
+    /**
+     * 生成上传token
+     *
+     * @param key     key，可为 null
+     * @param expires 有效时长，单位秒。默认3600s
+     * @param policy  上传策略的其它参数，如 new StringMap().put("endUser", "uid").putNotEmpty("returnBody", "")。
+     *                scope通过 bucket、key间接设置，deadline 通过 expires 间接设置
+     * @param strict  是否去除非限定的策略字段，默认true
+     * @return 生成的上传token
+     */
+    public String getUploadToken(String key, long expires, StringMap policy, boolean strict) {
+        return Auth.create(accessKey, secretKey).uploadToken(bucket, key, expires, policy, strict);
     }
 
     /**
