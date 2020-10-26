@@ -474,6 +474,22 @@ public class QiNiuUpload {
     }
 
     /**
+     * 异步第三方资源抓取 从指定 URL 抓取资源，并将该资源存储到指定空间中。每次只抓取一个文件，抓取时可以指定保存空间名和最终资源名。
+     * 主要对于大文件进行抓取
+     * https://developer.qiniu.com/kodo/api/4097/asynch-fetch
+     *
+     * @param url    待抓取的文件链接，支持设置多个,以';'分隔
+     * @param bucket 文件抓取后保存的空间
+     * @param key    文件抓取后保存的文件名
+     * @return Response
+     * @throws QiniuException
+     */
+    public Response asyncFetch(String url, String bucket, String key) throws QiniuException {
+        StringMap params = new StringMap().putNotNull("key", key);
+        return getBucketManager(region).asyncFetch(url, bucket, params);
+    }
+
+    /**
      * 删除空间中的文件
      *
      * @param key    你的文件的key值
@@ -525,6 +541,89 @@ public class QiNiuUpload {
      */
     public static BatchStatus[] delete(String[] keyList) throws QiniuException {
         return delete(keyList, region);
+    }
+
+    /**
+     * 重命名空间中的文件
+     *
+     * @param bucket     空间名称
+     * @param oldFileKey 旧的文件名称
+     * @param newFileKey 新的文件名称
+     * @param force      强制覆盖空间中已有同名（和 newFileKey 相同）的文件
+     * @return 返回定义HTTP请求的信息
+     * @throws QiniuException 抛出七牛云异常
+     */
+    public static Response rename(String bucket, String oldFileKey, String newFileKey, boolean force) throws QiniuException {
+        return getBucketManager(region).rename(bucket, oldFileKey, newFileKey, force);
+    }
+
+    /**
+     * 重命名空间中的文件
+     * 使用默认upToken、默认的region为华东
+     *
+     * @param oldFileKey 旧的文件名称
+     * @param newFileKey 新的文件名称
+     * @return 返回定义HTTP请求的信息
+     * @throws QiniuException 抛出七牛云异常
+     */
+    public static Response rename(String oldFileKey, String newFileKey) throws QiniuException {
+        return rename(bucket, oldFileKey, newFileKey, false);
+    }
+
+    /**
+     * 复制文件，要求空间在同一账号下，可以设置force参数为true强行覆盖空间已有同名文件
+     *
+     * @param fromBucket  源空间名称
+     * @param fromFileKey 源文件名称
+     * @param toBucket    目的空间名称
+     * @param toFileKey   目的文件名称
+     * @param force       强制覆盖空间中已有同名（和 toFileKey 相同）的文件
+     * @return 返回定义HTTP请求的信息
+     * @throws QiniuException 抛出七牛云异常
+     */
+    public static Response copy(String fromBucket, String fromFileKey, String toBucket, String toFileKey, boolean force) throws QiniuException {
+        return getBucketManager(region).copy(fromBucket, fromFileKey, toBucket, toFileKey, force);
+    }
+
+    /**
+     * 复制文件，要求空间在同一账号下
+     * 使用默认upToken、默认的region为华东
+     *
+     * @param fromFileKey 源文件名称
+     * @param toFileKey   目的文件名称
+     * @return 返回定义HTTP请求的信息
+     * @throws QiniuException 抛出七牛云异常
+     */
+    public static Response copy(String fromFileKey, String toFileKey) throws QiniuException {
+        return copy(bucket, fromFileKey, bucket, toFileKey, false);
+    }
+
+    /**
+     * 移动文件，要求空间在同一账号下, 可以添加force参数为true强行移动文件。
+     *
+     * @param fromBucket  源空间名称
+     * @param fromFileKey 源文件名称
+     * @param toBucket    目的空间名称
+     * @param toFileKey   目的文件名称
+     * @param force       强制覆盖空间中已有同名（和 toFileKey 相同）的文件
+     * @return 返回定义HTTP请求的信息
+     * @throws QiniuException 抛出七牛云异常
+     */
+    public static Response move(String fromBucket, String fromFileKey, String toBucket, String toFileKey, boolean force) throws QiniuException {
+        return getBucketManager(region).move(fromBucket, fromFileKey, toBucket, toFileKey, force);
+    }
+
+    /**
+     * 移动文件。要求空间在同一账号下
+     * 使用默认upToken、默认的region为华东
+     *
+     * @param fromFileKey 源文件名称
+     * @param toFileKey   目的文件名称
+     * @return 返回定义HTTP请求的信息
+     * @throws QiniuException 抛出七牛云异常
+     */
+    public static Response move(String fromFileKey, String toFileKey) throws QiniuException {
+        return move(bucket, fromFileKey, bucket, toFileKey, false);
     }
 
     /**
