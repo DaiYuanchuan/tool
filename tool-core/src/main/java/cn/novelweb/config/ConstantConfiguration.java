@@ -53,4 +53,13 @@ public class ConstantConfiguration {
      */
     public static final String NUMBER_REGULARIZATION = "[0-9]*";
 
+    /**
+     * 数字类型常量
+     */
+    public interface Number {
+        /**
+         * 数字0
+         */
+        Integer ZERO = 0;
+    }
 }

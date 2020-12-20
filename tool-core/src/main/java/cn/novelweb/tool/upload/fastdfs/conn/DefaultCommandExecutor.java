@@ -29,7 +29,7 @@ public class DefaultCommandExecutor implements CommandExecutor {
     /**
      * Tracker定位
      */
-    private TrackerLocator trackerLocator;
+    private final TrackerLocator trackerLocator;
 
     /**
      * 连接池
@@ -44,7 +44,7 @@ public class DefaultCommandExecutor implements CommandExecutor {
      */
     public DefaultCommandExecutor(String trackerStr, ConnectionPool pool) {
         Log.debug("初始化Tracker Server连接 {}", trackerStr);
-        Set<String> trackerSet = new HashSet<String>();
+        Set<String> trackerSet = new HashSet<>();
         String[] trackerArray = StringUtils.split(trackerStr, ",");
         for (String tracker : trackerArray) {
             if (StringUtils.isBlank(tracker)) {
