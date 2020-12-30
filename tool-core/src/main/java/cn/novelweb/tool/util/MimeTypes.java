@@ -1,9 +1,7 @@
 package cn.novelweb.tool.util;
 
 import cn.hutool.core.io.FileTypeUtil;
-import cn.hutool.core.io.IoUtil;
 import cn.hutool.core.util.StrUtil;
-import cn.novelweb.config.ConstantConfiguration;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 
