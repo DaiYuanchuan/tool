@@ -104,6 +104,9 @@ public class Annotation {
             if (e.getCause() != null) {
                 accessLogInfo.setErrorCause(e.getCause().toString());
                 accessLogInfo.setErrorMsg(e.getCause().getMessage());
+            } else {
+                accessLogInfo.setErrorCause(e.getLocalizedMessage());
+                accessLogInfo.setErrorMsg(e.getMessage());
             }
         } else {
             accessLogInfo.setErrorCause("");
