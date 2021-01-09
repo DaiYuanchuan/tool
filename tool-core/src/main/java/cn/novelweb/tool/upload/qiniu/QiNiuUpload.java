@@ -4,22 +4,22 @@ import cn.hutool.core.io.IoUtil;
 import cn.hutool.core.lang.Singleton;
 import cn.hutool.http.HttpUtil;
 import com.alibaba.fastjson.JSON;
-import com.qiniu.common.QiniuException;
 import com.qiniu.http.Response;
 import com.qiniu.storage.*;
 import com.qiniu.storage.model.BatchStatus;
 import com.qiniu.storage.model.DefaultPutRet;
 import com.qiniu.storage.model.FetchRet;
 import com.qiniu.storage.model.FileInfo;
+import com.qiniu.storage.persistent.FileRecorder;
 import com.qiniu.util.Auth;
 import com.qiniu.util.Etag;
 import com.qiniu.util.StringMap;
 import com.qiniu.util.StringUtils;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
-import java.io.IOException;
 import java.io.InputStream;
 
 /**
@@ -77,16 +77,25 @@ public class QiNiuUpload {
     public static Region region = huaDong;
 
     /**
-     * 构建七牛云文件上传管理器
+     * 构建七牛云文件上传管理器[支持记录上传进度]
+     * 构建一个支持断点续传的上传对象。只在文件采用分片上传时才会有效。
+     * 分块上传中，将每一块上传的记录保存下来。上传中断后可在上一次断点记录基础上上传剩余部分。
+     * 对于不同的文件上传需要支持断点续传的情况，请定义不同的UploadManager对象，而不要共享。
      *
-     * @param region 需要上传到的区域
+     * @param region   需要上传到的区域
+     * @param recorder 断点记录对象
      * @return 返回七牛云文件上传管理器<code>UploadManager</code>类
      */
-    private static UploadManager buildUploadManager(Region region) {
+    @SneakyThrows
+    private static UploadManager buildUploadManager(Region region, File recorder) {
         // 构造一个带指定Region对象的配置类
         Configuration configuration = Singleton.get(Configuration.class, region);
-        // 构造一个带指定Zone对象的配置类
-        return Singleton.get(UploadManager.class, configuration);
+        if (recorder == null) {
+            // 构造一个带指定Zone对象的配置类
+            return Singleton.get(UploadManager.class, configuration);
+        }
+        // 构造一个带 指定Zone对象的 和 断点记录对象的 配置类
+        return Singleton.get(UploadManager.class, configuration, new FileRecorder(recorder));
     }
 
     /**
@@ -106,9 +115,9 @@ public class QiNiuUpload {
      *
      * @param response 上传结果对象
      * @return 返回默认上传接口回复对象DefaultPutRet
-     * @throws QiniuException 抛出七牛云异常
      */
-    private static DefaultPutRet putRet(Response response) throws QiniuException {
+    @SneakyThrows
+    private static DefaultPutRet putRet(Response response) {
         DefaultPutRet putRet = JSON.parseObject(response.bodyString(), DefaultPutRet.class);
         if (StringUtils.isNullOrEmpty(putRet.key) || StringUtils.isNullOrEmpty(putRet.hash)) {
             return null;
@@ -119,18 +128,19 @@ public class QiNiuUpload {
     /**
      * 服务端本地文件直接上传到七牛云
      *
-     * @param cosFile 需要上传的文件对象
-     * @param key     上传文件保存的文件名
-     * @param upToken 上传凭证
-     * @param region  需要上传到的区域
+     * @param cosFile  需要上传的文件对象
+     * @param key      上传文件保存的文件名
+     * @param upToken  上传凭证
+     * @param region   需要上传到的区域
+     * @param recorder 断点记录对象[只有断点上传有效，用来记录当前上传进度的]
      * @return 返回null为上传失败, 否则返回默认上传接口回复对象DefaultPutRet
-     * @throws QiniuException 抛出七牛云异常
      */
-    public static DefaultPutRet uploader(File cosFile, String key, String upToken, Region region) throws QiniuException {
+    @SneakyThrows
+    public static DefaultPutRet uploader(File cosFile, String key, String upToken, Region region, File recorder) {
         if (cosFile == null) {
             return null;
         }
-        return putRet(buildUploadManager(region).put(cosFile, key, upToken));
+        return putRet(buildUploadManager(region, recorder).put(cosFile, key, upToken));
     }
 
     /**
@@ -140,28 +150,41 @@ public class QiNiuUpload {
      * @param cosFile 需要上传的文件对象
      * @param key     上传文件保存的文件名
      * @return 返回null为上传失败, 否则返回默认上传接口回复对象DefaultPutRet
-     * @throws QiniuException 抛出七牛云异常
      */
-    public static DefaultPutRet uploader(File cosFile, String key) throws QiniuException {
-        return uploader(cosFile, key, getUploadToken(), region);
+    public static DefaultPutRet uploader(File cosFile, String key) {
+        return uploader(cosFile, key, getUploadToken(), region, null);
+    }
+
+    /**
+     * 服务端本地文件直接上传到七牛云
+     * 使用默认upToken、默认的region为华东
+     *
+     * @param cosFile  需要上传的文件对象
+     * @param key      上传文件保存的文件名
+     * @param recorder 断点记录对象[只有断点上传有效，用来记录当前上传进度的]
+     * @return 返回null为上传失败, 否则返回默认上传接口回复对象DefaultPutRet
+     */
+    public static DefaultPutRet uploader(File cosFile, String key, File recorder) {
+        return uploader(cosFile, key, getUploadToken(), region, recorder);
     }
 
     /**
      * 七牛云数据流文件上传
      * 适用于所有的InputStream子类
      *
-     * @param cosFile 需要上传的数据流
-     * @param key     上传的路径,默认不指定key的情况下，以文件内容的hash值作为文件名
-     * @param upToken 七牛云上传的token
-     * @param region  需要上传到的区域
+     * @param cosFile  需要上传的数据流
+     * @param key      上传的路径,默认不指定key的情况下，以文件内容的hash值作为文件名
+     * @param upToken  七牛云上传的token
+     * @param region   需要上传到的区域
+     * @param recorder 断点记录对象[只有断点上传有效，用来记录当前上传进度的]
      * @return 返回null为上传失败, 否则返回默认上传接口回复对象DefaultPutRet
-     * @throws QiniuException 抛出七牛云异常
      */
-    public static DefaultPutRet uploader(InputStream cosFile, String key, String upToken, Region region) throws QiniuException {
+    @SneakyThrows
+    public static DefaultPutRet uploader(InputStream cosFile, String key, String upToken, Region region, File recorder) {
         if (cosFile == null) {
             return null;
         }
-        return putRet(buildUploadManager(region).put(cosFile, key, upToken, null, null));
+        return putRet(buildUploadManager(region, recorder).put(cosFile, key, upToken, null, null));
     }
 
     /**
@@ -172,10 +195,23 @@ public class QiNiuUpload {
      * @param cosFile 需要上传的数据流
      * @param key     上传的路径,默认不指定key的情况下，以文件内容的hash值作为文件名
      * @return 返回null为上传失败, 否则返回默认上传接口回复对象DefaultPutRet
-     * @throws QiniuException 抛出七牛云异常
      */
-    public static DefaultPutRet uploader(InputStream cosFile, String key) throws QiniuException {
-        return uploader(cosFile, key, getUploadToken(), region);
+    public static DefaultPutRet uploader(InputStream cosFile, String key) {
+        return uploader(cosFile, key, getUploadToken(), region, null);
+    }
+
+    /**
+     * 七牛云数据流文件上传
+     * 适用于所有的InputStream子类
+     * 使用默认upToken、默认的region为华东
+     *
+     * @param cosFile  需要上传的数据流
+     * @param key      上传的路径,默认不指定key的情况下，以文件内容的hash值作为文件名
+     * @param recorder 断点记录对象[只有断点上传有效，用来记录当前上传进度的]
+     * @return 返回null为上传失败, 否则返回默认上传接口回复对象DefaultPutRet
+     */
+    public static DefaultPutRet uploader(InputStream cosFile, String key, File recorder) {
+        return uploader(cosFile, key, getUploadToken(), region, recorder);
     }
 
     /**
@@ -187,15 +223,13 @@ public class QiNiuUpload {
      * @param str         需要上传的字符串
      * @param charsetName 字符集(如:UTF-8)
      * @return 返回null为上传失败, 否则返回默认上传接口回复对象DefaultPutRet
-     * @throws QiniuException 抛出七牛云异常
      */
-    public static DefaultPutRet stringUploader(String key, String upToken, Region region,
-                                               String str, String charsetName) throws QiniuException {
+    public static DefaultPutRet stringUploader(String key, String upToken, Region region, String str, String charsetName) {
         if (org.apache.commons.lang.StringUtils.isBlank(str)) {
             return null;
         }
         ByteArrayInputStream inputStream = IoUtil.toStream(str, charsetName);
-        return uploader(inputStream, key, upToken, region);
+        return uploader(inputStream, key, upToken, region, null);
     }
 
     /**
@@ -206,9 +240,8 @@ public class QiNiuUpload {
      * @param str         需要上传的字符串
      * @param charsetName 字符集(如:UTF-8)
      * @return 返回null为上传失败, 否则返回默认上传接口回复对象DefaultPutRet
-     * @throws QiniuException 抛出七牛云异常
      */
-    public static DefaultPutRet stringUploader(String key, String str, String charsetName) throws QiniuException {
+    public static DefaultPutRet stringUploader(String key, String str, String charsetName) {
         return stringUploader(key, getUploadToken(), region, str, charsetName);
     }
 
@@ -221,10 +254,8 @@ public class QiNiuUpload {
      * @param region  需要上传到的区域
      * @param str     需要上传的字符串
      * @return 返回null为上传失败, 否则返回默认上传接口回复对象DefaultPutRet
-     * @throws QiniuException 抛出七牛云异常
      */
-    public static DefaultPutRet stringUploader(String key, String upToken,
-                                               Region region, String str) throws QiniuException {
+    public static DefaultPutRet stringUploader(String key, String upToken, Region region, String str) {
         return stringUploader(key, upToken, region, str, "UTF-8");
     }
 
@@ -236,9 +267,8 @@ public class QiNiuUpload {
      * @param key 上传的路径,默认不指定key的情况下，以文件内容的hash值作为文件名
      * @param str 需要上传的字符串
      * @return 返回null为上传失败, 否则返回默认上传接口回复对象DefaultPutRet
-     * @throws QiniuException 抛出七牛云异常
      */
-    public static DefaultPutRet stringUploader(String key, String str) throws QiniuException {
+    public static DefaultPutRet stringUploader(String key, String str) {
         return stringUploader(key, getUploadToken(), region, str);
     }
 
@@ -262,14 +292,15 @@ public class QiNiuUpload {
      * @param key         上传的路径,默认不指定key的情况下，以文件内容的hash值作为文件名
      * @param upToken     七牛云上传的token
      * @param region      需要上传到的区域
+     * @param recorder    断点记录对象[只有断点上传有效，用来记录当前上传进度的]
      * @return 返回null为上传失败, 否则返回默认上传接口回复对象DefaultPutRet
-     * @throws QiniuException 抛出七牛云异常
      */
-    public static DefaultPutRet uploader(final byte[] uploadBytes, String key, String upToken, Region region) throws QiniuException {
+    @SneakyThrows
+    public static DefaultPutRet uploader(final byte[] uploadBytes, String key, String upToken, Region region, File recorder) {
         if (uploadBytes == null) {
             return null;
         }
-        return putRet(buildUploadManager(region).put(uploadBytes, key, upToken));
+        return putRet(buildUploadManager(region, recorder).put(uploadBytes, key, upToken));
     }
 
     /**
@@ -280,10 +311,23 @@ public class QiNiuUpload {
      * @param uploadBytes 需要上传的字节数组文件
      * @param key         上传的路径,默认不指定key的情况下，以文件内容的hash值作为文件名
      * @return 返回null为上传失败, 否则返回默认上传接口回复对象DefaultPutRet
-     * @throws QiniuException 抛出七牛云异常
      */
-    public static DefaultPutRet uploader(final byte[] uploadBytes, String key) throws QiniuException {
-        return uploader(uploadBytes, key, getUploadToken(), region);
+    public static DefaultPutRet uploader(final byte[] uploadBytes, String key) {
+        return uploader(uploadBytes, key, getUploadToken(), region, null);
+    }
+
+    /**
+     * 七牛云字节数组文件上传
+     * 可以支持将内存中的字节数组上传到空间中。
+     * 使用默认upToken、默认的region为华东
+     *
+     * @param uploadBytes 需要上传的字节数组文件
+     * @param key         上传的路径,默认不指定key的情况下，以文件内容的hash值作为文件名
+     * @param recorder    断点记录对象[只有断点上传有效，用来记录当前上传进度的]
+     * @return 返回null为上传失败, 否则返回默认上传接口回复对象DefaultPutRet
+     */
+    public static DefaultPutRet uploader(final byte[] uploadBytes, String key, File recorder) {
+        return uploader(uploadBytes, key, getUploadToken(), region, recorder);
     }
 
     /**
@@ -298,11 +342,12 @@ public class QiNiuUpload {
      * @param checkCrc 是否验证crc32
      * @param handler  上传完成的回调函数
      * @param region   需要上传到的区域
-     * @throws IOException 抛出IO异常
+     * @param recorder 断点记录对象[只有断点上传有效，用来记录当前上传进度的]
      */
-    public static void uploader(final byte[] data, final String key, final String token, StringMap params,
-                                String mime, boolean checkCrc, UpCompletionHandler handler, Region region) throws IOException {
-        buildUploadManager(region).asyncPut(data, key, token, params, mime, checkCrc, handler);
+    @SneakyThrows
+    public static void uploader(final byte[] data, final String key, final String token, StringMap params, String mime,
+                                boolean checkCrc, UpCompletionHandler handler, Region region, File recorder) {
+        buildUploadManager(region, recorder).asyncPut(data, key, token, params, mime, checkCrc, handler);
     }
 
     /**
@@ -316,11 +361,28 @@ public class QiNiuUpload {
      * @param mime     指定文件mimeType
      * @param checkCrc 是否验证crc32
      * @param handler  上传完成的回调函数
-     * @throws IOException 抛出IO异常
      */
     public static void uploader(final byte[] data, final String key, StringMap params, String mime,
-                                boolean checkCrc, UpCompletionHandler handler) throws IOException {
-        uploader(data, key, getUploadToken(), params, mime, checkCrc, handler, region);
+                                boolean checkCrc, UpCompletionHandler handler) {
+        uploader(data, key, getUploadToken(), params, mime, checkCrc, handler, region, null);
+    }
+
+    /**
+     * 七牛云异步上传数据
+     * 将内存中的字节数组异步上传到空间中
+     * 使用默认upToken、默认的region为华东
+     *
+     * @param data     上传的数据
+     * @param key      上传数据保存的文件名
+     * @param params   自定义参数，如 params.put("x:foo", "foo")
+     * @param mime     指定文件mimeType
+     * @param checkCrc 是否验证crc32
+     * @param handler  上传完成的回调函数
+     * @param recorder 断点记录对象[只有断点上传有效，用来记录当前上传进度的]
+     */
+    public static void uploader(final byte[] data, final String key, StringMap params, String mime,
+                                boolean checkCrc, UpCompletionHandler handler, File recorder) {
+        uploader(data, key, getUploadToken(), params, mime, checkCrc, handler, region, recorder);
     }
 
     /**
@@ -328,16 +390,17 @@ public class QiNiuUpload {
      * 将内存中的字节数组异步上传到空间中
      * 取消一些不常用的参数
      *
-     * @param data    上传的数据
-     * @param key     上传数据保存的文件名
-     * @param token   上传凭证
-     * @param handler 上传完成的回调函数
-     * @param region  需要上传到的区域
-     * @throws IOException 抛出IO异常
+     * @param data     上传的数据
+     * @param key      上传数据保存的文件名
+     * @param token    上传凭证
+     * @param handler  上传完成的回调函数
+     * @param region   需要上传到的区域
+     * @param recorder 断点记录对象[只有断点上传有效，用来记录当前上传进度的]
      */
+    @SneakyThrows
     public static void uploader(final byte[] data, final String key, final String token,
-                                UpCompletionHandler handler, Region region) throws IOException {
-        buildUploadManager(region).asyncPut(data, key, token, null, null, false, handler);
+                                UpCompletionHandler handler, Region region, File recorder) {
+        buildUploadManager(region, recorder).asyncPut(data, key, token, null, null, false, handler);
     }
 
     /**
@@ -349,10 +412,23 @@ public class QiNiuUpload {
      * @param data    上传的数据
      * @param key     上传数据保存的文件名
      * @param handler 上传完成的回调函数
-     * @throws IOException 抛出IO异常
      */
-    public static void uploader(final byte[] data, final String key, UpCompletionHandler handler) throws IOException {
-        uploader(data, key, getUploadToken(), handler, region);
+    public static void uploader(final byte[] data, final String key, UpCompletionHandler handler) {
+        uploader(data, key, getUploadToken(), handler, region, null);
+    }
+
+    /**
+     * 七牛云异步上传数据精简版
+     * 将内存中的字节数组异步上传到空间中
+     * 取消一些不常用的参数
+     * 使用默认upToken、默认的region为华东
+     *
+     * @param data    上传的数据
+     * @param key     上传数据保存的文件名
+     * @param handler 上传完成的回调函数
+     */
+    public static void uploader(final byte[] data, final String key, UpCompletionHandler handler, File recorder) {
+        uploader(data, key, getUploadToken(), handler, region, recorder);
     }
 
     /**
@@ -361,9 +437,9 @@ public class QiNiuUpload {
      * @param key    key值
      * @param region 需要上传到的区域
      * @return 返回null为获取失败, 否则返回com.qiniu.storage.model.FileInfo实体信息
-     * @throws QiniuException 抛出七牛云异常
      */
-    public static FileInfo getFileInfo(String key, Region region) throws QiniuException {
+    @SneakyThrows
+    public static FileInfo getFileInfo(String key, Region region) {
         return getBucketManager(region).stat(bucket, key);
     }
 
@@ -373,9 +449,8 @@ public class QiNiuUpload {
      *
      * @param key key值
      * @return 返回null为获取失败, 否则返回com.qiniu.storage.model.FileInfo实体信息
-     * @throws QiniuException 抛出七牛云异常
      */
-    public static FileInfo getFileInfo(String key) throws QiniuException {
+    public static FileInfo getFileInfo(String key) {
         return getFileInfo(key, region);
     }
 
@@ -386,9 +461,9 @@ public class QiNiuUpload {
      * @param region      区域信息
      * @param newMimeType 需要修改的新的文件类型
      * @return 返回定义HTTP请求的信息
-     * @throws QiniuException 抛出七牛云异常
      */
-    public static Response setFileType(String key, Region region, String newMimeType) throws QiniuException {
+    @SneakyThrows
+    public static Response setFileType(String key, Region region, String newMimeType) {
         return getBucketManager(region).changeMime(bucket, key, newMimeType);
     }
 
@@ -399,9 +474,8 @@ public class QiNiuUpload {
      * @param key         key值
      * @param newMimeType 需要修改的新的文件类型
      * @return 返回定义HTTP请求的信息
-     * @throws QiniuException 抛出七牛云异常
      */
-    public static Response setFileType(String key, String newMimeType) throws QiniuException {
+    public static Response setFileType(String key, String newMimeType) {
         return setFileType(key, region, newMimeType);
     }
 
@@ -453,9 +527,9 @@ public class QiNiuUpload {
      * @param region       区域信息
      * @return 返回fetch 接口的回复对象
      * 参考文档：<a href="https://developer.qiniu.com/kodo/api/fetch">资源抓取</a>
-     * @throws QiniuException 抛出七牛云异常
      */
-    public static FetchRet fetch(String remoteSrcUrl, String key, Region region) throws QiniuException {
+    @SneakyThrows
+    public static FetchRet fetch(String remoteSrcUrl, String key, Region region) {
         return getBucketManager(region).fetch(remoteSrcUrl, bucket, key);
     }
 
@@ -467,9 +541,8 @@ public class QiNiuUpload {
      * @param key          你的文件的key值
      * @return 返回fetch 接口的回复对象
      * 参考文档：<a href="https://developer.qiniu.com/kodo/api/fetch">资源抓取</a>
-     * @throws QiniuException 抛出七牛云异常
      */
-    public static FetchRet fetch(String remoteSrcUrl, String key) throws QiniuException {
+    public static FetchRet fetch(String remoteSrcUrl, String key) {
         return fetch(remoteSrcUrl, key, region);
     }
 
@@ -482,9 +555,9 @@ public class QiNiuUpload {
      * @param bucket 文件抓取后保存的空间
      * @param key    文件抓取后保存的文件名
      * @return Response
-     * @throws QiniuException
      */
-    public Response asyncFetch(String url, String bucket, String key) throws QiniuException {
+    @SneakyThrows
+    public Response asyncFetch(String url, String bucket, String key) {
         StringMap params = new StringMap().putNotNull("key", key);
         return getBucketManager(region).asyncFetch(url, bucket, params);
     }
@@ -495,9 +568,9 @@ public class QiNiuUpload {
      * @param key    你的文件的key值
      * @param region 区域信息
      * @return 返回定义HTTP请求的信息
-     * @throws QiniuException 抛出七牛云异常
      */
-    public static Response delete(String key, Region region) throws QiniuException {
+    @SneakyThrows
+    public static Response delete(String key, Region region) {
         return getBucketManager(region).delete(bucket, key);
     }
 
@@ -507,9 +580,8 @@ public class QiNiuUpload {
      *
      * @param key 你的文件的key值
      * @return 返回定义HTTP请求的信息
-     * @throws QiniuException 抛出七牛云异常
      */
-    public static Response delete(String key) throws QiniuException {
+    public static Response delete(String key) {
         return delete(key, region);
     }
 
@@ -520,9 +592,9 @@ public class QiNiuUpload {
      * @param region  区域信息
      * @return 返回定义批量请求的状态码
      * 参考文档：<a href="https://developer.qiniu.com/kodo/api/batch">批量操作</a>
-     * @throws QiniuException 抛出七牛云异常
      */
-    public static BatchStatus[] delete(String[] keyList, Region region) throws QiniuException {
+    @SneakyThrows
+    public static BatchStatus[] delete(String[] keyList, Region region) {
         BucketManager bucketManager = getBucketManager(region);
         BucketManager.BatchOperations batchOperations = new BucketManager.BatchOperations();
         batchOperations.addDeleteOp(bucket, keyList);
@@ -537,9 +609,8 @@ public class QiNiuUpload {
      * @param keyList 文件key，单次批量请求的文件数量不得超过1000
      * @return 返回定义批量请求的状态码
      * 参考文档：<a href="https://developer.qiniu.com/kodo/api/batch">批量操作</a>
-     * @throws QiniuException 抛出七牛云异常
      */
-    public static BatchStatus[] delete(String[] keyList) throws QiniuException {
+    public static BatchStatus[] delete(String[] keyList) {
         return delete(keyList, region);
     }
 
@@ -551,9 +622,9 @@ public class QiNiuUpload {
      * @param newFileKey 新的文件名称
      * @param force      强制覆盖空间中已有同名（和 newFileKey 相同）的文件
      * @return 返回定义HTTP请求的信息
-     * @throws QiniuException 抛出七牛云异常
      */
-    public static Response rename(String bucket, String oldFileKey, String newFileKey, boolean force) throws QiniuException {
+    @SneakyThrows
+    public static Response rename(String bucket, String oldFileKey, String newFileKey, boolean force) {
         return getBucketManager(region).rename(bucket, oldFileKey, newFileKey, force);
     }
 
@@ -564,9 +635,8 @@ public class QiNiuUpload {
      * @param oldFileKey 旧的文件名称
      * @param newFileKey 新的文件名称
      * @return 返回定义HTTP请求的信息
-     * @throws QiniuException 抛出七牛云异常
      */
-    public static Response rename(String oldFileKey, String newFileKey) throws QiniuException {
+    public static Response rename(String oldFileKey, String newFileKey) {
         return rename(bucket, oldFileKey, newFileKey, false);
     }
 
@@ -579,9 +649,9 @@ public class QiNiuUpload {
      * @param toFileKey   目的文件名称
      * @param force       强制覆盖空间中已有同名（和 toFileKey 相同）的文件
      * @return 返回定义HTTP请求的信息
-     * @throws QiniuException 抛出七牛云异常
      */
-    public static Response copy(String fromBucket, String fromFileKey, String toBucket, String toFileKey, boolean force) throws QiniuException {
+    @SneakyThrows
+    public static Response copy(String fromBucket, String fromFileKey, String toBucket, String toFileKey, boolean force) {
         return getBucketManager(region).copy(fromBucket, fromFileKey, toBucket, toFileKey, force);
     }
 
@@ -592,9 +662,9 @@ public class QiNiuUpload {
      * @param fromFileKey 源文件名称
      * @param toFileKey   目的文件名称
      * @return 返回定义HTTP请求的信息
-     * @throws QiniuException 抛出七牛云异常
      */
-    public static Response copy(String fromFileKey, String toFileKey) throws QiniuException {
+    @SneakyThrows
+    public static Response copy(String fromFileKey, String toFileKey) {
         return copy(bucket, fromFileKey, bucket, toFileKey, false);
     }
 
@@ -607,9 +677,9 @@ public class QiNiuUpload {
      * @param toFileKey   目的文件名称
      * @param force       强制覆盖空间中已有同名（和 toFileKey 相同）的文件
      * @return 返回定义HTTP请求的信息
-     * @throws QiniuException 抛出七牛云异常
      */
-    public static Response move(String fromBucket, String fromFileKey, String toBucket, String toFileKey, boolean force) throws QiniuException {
+    @SneakyThrows
+    public static Response move(String fromBucket, String fromFileKey, String toBucket, String toFileKey, boolean force) {
         return getBucketManager(region).move(fromBucket, fromFileKey, toBucket, toFileKey, force);
     }
 
@@ -620,9 +690,8 @@ public class QiNiuUpload {
      * @param fromFileKey 源文件名称
      * @param toFileKey   目的文件名称
      * @return 返回定义HTTP请求的信息
-     * @throws QiniuException 抛出七牛云异常
      */
-    public static Response move(String fromFileKey, String toFileKey) throws QiniuException {
+    public static Response move(String fromFileKey, String toFileKey) {
         return move(bucket, fromFileKey, bucket, toFileKey, false);
     }
 
@@ -722,9 +791,9 @@ public class QiNiuUpload {
      * @param in  数据输入流
      * @param len 数据流长度
      * @return 数据流的etag值
-     * @throws IOException 文件读取异常
      */
-    public static String getEtag(InputStream in, long len) throws IOException {
+    @SneakyThrows
+    public static String getEtag(InputStream in, long len) {
         return Etag.stream(in, len);
     }
 
@@ -756,9 +825,9 @@ public class QiNiuUpload {
      *
      * @param file 文件对象
      * @return 文件内容的etag
-     * @throws IOException 文件读取异常
      */
-    public static String getEtag(File file) throws IOException {
+    @SneakyThrows
+    public static String getEtag(File file) {
         return Etag.file(file);
     }
 
@@ -767,10 +836,9 @@ public class QiNiuUpload {
      *
      * @param filePath 文件路径
      * @return 文件内容的etag
-     * @throws IOException 文件读取异常
      */
-    public static String getEtag(String filePath) throws IOException {
+    @SneakyThrows
+    public static String getEtag(String filePath) {
         return Etag.file(filePath);
     }
-
 }
