@@ -54,6 +54,26 @@ public class ConstantConfiguration {
     public static final String NUMBER_REGULARIZATION = "[0-9]*";
 
     /**
+     * 常量 磁力链接
+     */
+    public interface Magnet {
+        /**
+         * 标准的磁力链接
+         */
+        String MAGNET_BASIC = "magnet:\\?.+";
+
+        /**
+         * 32位Hash磁力链接
+         */
+        String MAGNET_HASH_32 = "[a-zA-Z0-9]{32}";
+
+        /**
+         * 40位Hash磁力链接
+         */
+        String MAGNET_HASH_40 = "[a-zA-Z0-9]{40}";
+    }
+
+    /**
      * 数字类型常量
      */
     public interface Number {
