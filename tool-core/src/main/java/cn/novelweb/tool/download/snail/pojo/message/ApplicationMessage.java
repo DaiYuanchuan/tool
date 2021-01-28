@@ -20,11 +20,11 @@ public class ApplicationMessage {
 	/**
 	 * <p>失败：{@value}</p>
 	 */
-	public static final String FAIL = "fail";
+	public static String FAIL = "fail";
 	/**
 	 * <p>成功：{@value}</p>
 	 */
-	public static final String SUCCESS = "success";
+	public static String SUCCESS = "success";
 
 	/**
 	 * <p>系统消息、系统通知类型</p>
@@ -78,7 +78,7 @@ public class ApplicationMessage {
 		 * 
 		 * @return 消息类型
 		 */
-		public static final Type of(String name) {
+		public static Type of(String name) {
 			final ApplicationMessage.Type[] types = Type.values();
 			for (Type type : types) {
 				if(type.name().equalsIgnoreCase(name)) {
@@ -115,7 +115,7 @@ public class ApplicationMessage {
 	 * 
 	 * @return 系统消息
 	 */
-	public static final ApplicationMessage valueOf(String content) {
+	public static ApplicationMessage valueOf(String content) {
 		try {
 			final BEncodeDecoder decoder = BEncodeDecoder.newInstance(content.getBytes());
 			decoder.nextMap();
@@ -142,7 +142,7 @@ public class ApplicationMessage {
 	 * 
 	 * @return 系统消息
 	 */
-	public static final ApplicationMessage message(Type type) {
+	public static ApplicationMessage message(Type type) {
 		return message(type, null);
 	}
 	
@@ -154,7 +154,7 @@ public class ApplicationMessage {
 	 * 
 	 * @return 系统消息
 	 */
-	public static final ApplicationMessage message(Type type, String body) {
+	public static ApplicationMessage message(Type type, String body) {
 		return new ApplicationMessage(type, body);
 	}
 	
@@ -165,7 +165,7 @@ public class ApplicationMessage {
 	 * 
 	 * @return 系统消息
 	 */
-	public static final ApplicationMessage text(String body) {
+	public static ApplicationMessage text(String body) {
 		return message(Type.TEXT, body);
 	}
 	
@@ -176,7 +176,7 @@ public class ApplicationMessage {
 	 * 
 	 * @return 系统消息
 	 */
-	public static final ApplicationMessage response(String body) {
+	public static ApplicationMessage response(String body) {
 		return message(Type.RESPONSE, body);
 	}
 	

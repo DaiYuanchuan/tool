@@ -35,7 +35,7 @@ public final class FtpDownloader extends SingleFileDownloader {
 	 * 
 	 * @return {@link FtpDownloader}
 	 */
-	public static final FtpDownloader newInstance(ITaskSession taskSession) {
+	public static FtpDownloader newInstance(ITaskSession taskSession) {
 		return new FtpDownloader(taskSession);
 	}
 

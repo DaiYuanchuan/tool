@@ -20,35 +20,35 @@ public final class NetUtils {
 	/**
 	 * <p>子网掩码</p>
 	 */
-	public static final int LOCAL_HOST_MASK;
+	public static int LOCAL_HOST_MASK;
 	/**
 	 * <p>本机名称</p>
 	 * <p>例子：192.168.1.100</p>
 	 */
-	public static final String LOCAL_HOST_NAME;
+	public static String LOCAL_HOST_NAME;
 	/**
 	 * <p>本机地址</p>
 	 * <p>例子：acgist</p>
 	 */
-	public static final String LOCAL_HOST_ADDRESS;
+	public static String LOCAL_HOST_ADDRESS;
 	/**
 	 * <p>环回主机名称</p>
 	 * <p>例子：localhost</p>
 	 */
-	public static final String LOOPBACK_HOST_NAME;
+	public static String LOOPBACK_HOST_NAME;
 	/**
 	 * <p>环回地址</p>
 	 * <p>例子：127.0.0.1</p>
 	 */
-	public static final String LOOPBACK_HOST_ADDRESS;
+	public static String LOOPBACK_HOST_ADDRESS;
 	/**
 	 * <p>本机默认物理网卡</p>
 	 */
-	public static final NetworkInterface DEFAULT_NETWORK_INTERFACE;
+	public static NetworkInterface DEFAULT_NETWORK_INTERFACE;
 	/**
 	 * <p>最大端口号：{@value}</p>
 	 */
-	public static final int MAX_PORT = 2 << 15;
+	public static int MAX_PORT = 2 << 15;
 	/**
 	 * <p>IPv4地址正则表达式：{@value}</p>
 	 */
@@ -117,7 +117,7 @@ public final class NetUtils {
 	 * 
 	 * @return 端口（short）
 	 */
-	public static final short portToShort(int port) {
+	public static short portToShort(int port) {
 		return (short) port;
 	}
 
@@ -128,7 +128,7 @@ public final class NetUtils {
 	 * 
 	 * @return 端口（int）
 	 */
-	public static final int portToInt(short port) {
+	public static int portToInt(short port) {
 		return Short.toUnsignedInt(port);
 	}
 	
@@ -139,7 +139,7 @@ public final class NetUtils {
 	 * 
 	 * @return IP地址（int）
 	 */
-	public static final int ipToInt(String ip) {
+	public static int ipToInt(String ip) {
 		return (int) ipToLong(ip);
 	}
 	
@@ -150,7 +150,7 @@ public final class NetUtils {
 	 * 
 	 * @return IP地址（long）
 	 */
-	public static final long ipToLong(String ip) {
+	public static long ipToLong(String ip) {
 		Objects.requireNonNull(ip, "IP地址不能为空");
 		final String[] array = ip.split("\\.");
 		if(array.length != 4) {
@@ -172,7 +172,7 @@ public final class NetUtils {
 	 * 
 	 * @return IP地址（字符串）
 	 */
-	public static final String intToIP(int value) {
+	public static String intToIP(int value) {
 		return longToIP(Integer.toUnsignedLong(value));
 	}
 	
@@ -183,7 +183,7 @@ public final class NetUtils {
 	 * 
 	 * @return IP地址（字符串）
 	 */
-	public static final String longToIP(long value) {
+	public static String longToIP(long value) {
 		return
 			((value >> 24) & 0xFF) + "." +
 			((value >> 16) & 0xFF) + "." +
@@ -199,7 +199,7 @@ public final class NetUtils {
 	 * 
 	 * @return IP地址（字节数组）
 	 */
-	public static final byte[] ipToBytes(String ip) {
+	public static byte[] ipToBytes(String ip) {
 		try {
 			return InetAddress.getByName(ip).getAddress();
 		} catch (UnknownHostException e) {
@@ -216,7 +216,7 @@ public final class NetUtils {
 	 * 
 	 * @return IP地址（字符串）
 	 */
-	public static final String bytesToIP(byte[] value) {
+	public static String bytesToIP(byte[] value) {
 		try {
 			return InetAddress.getByAddress(value).getHostAddress();
 		} catch (UnknownHostException e) {
@@ -232,7 +232,7 @@ public final class NetUtils {
 	 * 
 	 * @return 是否是同一个网关
 	 */
-	public static final boolean gateway(String host) {
+	public static boolean gateway(String host) {
 		if(ipAddress(host)) {
 			final int value = ipToInt(host);
 			final int localHostValue = ipToInt(LOCAL_HOST_ADDRESS);
@@ -282,7 +282,7 @@ public final class NetUtils {
 	 * 
 	 * TODO：IPv6
 	 */
-	public static final boolean ipAddress(String host) {
+	public static boolean ipAddress(String host) {
 		return StringUtils.regex(host, IP_REGEX, true);
 	}
 
@@ -308,7 +308,7 @@ public final class NetUtils {
 	 * 
 	 * @return true-本地地址；false-公网地址；
 	 */
-	public static final boolean localIPAddress(String host) {
+	public static boolean localIPAddress(String host) {
 		InetAddress inetAddress = null;
 		try {
 			inetAddress = InetAddress.getByName(host);
@@ -331,7 +331,7 @@ public final class NetUtils {
 	 * 
 	 * @return Socket地址
 	 */
-	public static final InetSocketAddress buildSocketAddress(final int port) {
+	public static InetSocketAddress buildSocketAddress(final int port) {
 		return buildSocketAddress(null, port);
 	}
 	
@@ -344,7 +344,7 @@ public final class NetUtils {
 	 * 
 	 * @return Socket地址
 	 */
-	public static final InetSocketAddress buildSocketAddress(final String host, final int port) {
+	public static InetSocketAddress buildSocketAddress(final String host, final int port) {
 		if(StringUtils.isEmpty(host)) {
 			return new InetSocketAddress(port);
 		} else {

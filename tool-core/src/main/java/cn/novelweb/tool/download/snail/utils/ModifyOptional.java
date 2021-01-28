@@ -31,7 +31,7 @@ public final class ModifyOptional<T> {
 	 * 
 	 * @return 工具对象
 	 */
-	public static final <T> ModifyOptional<T> newInstance() {
+	public static <T> ModifyOptional<T> newInstance() {
 		return new ModifyOptional<>();
 	}
 	
@@ -44,7 +44,7 @@ public final class ModifyOptional<T> {
 	 * 
 	 * @return 工具对象
 	 */
-	public static final <T> ModifyOptional<T> newInstance(T t) {
+	public static <T> ModifyOptional<T> newInstance(T t) {
 		return new ModifyOptional<>(t);
 	}
 	

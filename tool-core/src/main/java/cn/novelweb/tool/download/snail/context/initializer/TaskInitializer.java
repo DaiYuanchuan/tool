@@ -20,7 +20,7 @@ public final class TaskInitializer extends Initializer {
 	private TaskInitializer() {
 	}
 	
-	public static final TaskInitializer newInstance() {
+	public static TaskInitializer newInstance() {
 		return new TaskInitializer();
 	}
 	

@@ -15,7 +15,7 @@ public final class LocalServiceDiscoveryAcceptHandler extends UdpAcceptHandler {
 
 	private static final LocalServiceDiscoveryAcceptHandler INSTANCE = new LocalServiceDiscoveryAcceptHandler();
 	
-	public static final LocalServiceDiscoveryAcceptHandler getInstance() {
+	public static LocalServiceDiscoveryAcceptHandler getInstance() {
 		return INSTANCE;
 	}
 	

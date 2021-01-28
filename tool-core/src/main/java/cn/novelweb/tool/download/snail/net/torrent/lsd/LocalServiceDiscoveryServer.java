@@ -21,7 +21,7 @@ public final class LocalServiceDiscoveryServer extends UdpServer<LocalServiceDis
 	
 	private static final LocalServiceDiscoveryServer INSTANCE = new LocalServiceDiscoveryServer();
 	
-	public static final LocalServiceDiscoveryServer getInstance() {
+	public static LocalServiceDiscoveryServer getInstance() {
 		return INSTANCE;
 	}
 
@@ -32,15 +32,15 @@ public final class LocalServiceDiscoveryServer extends UdpServer<LocalServiceDis
 	/**
 	 * <p>端口：{@value}</p>
 	 */
-	public static final int LSD_PORT = 6771;
+	public static int LSD_PORT = 6771;
 	/**
 	 * <p>IPv4组播地址：{@value}</p>
 	 */
-	public static final String LSD_HOST = "239.192.152.143";
+	public static String LSD_HOST = "239.192.152.143";
 	/**
 	 * <p>IPv6组播地址：{@value}</p>
 	 */
-	public static final String LSD_HOST_IPV6 = "[ff15::efc0:988f]";
+	public static String LSD_HOST_IPV6 = "[ff15::efc0:988f]";
 	
 	/**
 	 * <p>禁止创建实例</p>

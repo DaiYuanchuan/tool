@@ -77,7 +77,7 @@ public final class PeerDownloaderGroup {
 	 * 
 	 * @return PeerDownloader组
 	 */
-	public static final PeerDownloaderGroup newInstance(TorrentSession torrentSession) {
+	public static PeerDownloaderGroup newInstance(TorrentSession torrentSession) {
 		return new PeerDownloaderGroup(torrentSession);
 	}
 
@@ -216,6 +216,7 @@ public final class PeerDownloaderGroup {
 		PeerDownloader tmpDownloader = null; // 当前PeerDownloader
 		PeerDownloader minDownloader = null; // 劣质PeerDownloader
 		final int size = this.peerDownloaders.size();
+		System.out.println(size);
 		while(index++ < size) {
 			tmpDownloader = this.peerDownloaders.poll();
 			if(tmpDownloader == null) {

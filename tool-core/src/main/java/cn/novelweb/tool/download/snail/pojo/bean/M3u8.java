@@ -62,7 +62,7 @@ public final class M3u8 {
 		 * 
 		 * @return 加密协议
 		 */
-		public static final Protocol of(String value) {
+		public static Protocol of(String value) {
 			final Protocol[] protocols = Protocol.values();
 			for (Protocol protocol : protocols) {
 				if(protocol.value.equals(value)) {

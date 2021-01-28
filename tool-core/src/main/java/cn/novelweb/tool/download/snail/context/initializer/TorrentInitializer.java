@@ -23,7 +23,7 @@ public final class TorrentInitializer extends Initializer {
 	private TorrentInitializer() {
 	}
 	
-	public static final TorrentInitializer newInstance() {
+	public static TorrentInitializer newInstance() {
 		return new TorrentInitializer();
 	}
 	

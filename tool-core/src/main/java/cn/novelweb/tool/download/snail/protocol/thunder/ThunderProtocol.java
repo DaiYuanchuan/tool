@@ -23,7 +23,7 @@ public final class ThunderProtocol extends Protocol {
 	
 	private static final ThunderProtocol INSTANCE = new ThunderProtocol();
 	
-	public static final ThunderProtocol getInstance() {
+	public static ThunderProtocol getInstance() {
 		return INSTANCE;
 	}
 	

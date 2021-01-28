@@ -45,7 +45,7 @@ public final class Base32Utils {
 	 * 
 	 * @return 编码后字符串
 	 */
-	public static final String encode(final byte[] bytes) {
+	public static String encode(final byte[] bytes) {
 		if(bytes == null) {
 			return null;
 		}
@@ -80,7 +80,7 @@ public final class Base32Utils {
 	 * 
 	 * @return 原始数据
 	 */
-	public static final byte[] decode(final String content) {
+	public static byte[] decode(final String content) {
 		if(content == null) {
 			return null;
 		}

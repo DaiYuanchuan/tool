@@ -25,7 +25,7 @@ public final class MagnetProtocol extends Protocol {
 	
 	private static final MagnetProtocol INSTANCE = new MagnetProtocol();
 	
-	public static final MagnetProtocol getInstance() {
+	public static MagnetProtocol getInstance() {
 		return INSTANCE;
 	}
 

@@ -48,7 +48,7 @@ public final class MSEPaddingSync {
 	 * 
 	 * @return 同步工具
 	 */
-	public static final MSEPaddingSync newInstance(int count) {
+	public static MSEPaddingSync newInstance(int count) {
 		return new MSEPaddingSync(count);
 	}
 	

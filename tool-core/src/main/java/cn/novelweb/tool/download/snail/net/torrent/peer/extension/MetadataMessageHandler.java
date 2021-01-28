@@ -37,7 +37,7 @@ public final class MetadataMessageHandler extends ExtensionTypeMessageHandler {
     /**
      * <p>数据交换Slice大小：{@value}</p>
      */
-    public static final int SLICE_LENGTH = 16 * SystemConfig.ONE_KB;
+    public static int SLICE_LENGTH = 16 * SystemConfig.ONE_KB;
     /**
      * <p>Slice索引：{@value}</p>
      */
@@ -81,7 +81,7 @@ public final class MetadataMessageHandler extends ExtensionTypeMessageHandler {
      * @param extensionMessageHandler 扩展消息代理
      * @return Metadata扩展协议代理
      */
-    public static final MetadataMessageHandler newInstance(PeerSession peerSession, TorrentSession torrentSession, ExtensionMessageHandler extensionMessageHandler) {
+    public static MetadataMessageHandler newInstance(PeerSession peerSession, TorrentSession torrentSession, ExtensionMessageHandler extensionMessageHandler) {
         return new MetadataMessageHandler(peerSession, torrentSession, extensionMessageHandler);
     }
 

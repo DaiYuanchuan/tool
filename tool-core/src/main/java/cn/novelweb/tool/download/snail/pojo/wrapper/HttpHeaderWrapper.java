@@ -23,29 +23,29 @@ public final class HttpHeaderWrapper extends HeaderWrapper {
 	/**
 	 * <p>HTTP客户端信息：{@value}</p>
 	 */
-	public static final String HEADER_USER_AGENT = "User-Agent";
+	public static String HEADER_USER_AGENT = "User-Agent";
 	/**
 	 * <p>MIME类型：{@value}</p>
 	 */
-	public static final String HEADER_CONTENT_TYPE = "Content-Type";
+	public static String HEADER_CONTENT_TYPE = "Content-Type";
 	/**
 	 * <p>请求下载范围：{@value}</p>
 	 * <p>接收{@link #HEADER_RANGE}时返回范围数据</p>
 	 */
-	public static final String HEADER_CONTENT_RANGE = "Content-Range";
+	public static String HEADER_CONTENT_RANGE = "Content-Range";
 	/**
 	 * <p>下载大小：{@value}</p>
 	 */
-	public static final String HEADER_CONTENT_LENGTH = "Content-Length";
+	public static String HEADER_CONTENT_LENGTH = "Content-Length";
 	/**
 	 * <p>下载描述：{@value}</p>
 	 */
-	public static final String HEADER_CONTENT_DISPOSITION = "Content-Disposition";
+	public static String HEADER_CONTENT_DISPOSITION = "Content-Disposition";
 	/**
 	 * <p>接收范围请求：{@value}</p>
 	 * <p>没有接收{@link #HEADER_RANGE}时返回全部数据</p>
 	 */
-	public static final String HEADER_ACCEPT_RANGES = "Accept-Ranges";
+	public static String HEADER_ACCEPT_RANGES = "Accept-Ranges";
 	/**
 	 * <p>范围请求：{@value}</p>
 	 * <table border="1">
@@ -76,19 +76,19 @@ public final class HttpHeaderWrapper extends HeaderWrapper {
 	 * 	</tr>
 	 * </table>
 	 */
-	public static final String HEADER_RANGE = "Range";
+	public static String HEADER_RANGE = "Range";
 	/**
 	 * <p>接收范围请求：{@value}</p>
 	 * 
 	 * @see #HEADER_ACCEPT_RANGES
 	 */
-	public static final String HEADER_RANGE_BYTES = "bytes";
+	public static String HEADER_RANGE_BYTES = "bytes";
 	/**
 	 * <p>文件名称：{@value}</p>
 	 * 
 	 * @see #HEADER_CONTENT_DISPOSITION
 	 */
-	public static final String HEADER_CONTENT_DISPOSITION_FILENAME = "filename";
+	public static String HEADER_CONTENT_DISPOSITION_FILENAME = "filename";
 	
 	/**
 	 * @param headers 头部信息
@@ -102,7 +102,7 @@ public final class HttpHeaderWrapper extends HeaderWrapper {
 	 * 
 	 * @return HttpHeaderWrapper
 	 */
-	public static final HttpHeaderWrapper newInstance(Map<String, List<String>> httpHeaders) {
+	public static HttpHeaderWrapper newInstance(Map<String, List<String>> httpHeaders) {
 		return new HttpHeaderWrapper(httpHeaders);
 	}
 

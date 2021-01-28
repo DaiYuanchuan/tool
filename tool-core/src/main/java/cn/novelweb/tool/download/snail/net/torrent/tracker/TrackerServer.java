@@ -13,7 +13,7 @@ public final class TrackerServer extends UdpServer<TrackerAcceptHandler> {
 	
 	private static final TrackerServer INSTANCE = new TrackerServer();
 	
-	public static final TrackerServer getInstance() {
+	public static TrackerServer getInstance() {
 		return INSTANCE;
 	}
 	

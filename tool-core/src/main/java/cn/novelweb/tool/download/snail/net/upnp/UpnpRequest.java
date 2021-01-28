@@ -49,7 +49,7 @@ public final class UpnpRequest {
 	 * 
 	 * @return 请求
 	 */
-	public static final UpnpRequest newRequest(String serviceType) {
+	public static UpnpRequest newRequest(String serviceType) {
 		final UpnpRequest request = new UpnpRequest(serviceType);
 		request.build();
 		return request;

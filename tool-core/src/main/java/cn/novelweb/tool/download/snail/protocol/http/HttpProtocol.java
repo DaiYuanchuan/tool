@@ -18,7 +18,7 @@ public final class HttpProtocol extends Protocol {
 
 	private static final HttpProtocol INSTANCE = new HttpProtocol();
 	
-	public static final HttpProtocol getInstance() {
+	public static HttpProtocol getInstance() {
 		return INSTANCE;
 	}
 

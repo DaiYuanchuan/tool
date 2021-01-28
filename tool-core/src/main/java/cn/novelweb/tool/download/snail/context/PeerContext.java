@@ -34,7 +34,7 @@ public final class PeerContext implements IContext {
 
 	private static final PeerContext INSTANCE = new PeerContext();
 	
-	public static final PeerContext getInstance() {
+	public static PeerContext getInstance() {
 		return INSTANCE;
 	}
 	

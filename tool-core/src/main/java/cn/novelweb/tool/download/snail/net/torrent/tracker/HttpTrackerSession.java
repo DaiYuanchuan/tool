@@ -70,7 +70,7 @@ public final class HttpTrackerSession extends TrackerSession {
 	 *
 	 * @throws NetException 网络异常
 	 */
-	public static final HttpTrackerSession newInstance(String announceUrl) throws NetException {
+	public static HttpTrackerSession newInstance(String announceUrl) throws NetException {
 		final String scrapeUrl = buildScrapeUrl(announceUrl);
 		return new HttpTrackerSession(scrapeUrl, announceUrl);
 	}

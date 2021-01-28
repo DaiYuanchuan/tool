@@ -31,7 +31,7 @@ public final class AnnouncePeerResponse extends DhtResponse {
 	 * 
 	 * @return 响应
 	 */
-	public static final AnnouncePeerResponse newInstance(DhtRequest request) {
+	public static AnnouncePeerResponse newInstance(DhtRequest request) {
 		return new AnnouncePeerResponse(request.getT());
 	}
 
@@ -42,7 +42,7 @@ public final class AnnouncePeerResponse extends DhtResponse {
 	 * 
 	 * @return 响应
 	 */
-	public static final AnnouncePeerResponse newInstance(DhtResponse response) {
+	public static AnnouncePeerResponse newInstance(DhtResponse response) {
 		return new AnnouncePeerResponse(response);
 	}
 	

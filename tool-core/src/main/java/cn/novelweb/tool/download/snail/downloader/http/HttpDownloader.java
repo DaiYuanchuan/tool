@@ -31,7 +31,7 @@ public final class HttpDownloader extends SingleFileDownloader {
 	 * 
 	 * @return {@link HttpDownloader}
 	 */
-	public static final HttpDownloader newInstance(ITaskSession taskSession) {
+	public static HttpDownloader newInstance(ITaskSession taskSession) {
 		return new HttpDownloader(taskSession);
 	}
 	

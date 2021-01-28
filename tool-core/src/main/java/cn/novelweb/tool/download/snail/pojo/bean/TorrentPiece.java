@@ -15,7 +15,7 @@ public final class TorrentPiece {
 	/**
 	 * <p>默认下载长度：{@value}</p>
 	 */
-	public static final int SLICE_LENGTH = 16 * SystemConfig.ONE_KB;
+	public static int SLICE_LENGTH = 16 * SystemConfig.ONE_KB;
 
 	/**
 	 * <p>Piece大小</p>
@@ -94,7 +94,7 @@ public final class TorrentPiece {
 	 * 
 	 * @return Piece下载信息
 	 */
-	public static final TorrentPiece newInstance(long pieceLength, int index, int begin, int end, byte[] hash, boolean verify) {
+	public static TorrentPiece newInstance(long pieceLength, int index, int begin, int end, byte[] hash, boolean verify) {
 		return new TorrentPiece(pieceLength, index, begin, end, hash, verify);
 	}
 	

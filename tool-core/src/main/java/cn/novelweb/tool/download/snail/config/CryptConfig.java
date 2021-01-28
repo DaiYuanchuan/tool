@@ -121,46 +121,46 @@ public final class CryptConfig {
 	/**
 	 * <p>Prime P(768 bit safe prime)</p>
 	 */
-	public static final BigInteger P = new BigInteger(
+	public static BigInteger P = new BigInteger(
 		"FFFFFFFFFFFFFFFFC90FDAA22168C234C4C6628B80DC1CD129024E088A67CC74020BBEA63B139B22514A08798E3404DDEF9519B3CD3A431B302B0A6DF25F14374FE1356D6D51C245E485B576625E7EC6F44C42E9A63A36210000000000090563",
 		16
 	);
 	/**
 	 * <p>Generator G</p>
 	 */
-	public static final BigInteger G = BigInteger.valueOf(2);
+	public static BigInteger G = BigInteger.valueOf(2);
 	/**
 	 * <p>公钥长度：{@value}</p>
 	 */
-	public static final int PUBLIC_KEY_LENGTH = 96;
+	public static int PUBLIC_KEY_LENGTH = 96;
 	/**
 	 * <p>私钥长度：{@value}</p>
 	 * <p>随机长度：128~180</p>
 	 * <p>超过180只能增加计算时间，并不能提高安全性。</p>
 	 * <p>推荐长度：160</p>
 	 */
-	public static final int PRIVATE_KEY_LENGTH = 20;
+	public static int PRIVATE_KEY_LENGTH = 20;
 	/**
 	 * <p>最大随机填充长度：{@value}</p>
 	 */
-	public static final int PADDING_MAX_LENGTH = 512;
+	public static int PADDING_MAX_LENGTH = 512;
 	/**
 	 * <p>VC长度：{@value}</p>
 	 * 
 	 * @see #VC
 	 */
-	public static final int VC_LENGTH = 8;
+	public static int VC_LENGTH = 8;
 	/**
 	 * <p>VC数据</p>
 	 * <p>默认填充：0x00</p>
 	 */
-	public static final byte[] VC = {0, 0, 0, 0, 0, 0, 0, 0};
+	public static byte[] VC = {0, 0, 0, 0, 0, 0, 0, 0};
 	/**
 	 * <p>默认加密策略</p>
 	 * 
 	 * @see Strategy
 	 */
-	public static final Strategy STRATEGY = Strategy.PREFER_PLAINTEXT;
+	public static Strategy STRATEGY = Strategy.PREFER_PLAINTEXT;
 
 	static {
 		LOGGER.debug("默认加密策略：{}", CryptConfig.STRATEGY);

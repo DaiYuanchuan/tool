@@ -78,7 +78,7 @@ public final class TrackerLauncher {
 	 * 
 	 * @return Tracker执行器
 	 */
-	public static final TrackerLauncher newInstance(TrackerSession session, TorrentSession torrentSession) {
+	public static TrackerLauncher newInstance(TrackerSession session, TorrentSession torrentSession) {
 		return new TrackerLauncher(session, torrentSession);
 	}
 

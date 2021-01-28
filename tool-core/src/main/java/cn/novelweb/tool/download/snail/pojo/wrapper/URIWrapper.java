@@ -90,7 +90,7 @@ public final class URIWrapper {
 	 * 
 	 * @return URIWrapper
 	 */
-	public static final URIWrapper newInstance(String uri) {
+	public static URIWrapper newInstance(String uri) {
 		return new URIWrapper(uri);
 	}
 	
@@ -102,7 +102,7 @@ public final class URIWrapper {
 	 * 
 	 * @return URIWrapper
 	 */
-	public static final URIWrapper newInstance(String uri, int defaultPort) {
+	public static URIWrapper newInstance(String uri, int defaultPort) {
 		return new URIWrapper(uri, defaultPort);
 	}
 	
@@ -116,7 +116,7 @@ public final class URIWrapper {
 	 * 
 	 * @return URIWrapper
 	 */
-	public static final URIWrapper newInstance(String uri, int defaultPort, String defaultUser, String defaultPassword) {
+	public static URIWrapper newInstance(String uri, int defaultPort, String defaultUser, String defaultPassword) {
 		return new URIWrapper(uri, defaultPort, defaultUser, defaultPassword);
 	}
 	

@@ -10,31 +10,31 @@ public final class StunConfig {
 	/**
 	 * <p>默认端口：{@value}</p>
 	 */
-	public static final int DEFAULT_PORT = 3478;
+	public static int DEFAULT_PORT = 3478;
 	/**
 	 * <p>固定值：{@value}</p>
 	 */
-	public static final int MAGIC_COOKIE = 0x2112A442;
+	public static int MAGIC_COOKIE = 0x2112A442;
 	/**
 	 * <p>头部信息长度：{@value}</p>
 	 */
-	public static final int HEADER_LENGTH_STUN = 20;
+	public static int HEADER_LENGTH_STUN = 20;
 	/**
 	 * <p>属性头部信息长度：{@value}</p>
 	 */
-	public static final int HEADER_LENGTH_ATTRIBUTE = 4;
+	public static int HEADER_LENGTH_ATTRIBUTE = 4;
 	/**
 	 * <p>TransactionID长度：{@value}</p>
 	 */
-	public static final int TRANSACTION_ID_LENGTH = 12;
+	public static int TRANSACTION_ID_LENGTH = 12;
 	/**
 	 * <p>IPv4：{@value}</p>
 	 */
-	public static final int IPV4 = 0x01;
+	public static int IPV4 = 0x01;
 	/**
 	 * <p>IPv6：{@value}</p>
 	 */
-	public static final int IPV6 = 0x02;
+	public static int IPV6 = 0x02;
 	
 	/**
 	 * <p>禁止创建实例</p>
@@ -62,7 +62,7 @@ public final class StunConfig {
 		/**
 		 * <p>消息MASK：{@value}</p>
 		 */
-		public static final short VALUE_MASK = 0B0000_0000_0000_0001;
+		public static short VALUE_MASK = 0B0000_0000_0000_0001;
 		
 		/**
 		 * <p>方法ID</p>
@@ -114,15 +114,15 @@ public final class StunConfig {
 		/**
 		 * <p>C0：{@value}</p>
 		 */
-		public static final short C0_MASK = 0B0000_0000_0001_0000;
+		public static short C0_MASK = 0B0000_0000_0001_0000;
 		/**
 		 * <p>C1：{@value}</p>
 		 */
-		public static final short C1_MASK = 0B0000_0001_0000_0000;
+		public static short C1_MASK = 0B0000_0001_0000_0000;
 		/**
 		 * <p>前两位必须为零：{@value}</p>
 		 */
-		public static final short TYPE_MASK = 0B0011_1111_1111_1111;
+		public static short TYPE_MASK = 0B0011_1111_1111_1111;
 		
 		/**
 		 * <p>消息ID</p>
@@ -159,7 +159,7 @@ public final class StunConfig {
 		 * 
 		 * @return 方法类型
 		 */
-		public static final MessageType of(short value) {
+		public static MessageType of(short value) {
 			final byte id = (byte) (
 			(
 				((value & C1_MASK) >> 7) |
@@ -241,7 +241,7 @@ public final class StunConfig {
 		 * 
 		 * @return 属性类型
 		 */
-		public static final AttributeType of(short id) {
+		public static AttributeType of(short id) {
 			final StunConfig.AttributeType[] types = AttributeType.values();
 			for (AttributeType attributeType : types) {
 				if(attributeType.id == id) {

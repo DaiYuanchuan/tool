@@ -31,7 +31,7 @@ public final class NodeContext implements IContext {
 	
 	private static final NodeContext INSTANCE = new NodeContext();
 	
-	public static final NodeContext getInstance() {
+	public static NodeContext getInstance() {
 		return INSTANCE;
 	}
 	

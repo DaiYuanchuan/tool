@@ -80,7 +80,7 @@ public final class UtpConfig {
 		 * 
 		 * @return UTP消息类型
 		 */
-		public static final Type of(byte typeVersion) {
+		public static Type of(byte typeVersion) {
 			// 获取帧类型
 			final byte value = (byte) (typeVersion >> 4);
 			// 使用switch效率更高：DATA类型数据最多基本没有影响
@@ -98,11 +98,11 @@ public final class UtpConfig {
 	/**
 	 * <p>版本：{@value}</p>
 	 */
-	public static final byte UTP_VERSION = 1;
+	public static byte UTP_VERSION = 1;
 	/**
 	 * <p>扩展：{@value}</p>
 	 */
-	public static final byte EXTENSION = 0;
+	public static byte EXTENSION = 0;
 	/**
 	 * <p>UTP最大包长度：{@value}</p>
 	 * <p>UDP最大包长度：1500 - 20（IP头） - 8（UDP头） = 1472</p>
@@ -111,19 +111,19 @@ public final class UtpConfig {
 	 * 
 	 * @see #EXTENSION
 	 */
-	public static final int UTP_PACKET_MAX_LENGTH = 1452;
+	public static int UTP_PACKET_MAX_LENGTH = 1452;
 	/**
 	 * <p>默认窗口大小：{@value}</p>
 	 */
-	public static final int WND_SIZE = SystemConfig.ONE_MB;
+	public static int WND_SIZE = SystemConfig.ONE_MB;
 	/**
 	 * <p>最大发送次数：{@value}</p>
 	 */
-	public static final byte MAX_PUSH_TIMES = 3;
+	public static byte MAX_PUSH_TIMES = 3;
 	/**
 	 * <p>快速重传发送ACK次数：{@value}</p>
 	 */
-	public static final byte FAST_ACK_RETRY_TIMES = 3;
+	public static byte FAST_ACK_RETRY_TIMES = 3;
 	
 	/**
 	 * <p>禁止创建实例</p>

@@ -38,7 +38,7 @@ public final class TrackerContext implements IContext {
 	
 	private static final TrackerContext INSTANCE = new TrackerContext();
 	
-	public static final TrackerContext getInstance() {
+	public static TrackerContext getInstance() {
 		return INSTANCE;
 	}
 

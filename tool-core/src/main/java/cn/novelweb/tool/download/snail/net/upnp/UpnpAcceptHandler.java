@@ -15,7 +15,7 @@ public final class UpnpAcceptHandler extends UdpAcceptHandler {
 
 	private static final UpnpAcceptHandler INSTANCE = new UpnpAcceptHandler();
 	
-	public static final UpnpAcceptHandler getInstance() {
+	public static UpnpAcceptHandler getInstance() {
 		return INSTANCE;
 	}
 	

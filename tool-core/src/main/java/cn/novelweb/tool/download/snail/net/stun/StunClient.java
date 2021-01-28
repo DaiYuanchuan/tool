@@ -29,7 +29,7 @@ public final class StunClient extends UdpClient<StunMessageHandler> {
 	 * 
 	 * @return Stun客户端
 	 */
-	public static final StunClient newInstance(final String host) {
+	public static StunClient newInstance(final String host) {
 		return newInstance(host, StunConfig.DEFAULT_PORT);
 	}
 	
@@ -41,7 +41,7 @@ public final class StunClient extends UdpClient<StunMessageHandler> {
 	 * 
 	 * @return Stun客户端
 	 */
-	public static final StunClient newInstance(final String host, final int port) {
+	public static StunClient newInstance(final String host, final int port) {
 		return newInstance(NetUtils.buildSocketAddress(host, port));
 	}
 	
@@ -52,7 +52,7 @@ public final class StunClient extends UdpClient<StunMessageHandler> {
 	 * 
 	 * @return Stun客户端
 	 */
-	public static final StunClient newInstance(final InetSocketAddress socketAddress) {
+	public static StunClient newInstance(final InetSocketAddress socketAddress) {
 		return new StunClient(socketAddress);
 	}
 

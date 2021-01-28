@@ -48,7 +48,7 @@ public final class GetPeersResponse extends DhtResponse {
 	 * 
 	 * @return 响应
 	 */
-	public static final GetPeersResponse newInstance(DhtRequest request) {
+	public static GetPeersResponse newInstance(DhtRequest request) {
 		return new GetPeersResponse(request.getT());
 	}
 
@@ -59,7 +59,7 @@ public final class GetPeersResponse extends DhtResponse {
 	 * 
 	 * @return 响应
 	 */
-	public static final GetPeersResponse newInstance(DhtResponse response) {
+	public static GetPeersResponse newInstance(DhtResponse response) {
 		return new GetPeersResponse(response);
 	}
 	

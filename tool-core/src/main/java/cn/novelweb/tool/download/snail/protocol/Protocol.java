@@ -235,7 +235,7 @@ public abstract class Protocol {
 		 * 
 		 * @return 完整磁力链接
 		 */
-		public static final String buildMagnet(String hash) {
+		public static String buildMagnet(String hash) {
 			if(verifyMagnet(hash)) {
 				return hash;
 			}
@@ -249,7 +249,7 @@ public abstract class Protocol {
 		 * 
 		 * @return true-是；false-不是；
 		 */
-		public static final boolean verifyMagnet(String url) {
+		public static boolean verifyMagnet(String url) {
 			return StringUtils.regex(url, MAGNET_BASIC, true);
 		}
 		
@@ -260,7 +260,7 @@ public abstract class Protocol {
 		 * 
 		 * @return true-是；false-不是；
 		 */
-		public static final boolean verifyMagnetHash32(String url) {
+		public static boolean verifyMagnetHash32(String url) {
 			return StringUtils.regex(url, MAGNET_HASH_32, true);
 		}
 		
@@ -271,7 +271,7 @@ public abstract class Protocol {
 		 * 
 		 * @return true-是；false-不是；
 		 */
-		public static final boolean verifyMagnetHash40(String url) {
+		public static boolean verifyMagnetHash40(String url) {
 			return StringUtils.regex(url, MAGNET_HASH_40, true);
 		}
 		

@@ -1,12 +1,12 @@
 package cn.novelweb.tool.download.snail.utils;
 
+import cn.novelweb.tool.download.snail.config.SystemConfig;
+
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
-
-import cn.novelweb.tool.download.snail.config.SystemConfig;
 
 /**
  * <p>时间工具</p>
@@ -24,7 +24,7 @@ public final class DateUtils {
 	/**
 	 * <p>默认时间格式：{@value}</p>
 	 */
-	public static final String DEFAULT_PATTERN = "yyyy-MM-dd HH:mm:ss";
+	public static String DEFAULT_PATTERN = "yyyy-MM-dd HH:mm:ss";
 	/**
 	 * <p>时间格式工具</p>
 	 */
@@ -57,7 +57,7 @@ public final class DateUtils {
 	 * 
 	 * @return XX天XX小时、XX小时XX分钟、XX分钟XX秒
 	 */
-	public static final String format(long value) {
+	public static String format(long value) {
 		final StringBuilder builder = new StringBuilder();
 		final long day = value / SystemConfig.ONE_DAY;
 		if(day != 0) {
@@ -94,7 +94,7 @@ public final class DateUtils {
 	 * 
 	 * @see #dateFormat(Date, String)
 	 */
-	public static final String dateFormat(Date date) {
+	public static String dateFormat(Date date) {
 		return dateFormat(date, DEFAULT_PATTERN);
 	}
 	
@@ -106,7 +106,7 @@ public final class DateUtils {
 	 * 
 	 * @return 格式化字符串
 	 */
-	public static final String dateFormat(Date date, String pattern) {
+	public static String dateFormat(Date date, String pattern) {
 		if(date == null) {
 			return null;
 		}
@@ -123,7 +123,7 @@ public final class DateUtils {
 	 * 
 	 * @see #localDateTimeFormat(LocalDateTime, String)
 	 */
-	public static final String localDateTimeFormat(LocalDateTime localDateTime) {
+	public static String localDateTimeFormat(LocalDateTime localDateTime) {
 		return localDateTimeFormat(localDateTime, DEFAULT_PATTERN);
 	}
 	
@@ -135,7 +135,7 @@ public final class DateUtils {
 	 * 
 	 * @return 格式化字符串
 	 */
-	public static final String localDateTimeFormat(LocalDateTime localDateTime, String pattern) {
+	public static String localDateTimeFormat(LocalDateTime localDateTime, String pattern) {
 		if(localDateTime == null) {
 			return null;
 		}
@@ -153,7 +153,7 @@ public final class DateUtils {
 	 * 
 	 * @return Java时间戳
 	 */
-	public static final long javaTimestamp() {
+	public static long javaTimestamp() {
 		return System.currentTimeMillis();
 	}
 
@@ -164,7 +164,7 @@ public final class DateUtils {
 	 * 
 	 * @return Unix时间戳
 	 */
-	public static final long javaToUnixTimestamp(long javaTimestamp) {
+	public static long javaToUnixTimestamp(long javaTimestamp) {
 		return javaTimestamp / UNIX_JAVA_TIMESTAMP_SCALE;
 	}
 	
@@ -173,7 +173,7 @@ public final class DateUtils {
 	 * 
 	 * @return Unix时间戳
 	 */
-	public static final long unixTimestamp() {
+	public static long unixTimestamp() {
 		return javaToUnixTimestamp(javaTimestamp());
 	}
 
@@ -184,7 +184,7 @@ public final class DateUtils {
 	 * 
 	 * @return Java时间戳
 	 */
-	public static final long unixToJavaTimestamp(long unixTimestamp) {
+	public static long unixToJavaTimestamp(long unixTimestamp) {
 		return unixTimestamp * UNIX_JAVA_TIMESTAMP_SCALE;
 	}
 	
@@ -195,7 +195,7 @@ public final class DateUtils {
 	 * 
 	 * @return Java时间
 	 */
-	public static final Date unixToJavaDate(long unixTimestamp) {
+	public static Date unixToJavaDate(long unixTimestamp) {
 		return new Date(unixToJavaTimestamp(unixTimestamp));
 	}
 	
@@ -204,7 +204,7 @@ public final class DateUtils {
 	 * 
 	 * @return 时间戳（微秒）
 	 */
-	public static final int timestampUs() {
+	public static int timestampUs() {
 		return (int) (System.nanoTime() / 1000);
 	}
 
@@ -213,7 +213,7 @@ public final class DateUtils {
 	 * 
 	 * @return Windows时间戳
 	 */
-	public static final long windowsTimestamp() {
+	public static long windowsTimestamp() {
 		return (WINDOWS_JAVA_DIFF_TIMEMILLIS + System.currentTimeMillis()) * JAVA_WINDOWS_TIMESTAMP_SCALE;
 	}
 	
@@ -222,7 +222,7 @@ public final class DateUtils {
 	 * 
 	 * @return Windows时间戳
 	 */
-	public static final long windowsTimestampEx() {
+	public static long windowsTimestampEx() {
 		return DateUtils.diff(WINDOWS_BEIJIN_BEGIN_TIME, LocalDateTime.now()).toMillis() * JAVA_WINDOWS_TIMESTAMP_SCALE;
 	}
 	
@@ -234,7 +234,7 @@ public final class DateUtils {
 	 * 
 	 * @return 时间差
 	 */
-	public static final Duration diff(LocalDateTime begin, LocalDateTime end) {
+	public static Duration diff(LocalDateTime begin, LocalDateTime end) {
 		return Duration.between(begin, end);
 	}
 	

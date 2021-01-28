@@ -26,7 +26,7 @@ public final class LocalServiceDiscoveryInitializer extends Initializer {
 		super(DELAY); // 延迟启动
 	}
 	
-	public static final LocalServiceDiscoveryInitializer newInstance() {
+	public static LocalServiceDiscoveryInitializer newInstance() {
 		return new LocalServiceDiscoveryInitializer();
 	}
 	

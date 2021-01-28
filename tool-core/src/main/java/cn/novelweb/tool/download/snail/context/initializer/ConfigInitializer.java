@@ -21,7 +21,7 @@ public final class ConfigInitializer extends Initializer {
 	private ConfigInitializer() {
 	}
 	
-	public static final ConfigInitializer newInstance() {
+	public static ConfigInitializer newInstance() {
 		return new ConfigInitializer();
 	}
 

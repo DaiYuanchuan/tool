@@ -31,7 +31,7 @@ public final class UpnpService {
 	
 	private static final UpnpService INSTANCE = new UpnpService();
 	
-	public static final UpnpService getInstance() {
+	public static UpnpService getInstance() {
 		return INSTANCE;
 	}
 	

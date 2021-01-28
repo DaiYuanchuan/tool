@@ -40,7 +40,7 @@ public final class GetPeersRequest extends DhtRequest {
 	 * 
 	 * @return 请求
 	 */
-	public static final GetPeersRequest newRequest(byte[] infoHash) {
+	public static GetPeersRequest newRequest(byte[] infoHash) {
 		final GetPeersRequest request = new GetPeersRequest();
 		request.put(DhtConfig.KEY_INFO_HASH, infoHash);
 		return request;
@@ -54,7 +54,7 @@ public final class GetPeersRequest extends DhtRequest {
 	 * 
 	 * @return 响应
 	 */
-	public static final GetPeersResponse execute(DhtRequest request) {
+	public static GetPeersResponse execute(DhtRequest request) {
 		boolean needNodes = true;
 		final GetPeersResponse response = GetPeersResponse.newInstance(request);
 		final byte[] infoHash = request.getBytes(DhtConfig.KEY_INFO_HASH);

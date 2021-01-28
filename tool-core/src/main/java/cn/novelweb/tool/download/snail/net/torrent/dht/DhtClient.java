@@ -35,7 +35,7 @@ public final class DhtClient extends UdpClient<DhtMessageHandler> {
 	 * 
 	 * @return DHT客户端
 	 */
-	public static final DhtClient newInstance(final String host, final int port) {
+	public static DhtClient newInstance(final String host, final int port) {
 		return newInstance(NetUtils.buildSocketAddress(host, port));
 	}
 	
@@ -46,7 +46,7 @@ public final class DhtClient extends UdpClient<DhtMessageHandler> {
 	 * 
 	 * @return DHT客户端
 	 */
-	public static final DhtClient newInstance(InetSocketAddress socketAddress) {
+	public static DhtClient newInstance(InetSocketAddress socketAddress) {
 		return new DhtClient(socketAddress);
 	}
 

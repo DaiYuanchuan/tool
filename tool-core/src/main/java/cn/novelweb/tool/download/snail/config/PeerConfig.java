@@ -35,7 +35,7 @@ public final class PeerConfig extends PropertiesConfig {
 	 * 
 	 * @return 单例对象
 	 */
-	public static final PeerConfig getInstance() {
+	public static PeerConfig getInstance() {
 		return INSTANCE;
 	}
 	
@@ -46,17 +46,17 @@ public final class PeerConfig extends PropertiesConfig {
 	/**
 	 * <p>Peer最大连接失败次数：{@value}</p>
 	 */
-	public static final int MAX_FAIL_TIMES = 3;
+	public static int MAX_FAIL_TIMES = 3;
 	/**
 	 * <p>PeerId长度：{@value}</p>
 	 */
-	public static final int PEER_ID_LENGTH = 20;
+	public static int PEER_ID_LENGTH = 20;
 	/**
 	 * <p>保留位长度：{@value}</p>
 	 * 
 	 * @see #RESERVED
 	 */
-	public static final int RESERVED_LENGTH = 8;
+	public static int RESERVED_LENGTH = 8;
 	/**
 	 * <p>保留位</p>
 	 * 
@@ -66,96 +66,96 @@ public final class PeerConfig extends PropertiesConfig {
 	 * @see #RESERVED_NAT_TRAVERSAL
 	 * @see #RESERVED_EXTENSION_PROTOCOL
 	 */
-	public static final byte[] RESERVED = {0, 0, 0, 0, 0, 0, 0, 0};
+	public static byte[] RESERVED = {0, 0, 0, 0, 0, 0, 0, 0};
 	/**
 	 * <p>DHT协议保留位：{@value}</p>
 	 * <p>[7]-0x01：DHT Protocol</p>
 	 * 
 	 * @see DhtExtensionMessageHandler
 	 */
-	public static final byte RESERVED_DHT_PROTOCOL = 1 << 0;
+	public static byte RESERVED_DHT_PROTOCOL = 1 << 0;
 	/**
 	 * <p>PEX协议保留位：{@value}</p>
 	 * <p>[7]-0x02：Peer Exchange</p>
 	 * 
 	 * @see PeerExchangeMessageHandler
 	 */
-	public static final byte RESERVED_PEER_EXCHANGE = 1 << 1;
+	public static byte RESERVED_PEER_EXCHANGE = 1 << 1;
 	/**
 	 * <p>FAST协议保留位：{@value}</p>
 	 * <p>[7]-0x04：FAST Protocol</p>
 	 * 
 	 * @see PeerSubMessageHandler
 	 */
-	public static final byte RESERVED_FAST_PROTOCOL = 1 << 2;
+	public static byte RESERVED_FAST_PROTOCOL = 1 << 2;
 	/**
 	 * <p>NAT保留位：{@value}</p>
 	 * <p>[7]-0x08：NAT Traversal</p>
 	 * 
 	 * @see #nat()
 	 */
-	public static final byte RESERVED_NAT_TRAVERSAL = 1 << 3;
+	public static byte RESERVED_NAT_TRAVERSAL = 1 << 3;
 	/**
 	 * <p>扩展协议保留位：{@value}</p>
 	 * <p>[5]-0x10：Extension Protocol</p>
 	 * 
 	 * @see ExtensionMessageHandler
 	 */
-	public static final byte RESERVED_EXTENSION_PROTOCOL = 1 << 4;
+	public static byte RESERVED_EXTENSION_PROTOCOL = 1 << 4;
 	/**
 	 * <p>握手消息长度：{@value}</p>
 	 */
-	public static final int HANDSHAKE_LENGTH = 68;
+	public static int HANDSHAKE_LENGTH = 68;
 	/**
 	 * <p>协议名称：{@value}</p>
 	 */
-	public static final String PROTOCOL_NAME = "BitTorrent protocol";
+	public static String PROTOCOL_NAME = "BitTorrent protocol";
 	/**
 	 * <p>协议名称字节数组</p>
 	 */
-	public static final byte[] PROTOCOL_NAME_BYTES = PROTOCOL_NAME.getBytes();
+	public static byte[] PROTOCOL_NAME_BYTES = PROTOCOL_NAME.getBytes();
 	/**
 	 * <p>协议名称字节数组长度</p>
 	 */
-	public static final int PROTOCOL_NAME_LENGTH = PROTOCOL_NAME_BYTES.length;
+	public static int PROTOCOL_NAME_LENGTH = PROTOCOL_NAME_BYTES.length;
 	/**
 	 * <p>Peer状态：上传</p>
 	 */
-	public static final byte STATUS_UPLOAD = 1 << 1;
+	public static byte STATUS_UPLOAD = 1 << 1;
 	/**
 	 * <p>Peer状态：下载</p>
 	 */
-	public static final byte STATUS_DOWNLOAD = 1 << 0;
+	public static byte STATUS_DOWNLOAD = 1 << 0;
 	/**
 	 * <p>pex flags：{@value}</p>
 	 * <p>偏爱加密：0x01</p>
 	 */
-	public static final byte PEX_PREFER_ENCRYPTION = 1 << 0;
+	public static byte PEX_PREFER_ENCRYPTION = 1 << 0;
 	/**
 	 * <p>pex flags：{@value}</p>
 	 * <p>只上传不下载：0x02</p>
 	 * <p>此标记Peer不发送消息：解除阻塞、have、Piece位图</p>
 	 */
-	public static final byte PEX_UPLOAD_ONLY = 1 << 1;
+	public static byte PEX_UPLOAD_ONLY = 1 << 1;
 	/**
 	 * <p>pex flags：{@value}</p>
 	 * <p>支持UTP协议：0x04</p>
 	 */
-	public static final byte PEX_UTP = 1 << 2;
+	public static byte PEX_UTP = 1 << 2;
 	/**
 	 * <p>pex flags：{@value}</p>
 	 * <p>支持holepunch协议：0x08</p>
 	 */
-	public static final byte PEX_HOLEPUNCH = 1 << 3;
+	public static byte PEX_HOLEPUNCH = 1 << 3;
 	/**
 	 * <p>pex flags：{@value}</p>
 	 * <p>可以连接：0x10</p>
 	 */
-	public static final byte PEX_OUTGO = 1 << 4;
+	public static byte PEX_OUTGO = 1 << 4;
 	/**
 	 * <p>holepunch连接超时时间（毫秒）：{@value}</p>
 	 */
-	public static final int HOLEPUNCH_TIMEOUT = 2000;
+	public static int HOLEPUNCH_TIMEOUT = 2000;
 	/**
 	 * <p>PeerId名称配置：{@value}</p>
 	 */
@@ -210,7 +210,7 @@ public final class PeerConfig extends PropertiesConfig {
 	 * 
 	 * @return 客户端名称
 	 */
-	public static final String clientName(byte[] peerId) {
+	public static String clientName(byte[] peerId) {
 		if(peerId == null || peerId.length < 3) {
 			return UNKNOWN;
 		}
@@ -228,7 +228,7 @@ public final class PeerConfig extends PropertiesConfig {
 	 * <p>设置NAT保留位</p>
 	 * <p>使用STUN穿透时设置NAT保留位</p>
 	 */
-	public static final void nat() {
+	public static void nat() {
 		RESERVED[7] |= RESERVED_NAT_TRAVERSAL;
 	}
 	
@@ -333,7 +333,7 @@ public final class PeerConfig extends PropertiesConfig {
 		 * 
 		 * @return 协议消息类型
 		 */
-		public static final Type of(byte id) {
+		public static Type of(byte id) {
 			final PeerConfig.Type[] types = Type.values();
 			for (Type type : types) {
 				if(type.id == id) {
@@ -517,7 +517,7 @@ public final class PeerConfig extends PropertiesConfig {
 		 * 
 		 * @return 扩展协议消息类型
 		 */
-		public static final ExtensionType of(byte id) {
+		public static ExtensionType of(byte id) {
 			final PeerConfig.ExtensionType[] types = ExtensionType.values();
 			for (ExtensionType type : types) {
 				if(type.id == id) {
@@ -534,7 +534,7 @@ public final class PeerConfig extends PropertiesConfig {
 		 * 
 		 * @return 扩展协议消息类型
 		 */
-		public static final ExtensionType of(String value) {
+		public static ExtensionType of(String value) {
 			final PeerConfig.ExtensionType[] types = ExtensionType.values();
 			for (ExtensionType type : types) {
 				if(type.value.equalsIgnoreCase(value)) {
@@ -599,7 +599,7 @@ public final class PeerConfig extends PropertiesConfig {
 		 * 
 		 * @return 扩展协议消息类型
 		 */
-		public static final MetadataType of(byte id) {
+		public static MetadataType of(byte id) {
 			final PeerConfig.MetadataType[] types = MetadataType.values();
 			for (MetadataType type : types) {
 				if(type.id == id) {
@@ -659,7 +659,7 @@ public final class PeerConfig extends PropertiesConfig {
 		 * 
 		 * @return 扩展协议消息类型
 		 */
-		public static final HolepunchType of(byte id) {
+		public static HolepunchType of(byte id) {
 			final PeerConfig.HolepunchType[] types = HolepunchType.values();
 			for (HolepunchType type : types) {
 				if(type.id == id) {

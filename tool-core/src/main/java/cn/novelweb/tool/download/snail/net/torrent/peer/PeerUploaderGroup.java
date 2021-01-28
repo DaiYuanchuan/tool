@@ -48,7 +48,7 @@ public final class PeerUploaderGroup {
 	 * 
 	 * @return PeerUploader组
 	 */
-	public static final PeerUploaderGroup newInstance(TorrentSession torrentSession) {
+	public static PeerUploaderGroup newInstance(TorrentSession torrentSession) {
 		return new PeerUploaderGroup(torrentSession);
 	}
 	

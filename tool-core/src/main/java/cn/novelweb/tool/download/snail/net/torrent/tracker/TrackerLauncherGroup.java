@@ -50,7 +50,7 @@ public final class TrackerLauncherGroup {
 	 * 
 	 * @return Tracker执行器组
 	 */
-	public static final TrackerLauncherGroup newInstance(TorrentSession torrentSession) {
+	public static TrackerLauncherGroup newInstance(TorrentSession torrentSession) {
 		return new TrackerLauncherGroup(torrentSession);
 	}
 

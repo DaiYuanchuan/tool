@@ -47,7 +47,7 @@ public final class DhtLauncher implements Runnable {
 	 * 
 	 * @return DhtLauncher
 	 */
-	public static final DhtLauncher newInstance(TorrentSession torrentSession) {
+	public static DhtLauncher newInstance(TorrentSession torrentSession) {
 		return new DhtLauncher(torrentSession);
 	}
 	

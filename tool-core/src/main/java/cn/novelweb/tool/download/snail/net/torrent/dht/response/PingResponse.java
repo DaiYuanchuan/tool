@@ -31,7 +31,7 @@ public final class PingResponse extends DhtResponse {
 	 * 
 	 * @return 响应
 	 */
-	public static final PingResponse newInstance(DhtRequest request) {
+	public static PingResponse newInstance(DhtRequest request) {
 		return new PingResponse(request.getT());
 	}
 
@@ -42,7 +42,7 @@ public final class PingResponse extends DhtResponse {
 	 * 
 	 * @return 响应
 	 */
-	public static final PingResponse newInstance(DhtResponse response) {
+	public static PingResponse newInstance(DhtResponse response) {
 		return new PingResponse(response);
 	}
 	

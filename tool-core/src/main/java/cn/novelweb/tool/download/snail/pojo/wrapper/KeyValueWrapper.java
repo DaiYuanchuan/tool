@@ -66,7 +66,7 @@ public final class KeyValueWrapper {
 	 * 
 	 * @return KeyValueWrapper
 	 */
-	public static final KeyValueWrapper newInstance() {
+	public static KeyValueWrapper newInstance() {
 		return new KeyValueWrapper(DEFAULT_SEPARATOR, DEFAULT_KV_SEPARATOR, null, null);
 	}
 	
@@ -77,7 +77,7 @@ public final class KeyValueWrapper {
 	 * 
 	 * @return KeyValueWrapper
 	 */
-	public static final KeyValueWrapper newInstance(String content) {
+	public static KeyValueWrapper newInstance(String content) {
 		return new KeyValueWrapper(DEFAULT_SEPARATOR, DEFAULT_KV_SEPARATOR, content, null);
 	}
 	
@@ -88,7 +88,7 @@ public final class KeyValueWrapper {
 	 * 
 	 * @return KeyValueWrapper
 	 */
-	public static final KeyValueWrapper newInstance(Map<String, String> data) {
+	public static KeyValueWrapper newInstance(Map<String, String> data) {
 		return new KeyValueWrapper(DEFAULT_SEPARATOR, DEFAULT_KV_SEPARATOR, null, data);
 	}
 	
@@ -100,7 +100,7 @@ public final class KeyValueWrapper {
 	 * 
 	 * @return KeyValueWrapper
 	 */
-	public static final KeyValueWrapper newInstance(char separator, char kvSeparator) {
+	public static KeyValueWrapper newInstance(char separator, char kvSeparator) {
 		return new KeyValueWrapper(separator, kvSeparator, null, null);
 	}
 	
@@ -113,7 +113,7 @@ public final class KeyValueWrapper {
 	 * 
 	 * @return KeyValueWrapper
 	 */
-	public static final KeyValueWrapper newInstance(char separator, char kvSeparator, String content) {
+	public static KeyValueWrapper newInstance(char separator, char kvSeparator, String content) {
 		return new KeyValueWrapper(separator, kvSeparator, content, null);
 	}
 	
@@ -126,7 +126,7 @@ public final class KeyValueWrapper {
 	 * 
 	 * @return KeyValueWrapper
 	 */
-	public static final KeyValueWrapper newInstance(char separator, char kvSeparator, Map<String, String> data) {
+	public static KeyValueWrapper newInstance(char separator, char kvSeparator, Map<String, String> data) {
 		return new KeyValueWrapper(separator, kvSeparator, null, data);
 	}
 	

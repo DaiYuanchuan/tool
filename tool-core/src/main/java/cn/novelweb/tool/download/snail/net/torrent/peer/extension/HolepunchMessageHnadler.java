@@ -63,7 +63,7 @@ public final class HolepunchMessageHnadler extends ExtensionTypeMessageHandler {
 	 * 
 	 * @return holepunch扩展协议代理
 	 */
-	public static final HolepunchMessageHnadler newInstance(PeerSession peerSession, TorrentSession torrentSession, ExtensionMessageHandler extensionMessageHandler) {
+	public static HolepunchMessageHnadler newInstance(PeerSession peerSession, TorrentSession torrentSession, ExtensionMessageHandler extensionMessageHandler) {
 		return new HolepunchMessageHnadler(peerSession, torrentSession, extensionMessageHandler);
 	}
 

@@ -22,7 +22,7 @@ public final class CollectionUtils {
 	 * 
 	 * @return true-空；false-非空；
 	 */
-	public static final boolean isEmpty(Collection<?> list) {
+	public static boolean isEmpty(Collection<?> list) {
 		return list == null || list.isEmpty();
 	}
 	
@@ -33,7 +33,7 @@ public final class CollectionUtils {
 	 * 
 	 * @return true-非空；false-空；
 	 */
-	public static final boolean isNotEmpty(Collection<?> list) {
+	public static boolean isNotEmpty(Collection<?> list) {
 		return !isEmpty(list);
 	}
 

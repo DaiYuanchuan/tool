@@ -31,7 +31,7 @@ public final class UpnpClient extends UdpClient<UpnpMessageHandler> {
 		super("UPNP Client", new UpnpMessageHandler(), socketAddress);
 	}
 	
-	public static final UpnpClient newInstance() {
+	public static UpnpClient newInstance() {
 		return new UpnpClient(NetUtils.buildSocketAddress(UpnpServer.UPNP_HOST, UpnpServer.UPNP_PORT));
 	}
 

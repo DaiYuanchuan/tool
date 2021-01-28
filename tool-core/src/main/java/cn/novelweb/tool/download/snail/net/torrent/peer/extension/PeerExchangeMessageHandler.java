@@ -86,7 +86,7 @@ public final class PeerExchangeMessageHandler extends ExtensionTypeMessageHandle
      * @param extensionMessageHandler 扩展消息代理
      * @return PEX扩展协议代理
      */
-    public static final PeerExchangeMessageHandler newInstance(PeerSession peerSession, TorrentSession torrentSession, ExtensionMessageHandler extensionMessageHandler) {
+    public static PeerExchangeMessageHandler newInstance(PeerSession peerSession, TorrentSession torrentSession, ExtensionMessageHandler extensionMessageHandler) {
         return new PeerExchangeMessageHandler(peerSession, torrentSession, extensionMessageHandler);
     }
 
@@ -152,7 +152,7 @@ public final class PeerExchangeMessageHandler extends ExtensionTypeMessageHandle
      * <p>
      * TODO：IPv6
      */
-    public static final byte[] buildMessage(List<PeerSession> optimize) {
+    public static byte[] buildMessage(List<PeerSession> optimize) {
         if (CollectionUtils.isEmpty(optimize)) {
             return new byte[0];
         }

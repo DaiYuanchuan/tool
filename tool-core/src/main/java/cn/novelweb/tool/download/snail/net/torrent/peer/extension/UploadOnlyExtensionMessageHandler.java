@@ -41,7 +41,7 @@ public final class UploadOnlyExtensionMessageHandler extends ExtensionTypeMessag
 	 * 
 	 * @return uploadOnly扩展协议代理
 	 */
-	public static final UploadOnlyExtensionMessageHandler newInstance(PeerSession peerSession, ExtensionMessageHandler extensionMessageHandler) {
+	public static UploadOnlyExtensionMessageHandler newInstance(PeerSession peerSession, ExtensionMessageHandler extensionMessageHandler) {
 		return new UploadOnlyExtensionMessageHandler(peerSession, extensionMessageHandler);
 	}
 	

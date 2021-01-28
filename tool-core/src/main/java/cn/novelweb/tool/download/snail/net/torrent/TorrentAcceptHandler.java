@@ -21,7 +21,7 @@ public final class TorrentAcceptHandler extends UdpAcceptHandler {
 	
 	private static final TorrentAcceptHandler INSTANCE = new TorrentAcceptHandler();
 	
-	public static final TorrentAcceptHandler getInstance() {
+	public static TorrentAcceptHandler getInstance() {
 		return INSTANCE;
 	}
 	

@@ -15,7 +15,7 @@ public final class TrackerAcceptHandler extends UdpAcceptHandler {
 	
 	private static final TrackerAcceptHandler INSTANCE = new TrackerAcceptHandler();
 	
-	public static final TrackerAcceptHandler getInstance() {
+	public static TrackerAcceptHandler getInstance() {
 		return INSTANCE;
 	}
 	

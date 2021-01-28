@@ -27,7 +27,7 @@ public final class EntityContext implements IContext {
 	
 	private static final EntityContext INSTANCE = new EntityContext();
 	
-	public static final EntityContext getInstance() {
+	public static EntityContext getInstance() {
 		return INSTANCE;
 	}
 	
@@ -257,8 +257,9 @@ public final class EntityContext implements IContext {
 	 * <p>加载实体</p>
 	 */
 	public void load() {
+		System.out.println("EntityContext:<p>加载实体</p>");
 		final File file = new File(ENTITY_FILE_PATH);
-		if(!file.exists()) {
+		if(true) {
 			return;
 		}
 		try (ObjectInput input = new ObjectInputStream(new FileInputStream(file))) {
@@ -293,6 +294,7 @@ public final class EntityContext implements IContext {
 			list.addAll(this.taskEntities);
 			list.addAll(this.configEntities);
 		}
+		System.out.println("EntityContext:<p>保存实体</p>");
 		final File file = new File(ENTITY_FILE_PATH);
 		FileUtils.buildFolder(file, true);
 		try (ObjectOutput output = new ObjectOutputStream(new FileOutputStream(file))) {

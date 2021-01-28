@@ -91,7 +91,7 @@ public final class FileUtils {
 	 * 
 	 * @return 系统分隔符路径
 	 */
-	public static final String systemSeparator(String path) {
+	public static String systemSeparator(String path) {
 		if(path == null) {
 			return path;
 		}
@@ -106,7 +106,7 @@ public final class FileUtils {
 	 * 
 	 * @param filePath 文件路径
 	 */
-	public static final void delete(final String filePath) {
+	public static void delete(final String filePath) {
 		if(StringUtils.isEmpty(filePath)) {
 			LOGGER.warn("删除文件为空：{}", filePath);
 			return;
@@ -119,7 +119,7 @@ public final class FileUtils {
 	 * 
 	 * @param file 文件
 	 */
-	public static final void delete(final File file) {
+	public static void delete(final File file) {
 		Objects.requireNonNull(file);
 		if(!file.exists()) {
 			LOGGER.debug("删除文件不存在：{}", file.getAbsolutePath());
@@ -150,7 +150,7 @@ public final class FileUtils {
 	 * 
 	 * @return 文件名称
 	 */
-	public static final String fileName(final String url) {
+	public static String fileName(final String url) {
 		if(StringUtils.isEmpty(url)) {
 			return url;
 		}
@@ -181,7 +181,7 @@ public final class FileUtils {
 	 * 
 	 * @return 文件名称
 	 */
-	public static final String fileNameFormat(String name) {
+	public static String fileNameFormat(String name) {
 		// 过滤文件名禁用字符
 		if(StringUtils.isNotEmpty(name)) {
 			name = name.replaceAll(FILENAME_REPLACE_REGEX, FILENAME_REPLACE_TARGET);
@@ -200,7 +200,7 @@ public final class FileUtils {
 	 * 
 	 * @return 文件类型
 	 */
-	public static final FileType fileType(String fileName) {
+	public static FileType fileType(String fileName) {
 		final String ext = fileExt(fileName);
 		if(ext == null) {
 			return FileType.UNKNOWN;
@@ -222,7 +222,7 @@ public final class FileUtils {
 	 * 
 	 * @return 文件后缀
 	 */
-	public static final String fileExt(String fileName) {
+	public static String fileExt(String fileName) {
 		if(StringUtils.isEmpty(fileName)) {
 			return null;
 		}
@@ -239,7 +239,7 @@ public final class FileUtils {
 	 * @param filePath 文件路径
 	 * @param bytes 文件数据
 	 */
-	public static final void write(String filePath, byte[] bytes) {
+	public static void write(String filePath, byte[] bytes) {
 		buildFolder(filePath, true); // 创建目录
 		try(final FileOutputStream output = new FileOutputStream(filePath)) {
 			output.write(bytes);
@@ -254,7 +254,7 @@ public final class FileUtils {
 	 * @param source 原始文件
 	 * @param target 目标文件
 	 */
-	public static final void move(String source, String target) {
+	public static void move(String source, String target) {
 		final File sourceFile = new File(source);
 		final File targetFile = new File(target);
 		if(!sourceFile.renameTo(targetFile)) {
@@ -270,7 +270,7 @@ public final class FileUtils {
 	 * 
 	 * @return 文件路径
 	 */
-	public static final String file(String folder, String fileName) {
+	public static String file(String folder, String fileName) {
 		Objects.requireNonNull(folder, "文件目录格式错误");
 		Objects.requireNonNull(fileName, "文件名称格式错误");
 		return Paths.get(folder, fileName).toString();
@@ -283,7 +283,7 @@ public final class FileUtils {
 	 * 
 	 * @return 文件大小字符串
 	 */
-	public static final String formatSize(Long size) {
+	public static String formatSize(Long size) {
 		if(size == null || size == 0L) {
 			return "0B";
 		}
@@ -306,7 +306,7 @@ public final class FileUtils {
 	 * 
 	 * @return 文件大小（MB）
 	 */
-	public static final double formatSizeMB(Long size) {
+	public static double formatSizeMB(Long size) {
 		if(size == null || size == 0L) {
 			return 0D;
 		}
@@ -323,7 +323,7 @@ public final class FileUtils {
 	 * 
 	 * @return 文件大小
 	 */
-	public static final long fileSize(String path) {
+	public static long fileSize(String path) {
 		final File file = new File(path);
 		if(!file.exists()) {
 			return 0L;
@@ -352,7 +352,7 @@ public final class FileUtils {
 	 * 
 	 * @see #buildFolder(File, boolean)
 	 */
-	public static final void buildFolder(String path, boolean isFile) {
+	public static void buildFolder(String path, boolean isFile) {
 		final File file = new File(path);
 		buildFolder(file, isFile);
 	}
@@ -365,7 +365,7 @@ public final class FileUtils {
 	 * @param file 文件路径或目录路径
 	 * @param isFile 路径是否是文件：true-文件；false-目录；
 	 */
-	public static final void buildFolder(File file, boolean isFile) {
+	public static void buildFolder(File file, boolean isFile) {
 		if(file == null || file.exists()) {
 			return;
 		}
@@ -386,7 +386,7 @@ public final class FileUtils {
 	 * 
 	 * @see #hash(String, String)
 	 */
-	public static final String md5(String path) {
+	public static String md5(String path) {
 		return hash(path, DigestUtils.ALGO_MD5);
 	}
 
@@ -399,7 +399,7 @@ public final class FileUtils {
 	 * 
 	 * @see #hash(String, String)
 	 */
-	public static final String sha1(String path) {
+	public static String sha1(String path) {
 		return hash(path, DigestUtils.ALGO_SHA1);
 	}
 	
@@ -438,7 +438,7 @@ public final class FileUtils {
 	 * 
 	 * @return 文件
 	 */
-	public static final File userDirFile(String path) {
+	public static File userDirFile(String path) {
 		return new File(SystemConfig.userDir(path));
 	}
 	

@@ -22,7 +22,7 @@ public final class PacketSizeException extends NetException {
 	 * 
 	 * @see SystemConfig#MAX_NET_BUFFER_LENGTH
 	 */
-	public static final void verify(short length) throws PacketSizeException {
+	public static void verify(short length) throws PacketSizeException {
 		if(length < 0 || length > SystemConfig.MAX_NET_BUFFER_LENGTH) {
 			throw new PacketSizeException(length);
 		}
@@ -37,7 +37,7 @@ public final class PacketSizeException extends NetException {
 	 * 
 	 * @see SystemConfig#MAX_NET_BUFFER_LENGTH
 	 */
-	public static final void verify(int length) throws PacketSizeException {
+	public static void verify(int length) throws PacketSizeException {
 		if(length < 0 || length > SystemConfig.MAX_NET_BUFFER_LENGTH) {
 			throw new PacketSizeException(length);
 		}

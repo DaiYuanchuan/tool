@@ -27,7 +27,7 @@ public final class SystemContext implements IContext {
 
 	private static final SystemContext INSTANCE = new SystemContext();
 	
-	public static final SystemContext getInstance() {
+	public static SystemContext getInstance() {
 		return INSTANCE;
 	}
 	
@@ -72,7 +72,7 @@ public final class SystemContext implements IContext {
 		 * 
 		 * @return 当前系统类型
 		 */
-		public static final SystemType local() {
+		public static SystemType local() {
 			final String osName = SystemContext.osName();
 			for (SystemType type : SystemType.values()) {
 				for (String value : type.osNames) {
@@ -102,7 +102,7 @@ public final class SystemContext implements IContext {
 	/**
 	 * <p>系统信息</p>
 	 */
-	public static final void info() {
+	public static void info() {
 		final Runtime runtime = Runtime.getRuntime();
 		LOGGER.info("操作系统名称：{}", System.getProperty("os.name"));
 		LOGGER.info("操作系统架构：{}", System.getProperty("os.arch"));
@@ -128,7 +128,7 @@ public final class SystemContext implements IContext {
 	 * 
 	 * @return Snail
 	 */
-	public static final Snail build() {
+	public static Snail build() {
 		LOGGER.info("系统初始化");
 		return SnailBuilder.newBuilder()
 			.loadTask()
@@ -143,7 +143,7 @@ public final class SystemContext implements IContext {
 	 * 
 	 * @see SystemThreadContext
 	 */
-	public static final void shutdown() {
+	public static void shutdown() {
 		if(Snail.available()) {
 			SystemThreadContext.submit(() -> {
 				LOGGER.info("系统关闭中...");
@@ -167,7 +167,7 @@ public final class SystemContext implements IContext {
 	 * 
 	 * @return 系统名称
 	 */
-	public static final String osName() {
+	public static String osName() {
 		return INSTANCE.osName;
 	}
 
@@ -176,7 +176,7 @@ public final class SystemContext implements IContext {
 	 * 
 	 * @return 是不是最新版本
 	 */
-	public static final boolean latestRelease() {
+	public static boolean latestRelease() {
 		try {
 			// 本地版本：1.0.0
 			final String version = SystemConfig.getVersion();

@@ -56,7 +56,7 @@ public abstract class Downloader implements IDownloader {
 	 * 
 	 * @return 是否完成
 	 */
-	public static final boolean checkFinish(int length, long downloadSize, long fileSize) {
+	public static boolean checkFinish(int length, long downloadSize, long fileSize) {
 		return
 			// 没有更多数据
 			length < 0 ||

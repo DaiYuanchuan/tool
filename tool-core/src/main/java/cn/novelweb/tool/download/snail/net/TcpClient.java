@@ -113,7 +113,7 @@ public abstract class TcpClient<T extends TcpMessageHandler> extends ClientMessa
 	/**
 	 * <p>关闭TCP Client线程池</p>
 	 */
-	public static final void shutdown() {
+	public static void shutdown() {
 		LOGGER.debug("关闭TCP Client线程池");
 		SystemThreadContext.shutdown(GROUP);
 	}

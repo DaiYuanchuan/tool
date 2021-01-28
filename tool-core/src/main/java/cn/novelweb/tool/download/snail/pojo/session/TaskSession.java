@@ -68,7 +68,7 @@ public final class TaskSession implements ITaskSession {
 	 * 
 	 * @throws DownloadException 下载异常
 	 */
-	public static final ITaskSession newInstance(TaskEntity entity) throws DownloadException {
+	public static ITaskSession newInstance(TaskEntity entity) throws DownloadException {
 		return new TaskSession(entity);
 	}
 	

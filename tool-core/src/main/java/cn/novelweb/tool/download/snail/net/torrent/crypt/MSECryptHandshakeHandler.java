@@ -184,7 +184,7 @@ public final class MSECryptHandshakeHandler {
 	 * 
 	 * @return 加密代理
 	 */
-	public static final MSECryptHandshakeHandler newInstance(PeerUnpackMessageCodec peerUnpackMessageCodec, PeerSubMessageHandler peerSubMessageHandler) {
+	public static MSECryptHandshakeHandler newInstance(PeerUnpackMessageCodec peerUnpackMessageCodec, PeerSubMessageHandler peerSubMessageHandler) {
 		return new MSECryptHandshakeHandler(peerUnpackMessageCodec, peerSubMessageHandler);
 	}
 	

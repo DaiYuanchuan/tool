@@ -39,7 +39,7 @@ public final class UtpClient extends UdpClient<UtpMessageHandler> {
 	 * 
 	 * @return UTP客户端
 	 */
-	public static final UtpClient newInstance(PeerSession peerSession, PeerSubMessageHandler peerSubMessageHandler) {
+	public static UtpClient newInstance(PeerSession peerSession, PeerSubMessageHandler peerSubMessageHandler) {
 		return new UtpClient(peerSession, peerSubMessageHandler);
 	}
 	

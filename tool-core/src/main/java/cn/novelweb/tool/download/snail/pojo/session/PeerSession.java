@@ -155,7 +155,7 @@ public final class PeerSession implements IStatisticsSessionGetter {
 	 * 
 	 * @return Peer信息
 	 */
-	public static final PeerSession newInstance(IStatisticsSession parent, String host, Integer port) {
+	public static PeerSession newInstance(IStatisticsSession parent, String host, Integer port) {
 		return new PeerSession(parent, host, port);
 	}
 

@@ -26,23 +26,23 @@ public final class MagnetBuilder {
 	/**
 	 * <p>显示名称：{@value}</p>
 	 */
-	public static final String QUERY_DN = "dn";
+	public static String QUERY_DN = "dn";
 	/**
 	 * <p>资源URN：{@value}</p>
 	 */
-	public static final String QUERY_XT = "xt";
+	public static String QUERY_XT = "xt";
 	/**
 	 * <p>文件链接（经过编码）：{@value}</p>
 	 */
-	public static final String QUERY_AS = "as";
+	public static String QUERY_AS = "as";
 	/**
 	 * <p>绝对资源（经过编码）：{@value}</p>
 	 */
-	public static final String QUERY_XS = "xs";
+	public static String QUERY_XS = "xs";
 	/**
 	 * <p>Tracker服务器列表：{@value}</p>
 	 */
-	public static final String QUERY_TR = "tr";
+	public static String QUERY_TR = "tr";
 	
 	/**
 	 * <p>磁力链接</p>
@@ -74,7 +74,7 @@ public final class MagnetBuilder {
 	 * 
 	 * @throws DownloadException 下载异常
 	 */
-	public static final MagnetBuilder newInstance(String url) throws DownloadException {
+	public static MagnetBuilder newInstance(String url) throws DownloadException {
 		return new MagnetBuilder(url);
 	}
 	

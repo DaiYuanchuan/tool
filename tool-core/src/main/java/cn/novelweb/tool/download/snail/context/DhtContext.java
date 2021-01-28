@@ -28,7 +28,7 @@ public final class DhtContext implements IContext {
 	
 	private static final DhtContext INSTANCE = new DhtContext();
 	
-	public static final DhtContext getInstance() {
+	public static DhtContext getInstance() {
 		return INSTANCE;
 	}
 	

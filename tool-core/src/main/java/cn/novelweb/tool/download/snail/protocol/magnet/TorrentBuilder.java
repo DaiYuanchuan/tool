@@ -55,7 +55,7 @@ public final class TorrentBuilder {
 	 * 
 	 * @return 种子文件Builder
 	 */
-	public static final TorrentBuilder newInstance(InfoHash infoHash, List<String> trackers) {
+	public static TorrentBuilder newInstance(InfoHash infoHash, List<String> trackers) {
 		return new TorrentBuilder(infoHash, trackers);
 	}
 	

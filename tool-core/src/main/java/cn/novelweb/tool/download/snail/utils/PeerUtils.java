@@ -1,10 +1,10 @@
 package cn.novelweb.tool.download.snail.utils;
 
+import cn.novelweb.tool.download.snail.config.SystemConfig;
+
 import java.nio.ByteBuffer;
 import java.util.HashMap;
 import java.util.Map;
-
-import cn.novelweb.tool.download.snail.config.SystemConfig;
 
 /**
  * <p>Peer工具</p>
@@ -39,7 +39,7 @@ public final class PeerUtils {
 	 * 
 	 * @see #read(ByteBuffer)
 	 */
-	public static final Map<String, Integer> read(byte[] bytes) {
+	public static Map<String, Integer> read(byte[] bytes) {
 		if(bytes == null) {
 			return null;
 		}
@@ -54,7 +54,7 @@ public final class PeerUtils {
 	 * 
 	 * @return IP=端口
 	 */
-	public static final Map<String, Integer> read(ByteBuffer buffer) {
+	public static Map<String, Integer> read(ByteBuffer buffer) {
 		if(buffer == null) {
 			return null;
 		}
@@ -77,7 +77,7 @@ public final class PeerUtils {
 	 * 
 	 * @return 快速允许Piece索引
 	 */
-	public static final int[] allowedFast(int pieceSize, String ipAddress, byte[] infoHash) {
+	public static int[] allowedFast(int pieceSize, String ipAddress, byte[] infoHash) {
 		final int ipValue = NetUtils.ipToInt(ipAddress);
 		ByteBuffer buffer = ByteBuffer.allocate(24); // IP(4) + InfoHash(20)
 		buffer.putInt(ALLOWED_FAST_MASK & ipValue);
@@ -106,7 +106,7 @@ public final class PeerUtils {
 	 * 
 	 * @return HTTP传输编码结果
 	 */
-	public static final String urlEncode(String hex) {
+	public static String urlEncode(String hex) {
 		int index = 0;
 		final int length = hex.length();
 		final StringBuilder builder = new StringBuilder();
@@ -126,7 +126,7 @@ public final class PeerUtils {
 	 * 
 	 * @return HTTP传输编码结果
 	 */
-	public static final String urlEncode(byte[] bytes) {
+	public static String urlEncode(byte[] bytes) {
 		char value;
 		String valueHex;
 		final StringBuilder builder = new StringBuilder();

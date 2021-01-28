@@ -22,7 +22,7 @@ public final class DhtInitializer extends Initializer {
 	private DhtInitializer() {
 	}
 	
-	public static final DhtInitializer newInstance() {
+	public static DhtInitializer newInstance() {
 		return new DhtInitializer();
 	}
 	

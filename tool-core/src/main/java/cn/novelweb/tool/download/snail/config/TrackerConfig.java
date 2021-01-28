@@ -32,7 +32,7 @@ public final class TrackerConfig extends PropertiesConfig {
 	 * 
 	 * @return 单例对象
 	 */
-	public static final TrackerConfig getInstance() {
+	public static TrackerConfig getInstance() {
 		return INSTANCE;
 	}
 	
@@ -48,7 +48,7 @@ public final class TrackerConfig extends PropertiesConfig {
 	 * <p>最大请求失败次数：{@value}</p>
 	 * <p>超过最大请求失败次数标记无效</p>
 	 */
-	public static final int MAX_FAIL_TIMES = 3;
+	public static int MAX_FAIL_TIMES = 3;
 	
 	static {
 		LOGGER.debug("初始化Tracker服务器配置：{}", TRACKER_CONFIG);
@@ -187,7 +187,7 @@ public final class TrackerConfig extends PropertiesConfig {
 		 * 
 		 * @return Tracker动作
 		 */
-		public static final Action of(int id) {
+		public static Action of(int id) {
 			final TrackerConfig.Action[] values = Action.values();
 			for (Action action : values) {
 				if(id == action.id) {

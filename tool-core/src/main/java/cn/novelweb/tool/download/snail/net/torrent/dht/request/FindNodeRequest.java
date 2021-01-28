@@ -26,7 +26,7 @@ public final class FindNodeRequest extends DhtRequest {
 	 * 
 	 * @return 请求
 	 */
-	public static final FindNodeRequest newRequest(byte[] target) {
+	public static FindNodeRequest newRequest(byte[] target) {
 		final FindNodeRequest request = new FindNodeRequest();
 		request.put(DhtConfig.KEY_TARGET, target);
 		return request;
@@ -39,7 +39,7 @@ public final class FindNodeRequest extends DhtRequest {
 	 * 
 	 * @return 响应
 	 */
-	public static final FindNodeResponse execute(DhtRequest request) {
+	public static FindNodeResponse execute(DhtRequest request) {
 		final FindNodeResponse response = FindNodeResponse.newInstance(request);
 		final byte[] target = request.getBytes(DhtConfig.KEY_TARGET);
 		final List<NodeSession> nodes = NodeContext.getInstance().findNode(target);

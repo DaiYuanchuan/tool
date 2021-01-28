@@ -1,9 +1,9 @@
 package cn.novelweb.tool.download.snail.utils;
 
+import cn.novelweb.tool.download.snail.config.SystemConfig;
+
 import java.util.Objects;
 import java.util.Random;
-
-import cn.novelweb.tool.download.snail.config.SystemConfig;
 
 /**
  * <p>数组工具</p>
@@ -21,7 +21,7 @@ public final class ArrayUtils {
 	/**
 	 * <p>查找数组索引没有匹配索引：{@value}</p>
 	 */
-	public static final int NONE_INDEX = -1;
+	public static int NONE_INDEX = -1;
 	
 	/**
 	 * <p>异或运算</p>
@@ -31,7 +31,7 @@ public final class ArrayUtils {
 	 * 
 	 * @return 异或结果
 	 */
-	public static final byte[] xor(byte[] sources, byte[] targets) {
+	public static byte[] xor(byte[] sources, byte[] targets) {
 		Objects.requireNonNull(sources, "异或运算原始参数错误");
 		Objects.requireNonNull(targets, "异或运算目标参数错误");
 		final int length = sources.length;
@@ -55,7 +55,7 @@ public final class ArrayUtils {
 	 * 
 	 * @return 是否相等
 	 */
-	public static final boolean equals(byte[] sources, byte[] targets) {
+	public static boolean equals(byte[] sources, byte[] targets) {
 		if(sources == targets) {
 			return true;
 		}
@@ -84,7 +84,7 @@ public final class ArrayUtils {
 	 * 
 	 * @return 正数、零、负数代表原始数据大于、等于、小于比较数据
 	 */
-	public static final int compareUnsigned(byte[] sources, byte[] targets) {
+	public static int compareUnsigned(byte[] sources, byte[] targets) {
 		Objects.requireNonNull(sources, "数组大小比较原始参数错误");
 		Objects.requireNonNull(targets, "数组大小比较比较参数错误");
 		final int length = sources.length;
@@ -107,7 +107,7 @@ public final class ArrayUtils {
 	 * 
 	 * @return true-空；false-非空；
 	 */
-	public static final boolean isEmpty(Object[] objects) {
+	public static boolean isEmpty(Object[] objects) {
 		return objects == null || objects.length == 0;
 	}
 	
@@ -118,7 +118,7 @@ public final class ArrayUtils {
 	 * 
 	 * @return true-非空；false-空；
 	 */
-	public static final boolean isNotEmpty(Object[] objects) {
+	public static boolean isNotEmpty(Object[] objects) {
 		return !isEmpty(objects);
 	}
 	
@@ -129,7 +129,7 @@ public final class ArrayUtils {
 	 * 
 	 * @return true-空；false-非空；
 	 */
-	public static final boolean isEmpty(byte[] bytes) {
+	public static boolean isEmpty(byte[] bytes) {
 		return bytes == null || bytes.length == 0;
 	}
 
@@ -140,7 +140,7 @@ public final class ArrayUtils {
 	 * 
 	 * @return true-非空；false-空；
 	 */
-	public static final boolean isNotEmpty(byte[] bytes) {
+	public static boolean isNotEmpty(byte[] bytes) {
 		return !isEmpty(bytes);
 	}
 	
@@ -151,7 +151,7 @@ public final class ArrayUtils {
 	 * 
 	 * @return 字节数组
 	 */
-	public static final byte[] random(int length) {
+	public static byte[] random(int length) {
 		final byte[] bytes = new byte[length];
 		final Random random = NumberUtils.random();
 		for (int index = 0; index < length; index++) {
@@ -169,7 +169,7 @@ public final class ArrayUtils {
 	 * @see #NONE_INDEX
 	 * @see #indexOf(int[], int, int, int)
 	 */
-	public static final int indexOf(int[] values, int value) {
+	public static int indexOf(int[] values, int value) {
 		return indexOf(values, 0, values.length, value);
 	}
 	
@@ -185,8 +185,8 @@ public final class ArrayUtils {
 	 * 
 	 * @see #NONE_INDEX
 	 */
-	public static final int indexOf(int[] values, int begin, int end, int value) {
-		end = end > values.length ? values.length : end;
+	public static int indexOf(int[] values, int begin, int end, int value) {
+		end = Math.min(end, values.length);
 		for (int index = begin; index < end; index++) {
 			if(values[index] == value) {
 				return index;
@@ -205,7 +205,7 @@ public final class ArrayUtils {
 	 * 
 	 * @see #NONE_INDEX
 	 */
-	public static final int indexOf(char[] values, char value) {
+	public static int indexOf(char[] values, char value) {
 		for (int index = 0; index < values.length; index++) {
 			if(values[index] == value) {
 				return index;

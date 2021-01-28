@@ -41,7 +41,7 @@ public final class AnnouncePeerRequest extends DhtRequest {
 	 * 
 	 * @return 请求
 	 */
-	public static final AnnouncePeerRequest newRequest(byte[] token, byte[] infoHash) {
+	public static AnnouncePeerRequest newRequest(byte[] token, byte[] infoHash) {
 		final AnnouncePeerRequest request = new AnnouncePeerRequest();
 		request.put(DhtConfig.KEY_PORT, SystemConfig.getTorrentPortExt());
 		request.put(DhtConfig.KEY_TOKEN, token);
@@ -57,7 +57,7 @@ public final class AnnouncePeerRequest extends DhtRequest {
 	 * 
 	 * @return 响应
 	 */
-	public static final AnnouncePeerResponse execute(DhtRequest request) {
+	public static AnnouncePeerResponse execute(DhtRequest request) {
 		final byte[] token = request.getBytes(DhtConfig.KEY_TOKEN);
 		// 验证Token
 		if(!ArrayUtils.equals(token, DhtContext.getInstance().token())) {

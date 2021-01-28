@@ -167,7 +167,7 @@ public final class TorrentStream {
 	 * 
 	 * @throws DownloadException 下载异常
 	 */
-	public static final TorrentStream newInstance(
+	public static TorrentStream newInstance(
 		long pieceLength, String path, long size, long pos, boolean completed,
 		AtomicLong fileBufferSize, TorrentStreamGroup torrentStreamGroup
 	) throws DownloadException {

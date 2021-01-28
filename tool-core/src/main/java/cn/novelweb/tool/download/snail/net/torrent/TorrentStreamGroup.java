@@ -132,7 +132,7 @@ public final class TorrentStreamGroup {
 	 * 
 	 * @return 文件流组
 	 */
-	public static final TorrentStreamGroup newInstance(String folder, List<TorrentFile> files, TorrentSession torrentSession) {
+	public static TorrentStreamGroup newInstance(String folder, List<TorrentFile> files, TorrentSession torrentSession) {
 		final TorrentStreamGroup torrentStreamGroup = new TorrentStreamGroup(torrentSession);
 		torrentStreamGroup.load(torrentSession.completed(), folder, files);
 		return torrentStreamGroup;

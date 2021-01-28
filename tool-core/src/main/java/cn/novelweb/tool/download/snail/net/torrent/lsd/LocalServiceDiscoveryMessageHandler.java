@@ -33,20 +33,20 @@ public final class LocalServiceDiscoveryMessageHandler extends UdpMessageHandler
 	/**
 	 * <p>地址：{@value}</p>
 	 */
-	public static final String HEADER_HOST = "Host";
+	public static String HEADER_HOST = "Host";
 	/**
 	 * <p>端口：{@value}</p>
 	 */
-	public static final String HEADER_PORT = "Port";
+	public static String HEADER_PORT = "Port";
 	/**
 	 * <p>Cookie：{@value}</p>
 	 * <p>区别软件本身消息</p>
 	 */
-	public static final String HEADER_COOKIE = "cookie";
+	public static String HEADER_COOKIE = "cookie";
 	/**
 	 * <p>InfoHash：{@value}</p>
 	 */
-	public static final String HEADER_INFOHASH = "Infohash";
+	public static String HEADER_INFOHASH = "Infohash";
 
 	public LocalServiceDiscoveryMessageHandler() {
 		this.messageCodec = new StringMessageCodec(this);

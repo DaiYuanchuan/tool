@@ -35,7 +35,7 @@ public final class FindNodeResponse extends DhtResponse {
 	 * 
 	 * @return 响应
 	 */
-	public static final FindNodeResponse newInstance(DhtRequest request) {
+	public static FindNodeResponse newInstance(DhtRequest request) {
 		return new FindNodeResponse(request.getT());
 	}
 	
@@ -46,7 +46,7 @@ public final class FindNodeResponse extends DhtResponse {
 	 * 
 	 * @return 响应
 	 */
-	public static final FindNodeResponse newInstance(DhtResponse response) {
+	public static FindNodeResponse newInstance(DhtResponse response) {
 		return new FindNodeResponse(response);
 	}
 	

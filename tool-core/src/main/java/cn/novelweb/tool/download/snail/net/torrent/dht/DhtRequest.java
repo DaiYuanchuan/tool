@@ -85,7 +85,7 @@ public class DhtRequest extends DhtMessage {
 	 * 
 	 * @return 请求
 	 */
-	public static final DhtRequest valueOf(final BEncodeDecoder decoder) {
+	public static DhtRequest valueOf(final BEncodeDecoder decoder) {
 		final byte[] t = decoder.getBytes(DhtConfig.KEY_T);
 		final String y = decoder.getString(DhtConfig.KEY_Y);
 		final String q = decoder.getString(DhtConfig.KEY_Q);

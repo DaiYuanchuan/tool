@@ -39,7 +39,7 @@ public final class HlsDownloader extends MultifileDownloader {
 	 * 
 	 * @return {@link HlsDownloader}
 	 */
-	public static final HlsDownloader newInstance(ITaskSession taskSession) {
+	public static HlsDownloader newInstance(ITaskSession taskSession) {
 		return new HlsDownloader(taskSession);
 	}
 	

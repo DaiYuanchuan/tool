@@ -70,7 +70,7 @@ public final class MSECipher {
 	 * 
 	 * @throws NetException 网络异常
 	 */
-	public static final MSECipher newSender(byte[] secret, InfoHash infoHash) throws NetException {
+	public static MSECipher newSender(byte[] secret, InfoHash infoHash) throws NetException {
 		final Key sendKey = buildSendKey(secret, infoHash.infoHash());
 		final Key recvKey = buildRecvKey(secret, infoHash.infoHash());
 		try {
@@ -90,7 +90,7 @@ public final class MSECipher {
 	 * 
 	 * @throws NetException 网络异常
 	 */
-	public static final MSECipher newRecver(byte[] secret, InfoHash infoHash) throws NetException {
+	public static MSECipher newRecver(byte[] secret, InfoHash infoHash) throws NetException {
 		final Key sendKey = buildSendKey(secret, infoHash.infoHash());
 		final Key recvKey = buildRecvKey(secret, infoHash.infoHash());
 		try {

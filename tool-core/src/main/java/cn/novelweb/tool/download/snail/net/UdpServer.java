@@ -260,7 +260,7 @@ public abstract class UdpServer<T extends UdpAcceptHandler> implements IUdpChann
 	/**
 	 * <p>关闭UDP Server线程池</p>
 	 */
-	public static final void shutdown() {
+	public static void shutdown() {
 		LOGGER.debug("关闭UDP Server线程池");
 		SystemThreadContext.shutdown(EXECUTOR);
 	}

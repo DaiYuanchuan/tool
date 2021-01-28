@@ -22,7 +22,7 @@ public class MapUtils {
 	 * 
 	 * @return true-空；false-非空；
 	 */
-	public static final boolean isEmpty(Map<?, ?> map) {
+	public static boolean isEmpty(Map<?, ?> map) {
 		return map == null || map.isEmpty();
 	}
 
@@ -33,7 +33,7 @@ public class MapUtils {
 	 * 
 	 * @return true-非空；false-空；
 	 */
-	public static final boolean isNotEmpty(Map<?, ?> map) {
+	public static boolean isNotEmpty(Map<?, ?> map) {
 		return !isEmpty(map);
 	}
 	

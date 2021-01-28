@@ -41,7 +41,7 @@ public final class MultifileSelectorWrapper {
 	 * 
 	 * @return 包装器
 	 */
-	public static final MultifileSelectorWrapper newEncoder(List<String> list) {
+	public static MultifileSelectorWrapper newEncoder(List<String> list) {
 		final MultifileSelectorWrapper wrapper = new MultifileSelectorWrapper();
 		if(CollectionUtils.isNotEmpty(list)) {
 			wrapper.encoder = BEncodeEncoder.newInstance();
@@ -57,7 +57,7 @@ public final class MultifileSelectorWrapper {
 	 * 
 	 * @return 包装器
 	 */
-	public static final MultifileSelectorWrapper newDecoder(String value) {
+	public static MultifileSelectorWrapper newDecoder(String value) {
 		final MultifileSelectorWrapper wrapper = new MultifileSelectorWrapper();
 		if(StringUtils.isNotEmpty(value)) {
 			wrapper.decoder = BEncodeDecoder.newInstance(value);

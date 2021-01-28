@@ -14,7 +14,7 @@ public class EntityException extends IllegalArgumentException {
 	 * 
 	 * @param object 参数
 	 */
-	public static final void requireNull(Object object) {
+	public static void requireNull(Object object) {
 		if(object != null) {
 			throw new EntityException("参数必须为空：" + object);
 		}
@@ -25,7 +25,7 @@ public class EntityException extends IllegalArgumentException {
 	 * 
 	 * @param object 参数
 	 */
-	public static final void requireNotNull(Object object) {
+	public static void requireNotNull(Object object) {
 		if(object == null) {
 			throw new EntityException("参数不能为空：" + object);
 		}

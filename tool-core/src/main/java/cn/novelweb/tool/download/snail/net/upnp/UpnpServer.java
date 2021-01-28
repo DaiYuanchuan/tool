@@ -13,7 +13,7 @@ public final class UpnpServer extends UdpServer<UpnpAcceptHandler> {
 	
 	private static final UpnpServer INSTANCE = new UpnpServer();
 	
-	public static final UpnpServer getInstance() {
+	public static UpnpServer getInstance() {
 		return INSTANCE;
 	}
 	
@@ -24,15 +24,15 @@ public final class UpnpServer extends UdpServer<UpnpAcceptHandler> {
 	/**
 	 * <p>UPNP端口</p>
 	 */
-	public static final int UPNP_PORT = 1900;
+	public static int UPNP_PORT = 1900;
 	/**
 	 * <p>UPNP地址</p>
 	 */
-	public static final String UPNP_HOST = "239.255.255.250";
+	public static String UPNP_HOST = "239.255.255.250";
 	/**
 	 * <p>UPNP根设备</p>
 	 */
-	public static final String UPNP_ROOT_DEVICE = "upnp:rootdevice";
+	public static String UPNP_ROOT_DEVICE = "upnp:rootdevice";
 	
 	private UpnpServer() {
 		// 不监听UPNP端口：防止收到很多其他应用消息

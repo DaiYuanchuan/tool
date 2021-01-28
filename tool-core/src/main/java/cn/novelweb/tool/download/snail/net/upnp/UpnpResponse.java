@@ -29,7 +29,7 @@ public final class UpnpResponse {
 	 * 
 	 * @return 外网IP地址
 	 */
-	public static final String parseGetExternalIPAddress(String body) {
+	public static String parseGetExternalIPAddress(String body) {
 		if(StringUtils.isEmpty(body)) {
 			return null;
 		}
@@ -60,7 +60,7 @@ public final class UpnpResponse {
 	 * 
 	 * @return 端口映射的内网IP地址
 	 */
-	public static final String parseGetSpecificPortMappingEntry(String body) {
+	public static String parseGetSpecificPortMappingEntry(String body) {
 		if(StringUtils.isEmpty(body)) {
 			return null;
 		}

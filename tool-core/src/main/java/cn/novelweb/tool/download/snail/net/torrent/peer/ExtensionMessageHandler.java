@@ -176,7 +176,7 @@ public final class ExtensionMessageHandler implements IExtensionMessageHandler {
 	 * 
 	 * @return 扩展协议代理
 	 */
-	public static final ExtensionMessageHandler newInstance(PeerSession peerSession, TorrentSession torrentSession, PeerSubMessageHandler peerSubMessageHandler) {
+	public static ExtensionMessageHandler newInstance(PeerSession peerSession, TorrentSession torrentSession, PeerSubMessageHandler peerSubMessageHandler) {
 		return new ExtensionMessageHandler(peerSession, torrentSession, peerSubMessageHandler);
 	}
 	

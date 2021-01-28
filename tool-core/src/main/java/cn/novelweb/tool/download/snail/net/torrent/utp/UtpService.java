@@ -24,7 +24,7 @@ public final class UtpService {
 	
 	private static final UtpService INSTANCE = new UtpService();
 	
-	public static final UtpService getInstance() {
+	public static UtpService getInstance() {
 		return INSTANCE;
 	}
 	

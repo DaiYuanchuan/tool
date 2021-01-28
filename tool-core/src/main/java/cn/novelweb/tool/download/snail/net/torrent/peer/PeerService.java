@@ -22,7 +22,7 @@ public final class PeerService {
 	
 	private static final PeerService INSTANCE = new PeerService();
 	
-	public static final PeerService getInstance() {
+	public static PeerService getInstance() {
 		return INSTANCE;
 	}
 	

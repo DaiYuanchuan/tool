@@ -66,7 +66,7 @@ public final class NodeSession implements Comparable<NodeSession> {
 	 * 
 	 * @return 节点
 	 */
-	public static final NodeSession newInstance(byte[] id, String host, int port) {
+	public static NodeSession newInstance(byte[] id, String host, int port) {
 		return new NodeSession(id, host, port);
 	}
 

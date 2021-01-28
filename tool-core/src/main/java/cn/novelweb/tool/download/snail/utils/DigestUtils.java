@@ -20,11 +20,11 @@ public final class DigestUtils {
 	/**
 	 * <p>散列算法：{@value}</p>
 	 */
-	public static final String ALGO_MD5 = "MD5";
+	public static String ALGO_MD5 = "MD5";
 	/**
 	 * <p>散列算法：{@value}</p>
 	 */
-	public static final String ALGO_SHA1 = "SHA-1";
+	public static String ALGO_SHA1 = "SHA-1";
 	
 	/**
 	 * <p>获取MD5散列算法对象</p>
@@ -33,7 +33,7 @@ public final class DigestUtils {
 	 * 
 	 * @see #digest(String)
 	 */
-	public static final MessageDigest md5() {
+	public static MessageDigest md5() {
 		return digest(ALGO_MD5);
 	}
 
@@ -44,7 +44,7 @@ public final class DigestUtils {
 	 * 
 	 * @see #digest(String)
 	 */
-	public static final MessageDigest sha1() {
+	public static MessageDigest sha1() {
 		return digest(ALGO_SHA1);
 	}
 	
@@ -55,7 +55,7 @@ public final class DigestUtils {
 	 * 
 	 * @return 算法对象
 	 */
-	public static final MessageDigest digest(String algo) {
+	public static MessageDigest digest(String algo) {
 		try {
 			return MessageDigest.getInstance(algo);
 		} catch (NoSuchAlgorithmException e) {

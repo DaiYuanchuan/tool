@@ -26,7 +26,7 @@ public final class ProtocolContext implements IContext {
 
 	private static final ProtocolContext INSTANCE = new ProtocolContext();
 	
-	public static final ProtocolContext getInstance() {
+	public static ProtocolContext getInstance() {
 		return INSTANCE;
 	}
 	

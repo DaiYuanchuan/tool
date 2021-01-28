@@ -32,7 +32,7 @@ public final class TorrentContext implements IContext {
 
     private static final TorrentContext INSTANCE = new TorrentContext();
 
-    public static final TorrentContext getInstance() {
+    public static TorrentContext getInstance() {
         return INSTANCE;
     }
 
@@ -160,7 +160,7 @@ public final class TorrentContext implements IContext {
      * @return 种子信息
      * @throws DownloadException 下载异常
      */
-    public static final Torrent loadTorrent(String path) throws DownloadException {
+    public static Torrent loadTorrent(String path) throws DownloadException {
         final File file = new File(path);
         if (!file.exists()) {
             throw new DownloadException("种子文件不存在");

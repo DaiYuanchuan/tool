@@ -26,7 +26,7 @@ public final class GuiContext implements IContext {
 	
 	private static final GuiContext INSTANCE = new GuiContext();
 	
-	public static final GuiContext getInstance() {
+	public static GuiContext getInstance() {
 		return INSTANCE;
 	}
 	
@@ -122,7 +122,7 @@ public final class GuiContext implements IContext {
 	 * 
 	 * @param event GUI事件
 	 */
-	public static final void register(GuiEvent event) {
+	public static void register(GuiEvent event) {
 		if(LOGGER.isDebugEnabled()) {
 			LOGGER.debug("注册GUI事件：{}-{}", event.type(), event.name());
 		}

@@ -16,7 +16,7 @@ public final class LoggerConfig {
 
 	private static final LoggerConfig INSTANCE = new LoggerConfig();
 	
-	public static final LoggerConfig getInstance() {
+	public static LoggerConfig getInstance() {
 		return INSTANCE;
 	}
 	
@@ -100,7 +100,7 @@ public final class LoggerConfig {
 	/**
 	 * <p>关闭日志</p>
 	 */
-	public static final void off() {
+	public static void off() {
 		INSTANCE.levelInt = Integer.MAX_VALUE;
 	}
 	
@@ -109,7 +109,7 @@ public final class LoggerConfig {
 	 * 
 	 * @return 日志级别
 	 */
-	public static final int getLevelInt() {
+	public static int getLevelInt() {
 		return INSTANCE.levelInt;
 	}
 	
@@ -118,7 +118,7 @@ public final class LoggerConfig {
 	 * 
 	 * @return 日志系统名称
 	 */
-	public static final String getSystem() {
+	public static String getSystem() {
 		return INSTANCE.system;
 	}
 	
@@ -127,7 +127,7 @@ public final class LoggerConfig {
 	 * 
 	 * @return 日志适配
 	 */
-	public static final String getAdapter() {
+	public static String getAdapter() {
 		return INSTANCE.adapter;
 	}
 
@@ -136,7 +136,7 @@ public final class LoggerConfig {
 	 * 
 	 * @return 文件日志名称
 	 */
-	public static final String getFileName() {
+	public static String getFileName() {
 		return INSTANCE.fileName;
 	}
 
@@ -145,7 +145,7 @@ public final class LoggerConfig {
 	 * 
 	 * @return 文件日志缓存（byte）
 	 */
-	public static final int getFileBuffer() {
+	public static int getFileBuffer() {
 		return INSTANCE.fileBuffer;
 	}
 
@@ -154,7 +154,7 @@ public final class LoggerConfig {
 	 * 
 	 * @return 文件日志最大备份时间（天）
 	 */
-	public static final int getFileMaxDays() {
+	public static int getFileMaxDays() {
 		return INSTANCE.fileMaxDays;
 	}
 

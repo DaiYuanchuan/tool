@@ -17,7 +17,7 @@ public final class StatisticsContext implements IContext, ISpeedGetter, IStatist
 	
 	private static final StatisticsContext INSTANCE = new StatisticsContext();
 	
-	public static final StatisticsContext getInstance() {
+	public static StatisticsContext getInstance() {
 		return INSTANCE;
 	}
 	

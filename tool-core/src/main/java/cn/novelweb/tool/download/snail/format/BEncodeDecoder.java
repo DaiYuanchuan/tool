@@ -74,23 +74,23 @@ public final class BEncodeDecoder {
 	/**
 	 * <p>结尾：{@value}</p>
 	 */
-	public static final char TYPE_E = 'e';
+	public static char TYPE_E = 'e';
 	/**
 	 * <p>数值：{@value}</p>
 	 */
-	public static final char TYPE_I = 'i';
+	public static char TYPE_I = 'i';
 	/**
 	 * <p>List：{@value}</p>
 	 */
-	public static final char TYPE_L = 'l';
+	public static char TYPE_L = 'l';
 	/**
 	 * <p>Map：{@value}</p>
 	 */
-	public static final char TYPE_D = 'd';
+	public static char TYPE_D = 'd';
 	/**
 	 * <p>分隔符：{@value}</p>
 	 */
-	public static final char SEPARATOR = ':';
+	public static char SEPARATOR = ':';
 	
 	/**
 	 * <p>数据类型</p>
@@ -127,7 +127,7 @@ public final class BEncodeDecoder {
 	 * 
 	 * @return B编码解码器
 	 */
-	public static final BEncodeDecoder newInstance(byte[] bytes) {
+	public static BEncodeDecoder newInstance(byte[] bytes) {
 		return new BEncodeDecoder(bytes);
 	}
 	
@@ -138,7 +138,7 @@ public final class BEncodeDecoder {
 	 * 
 	 * @return B编码解码器
 	 */
-	public static final BEncodeDecoder newInstance(String content) {
+	public static BEncodeDecoder newInstance(String content) {
 		Objects.requireNonNull(content, "B编码内容错误");
 		return new BEncodeDecoder(content.getBytes());
 	}
@@ -150,7 +150,7 @@ public final class BEncodeDecoder {
 	 * 
 	 * @return B编码解码器
 	 */
-	public static final BEncodeDecoder newInstance(ByteBuffer buffer) {
+	public static BEncodeDecoder newInstance(ByteBuffer buffer) {
 		Objects.requireNonNull(buffer, "B编码内容错误");
 		final byte[] bytes = new byte[buffer.remaining()];
 		buffer.get(bytes);
@@ -504,7 +504,7 @@ public final class BEncodeDecoder {
 	 * 
 	 * @return 对象
 	 */
-	public static final Object get(Map<?, ?> map, String key) {
+	public static Object get(Map<?, ?> map, String key) {
 		if(map == null) {
 			return null;
 		}
@@ -530,7 +530,7 @@ public final class BEncodeDecoder {
 	 * 
 	 * @return 字节
 	 */
-	public static final Byte getByte(Map<?, ?> map, String key) {
+	public static Byte getByte(Map<?, ?> map, String key) {
 		final Long value = getLong(map, key);
 		if(value == null) {
 			return null;
@@ -557,7 +557,7 @@ public final class BEncodeDecoder {
 	 * 
 	 * @return 数值
 	 */
-	public static final Integer getInteger(Map<?, ?> map, String key) {
+	public static Integer getInteger(Map<?, ?> map, String key) {
 		final Long value = getLong(map, key);
 		if(value == null) {
 			return null;
@@ -584,7 +584,7 @@ public final class BEncodeDecoder {
 	 * 
 	 * @return 数值
 	 */
-	public static final Long getLong(Map<?, ?> map, String key) {
+	public static Long getLong(Map<?, ?> map, String key) {
 		if(map == null) {
 			return null;
 		}
@@ -622,7 +622,7 @@ public final class BEncodeDecoder {
 	 * 
 	 * @return 字符串
 	 */
-	public static final String getString(Map<?, ?> map, String key) {
+	public static String getString(Map<?, ?> map, String key) {
 		return getString(map, key, null);
 	}
 	
@@ -635,7 +635,7 @@ public final class BEncodeDecoder {
 	 * 
 	 * @return 字符串
 	 */
-	public static final String getString(Map<?, ?> map, String key, String encoding) {
+	public static String getString(Map<?, ?> map, String key, String encoding) {
 		final byte[] bytes = getBytes(map, key);
 		if(bytes == null) {
 			return null;
@@ -662,7 +662,7 @@ public final class BEncodeDecoder {
 	 * 
 	 * @return 字符数组
 	 */
-	public static final byte[] getBytes(Map<?, ?> map, String key) {
+	public static byte[] getBytes(Map<?, ?> map, String key) {
 		if(map == null) {
 			return null;
 		}
@@ -688,7 +688,7 @@ public final class BEncodeDecoder {
 	 * 
 	 * @return 集合
 	 */
-	public static final List<Object> getList(Map<?, ?> map, String key) {
+	public static List<Object> getList(Map<?, ?> map, String key) {
 		if(map == null) {
 			return Collections.emptyList();
 		}
@@ -720,7 +720,7 @@ public final class BEncodeDecoder {
 	 * 
 	 * @return Map
 	 */
-	public static final Map<String, Object> getMap(Map<?, ?> map, String key) {
+	public static Map<String, Object> getMap(Map<?, ?> map, String key) {
 		if(map == null) {
 			return Collections.emptyMap();
 		}

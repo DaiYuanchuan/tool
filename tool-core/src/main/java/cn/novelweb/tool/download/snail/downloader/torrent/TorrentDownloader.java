@@ -32,7 +32,7 @@ public final class TorrentDownloader extends TorrentSessionDownloader {
 	 * 
 	 * @return {@link TorrentDownloader}
 	 */
-	public static final TorrentDownloader newInstance(ITaskSession taskSession) {
+	public static TorrentDownloader newInstance(ITaskSession taskSession) {
 		return new TorrentDownloader(taskSession);
 	}
 	

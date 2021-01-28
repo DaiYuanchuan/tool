@@ -38,7 +38,7 @@ public final class DontHaveExtensionMessageHandler extends ExtensionTypeMessageH
 	 * 
 	 * @return dontHave扩展协议代理
 	 */
-	public static final DontHaveExtensionMessageHandler newInstance(PeerSession peerSession, ExtensionMessageHandler extensionMessageHandler) {
+	public static DontHaveExtensionMessageHandler newInstance(PeerSession peerSession, ExtensionMessageHandler extensionMessageHandler) {
 		return new DontHaveExtensionMessageHandler(peerSession, extensionMessageHandler);
 	}
 	

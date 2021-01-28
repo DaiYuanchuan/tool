@@ -1,11 +1,5 @@
 package cn.novelweb.tool.download.snail;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import cn.novelweb.tool.download.snail.config.DhtConfig;
 import cn.novelweb.tool.download.snail.config.TrackerConfig;
 import cn.novelweb.tool.download.snail.context.EntityContext;
@@ -13,15 +7,7 @@ import cn.novelweb.tool.download.snail.context.NatContext;
 import cn.novelweb.tool.download.snail.context.ProtocolContext;
 import cn.novelweb.tool.download.snail.context.TaskContext;
 import cn.novelweb.tool.download.snail.context.exception.DownloadException;
-import cn.novelweb.tool.download.snail.context.initializer.ConfigInitializer;
-import cn.novelweb.tool.download.snail.context.initializer.DhtInitializer;
-import cn.novelweb.tool.download.snail.context.initializer.EntityInitializer;
-import cn.novelweb.tool.download.snail.context.initializer.Initializer;
-import cn.novelweb.tool.download.snail.context.initializer.LocalServiceDiscoveryInitializer;
-import cn.novelweb.tool.download.snail.context.initializer.NatInitializer;
-import cn.novelweb.tool.download.snail.context.initializer.TaskInitializer;
-import cn.novelweb.tool.download.snail.context.initializer.TorrentInitializer;
-import cn.novelweb.tool.download.snail.context.initializer.TrackerInitializer;
+import cn.novelweb.tool.download.snail.context.initializer.*;
 import cn.novelweb.tool.download.snail.net.application.ApplicationClient;
 import cn.novelweb.tool.download.snail.net.application.ApplicationServer;
 import cn.novelweb.tool.download.snail.net.torrent.TorrentServer;
@@ -37,6 +23,11 @@ import cn.novelweb.tool.download.snail.protocol.http.HttpProtocol;
 import cn.novelweb.tool.download.snail.protocol.magnet.MagnetProtocol;
 import cn.novelweb.tool.download.snail.protocol.thunder.ThunderProtocol;
 import cn.novelweb.tool.download.snail.protocol.torrent.TorrentProtocol;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * <p>Snail下载工具</p>
@@ -50,7 +41,7 @@ public final class Snail {
 	
 	private static final Snail INSTANCE = new Snail();
 	
-	public static final Snail getInstance() {
+	public static Snail getInstance() {
 		return INSTANCE;
 	}
 	
@@ -134,14 +125,14 @@ public final class Snail {
 	 * 
 	 * @return 是否可用
 	 */
-	public static final boolean available() {
+	public static boolean available() {
 		return INSTANCE.available;
 	}
 	
 	/**
 	 * <p>关闭资源</p>
 	 */
-	public static final void shutdown() {
+	public static void shutdown() {
 		if(INSTANCE.available) {
 			INSTANCE.available = false;
 			if(INSTANCE.buildApplication) {
@@ -169,14 +160,14 @@ public final class Snail {
 	 * 
 	 * @author acgist
 	 */
-	public static final class SnailBuilder {
+	public static class SnailBuilder {
 		
 		/**
 		 * <p>获取SnailBuilder</p>
 		 * 
 		 * @return SnailBuilder
 		 */
-		public static final SnailBuilder newBuilder() {
+		public static SnailBuilder newBuilder() {
 			return new SnailBuilder();
 		}
 		

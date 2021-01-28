@@ -38,7 +38,7 @@ public final class UtpRequest {
 	 * 
 	 * @return UTP请求
 	 */
-	public static final UtpRequest newInstance(ByteBuffer buffer, IMessageCodec<ByteBuffer> messageCodec) {
+	public static UtpRequest newInstance(ByteBuffer buffer, IMessageCodec<ByteBuffer> messageCodec) {
 		return new UtpRequest(buffer, messageCodec);
 	}
 	

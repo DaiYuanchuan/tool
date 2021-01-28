@@ -18,7 +18,7 @@ public final class PeerServer extends TcpServer<PeerMessageHandler> {
 	
 	private static final PeerServer INSTANCE = new PeerServer();
 	
-	public static final PeerServer getInstance() {
+	public static PeerServer getInstance() {
 		return INSTANCE;
 	}
 	

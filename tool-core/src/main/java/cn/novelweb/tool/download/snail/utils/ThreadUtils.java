@@ -23,7 +23,7 @@ public final class ThreadUtils {
 	 * 
 	 * @param millis 休眠时间（毫秒）
 	 */
-	public static final void sleep(long millis) {
+	public static void sleep(long millis) {
 		try {
 			Thread.sleep(millis);
 		} catch (InterruptedException e) {

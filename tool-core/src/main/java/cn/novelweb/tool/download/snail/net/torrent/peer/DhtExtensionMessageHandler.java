@@ -55,7 +55,7 @@ public final class DhtExtensionMessageHandler implements IExtensionMessageHandle
 	 * 
 	 * @return DHT扩展协议代理
 	 */
-	public static final DhtExtensionMessageHandler newInstance(PeerSession peerSession, TorrentSession torrentSession, PeerSubMessageHandler peerSubMessageHandler) {
+	public static DhtExtensionMessageHandler newInstance(PeerSession peerSession, TorrentSession torrentSession, PeerSubMessageHandler peerSubMessageHandler) {
 		return new DhtExtensionMessageHandler(peerSession, torrentSession, peerSubMessageHandler);
 	}
 	

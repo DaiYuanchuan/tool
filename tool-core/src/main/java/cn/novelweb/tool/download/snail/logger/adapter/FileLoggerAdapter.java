@@ -27,7 +27,7 @@ public final class FileLoggerAdapter extends LoggerAdapter {
 	/**
 	 * <p>文件适配器名称：{@value}</p>
 	 */
-	public static final String ADAPTER = "file";
+	public static String ADAPTER = "file";
 	/**
 	 * <p>文件格式：{@value}</p>
 	 */

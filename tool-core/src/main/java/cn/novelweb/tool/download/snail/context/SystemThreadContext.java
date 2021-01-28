@@ -31,51 +31,51 @@ public final class SystemThreadContext implements IContext {
 	/**
 	 * <p>系统线程：{@value}</p>
 	 */
-	public static final String SNAIL_THREAD = "Snail-Thread";
+	public static String SNAIL_THREAD = "Snail-Thread";
 	/**
 	 * <p>Costed线程：{@value}</p>
 	 */
-	public static final String SNAIL_THREAD_COSTED = SNAIL_THREAD + "-Costed";
+	public static String SNAIL_THREAD_COSTED = SNAIL_THREAD + "-Costed";
 	/**
 	 * <p>BT线程：{@value}</p>
 	 */
-	public static final String SNAIL_THREAD_BT = SNAIL_THREAD + "-BT";
+	public static String SNAIL_THREAD_BT = SNAIL_THREAD + "-BT";
 	/**
 	 * <p>HLS线程：{@value}</p>
 	 */
-	public static final String SNAIL_THREAD_HLS = SNAIL_THREAD + "-HLS";
+	public static String SNAIL_THREAD_HLS = SNAIL_THREAD + "-HLS";
 	/**
 	 * <p>定时线程：{@value}</p>
 	 */
-	public static final String SNAIL_THREAD_TIMER = SNAIL_THREAD + "-Timer";
+	public static String SNAIL_THREAD_TIMER = SNAIL_THREAD + "-Timer";
 	/**
 	 * <p>BT定时线程：{@value}</p>
 	 */
-	public static final String SNAIL_THREAD_BT_TIMER = SNAIL_THREAD_BT + "-Timer";
+	public static String SNAIL_THREAD_BT_TIMER = SNAIL_THREAD_BT + "-Timer";
 	/**
 	 * <p>JavaFX平台线程：{@value}</p>
 	 */
-	public static final String SNAIL_THREAD_PLATFORM = SNAIL_THREAD + "-Platform";
+	public static String SNAIL_THREAD_PLATFORM = SNAIL_THREAD + "-Platform";
 	/**
 	 * <p>UTP队列线程：{@value}</p>
 	 */
-	public static final String SNAIL_THREAD_UTP_QUEUE = SNAIL_THREAD + "-UTP-Queue";
+	public static String SNAIL_THREAD_UTP_QUEUE = SNAIL_THREAD + "-UTP-Queue";
 	/**
 	 * <p>下载器线程：{@value}</p>
 	 */
-	public static final String SNAIL_THREAD_DOWNLOADER = SNAIL_THREAD + "-Downloader";
+	public static String SNAIL_THREAD_DOWNLOADER = SNAIL_THREAD + "-Downloader";
 	/**
 	 * <p>TCP客户端线程：{@value}</p>
 	 */
-	public static final String SNAIL_THREAD_TCP_CLIENT = SNAIL_THREAD + "-TCP-Client";
+	public static String SNAIL_THREAD_TCP_CLIENT = SNAIL_THREAD + "-TCP-Client";
 	/**
 	 * <p>TCP服务端线程：{@value}</p>
 	 */
-	public static final String SNAIL_THREAD_TCP_SERVER = SNAIL_THREAD + "-TCP-Server";
+	public static String SNAIL_THREAD_TCP_SERVER = SNAIL_THREAD + "-TCP-Server";
 	/**
 	 * <p>UDP服务端线程：{@value}</p>
 	 */
-	public static final String SNAIL_THREAD_UDP_SERVER = SNAIL_THREAD + "-UDP-Server";
+	public static String SNAIL_THREAD_UDP_SERVER = SNAIL_THREAD + "-UDP-Server";
 	
 	/**
 	 * <p>系统线程池：加快系统运行、防止卡顿</p>
@@ -88,7 +88,7 @@ public final class SystemThreadContext implements IContext {
 	/**
 	 * <p>任务拒绝执行处理</p>
 	 */
-	public static final RejectedExecutionHandler REJECTED_HANDLER = (runnable, executor) -> LOGGER.error("任务拒绝执行：{}-{}", runnable, executor);
+	public static RejectedExecutionHandler REJECTED_HANDLER = (runnable, executor) -> LOGGER.error("任务拒绝执行：{}-{}", runnable, executor);
 	
 	static {
 		LOGGER.debug("初始化系统线程池");
@@ -107,7 +107,7 @@ public final class SystemThreadContext implements IContext {
 	 * 
 	 * @param runnable 任务
 	 */
-	public static final void submit(Runnable runnable) {
+	public static void submit(Runnable runnable) {
 		EXECUTOR.submit(runnable);
 	}
 
@@ -120,7 +120,7 @@ public final class SystemThreadContext implements IContext {
 	 * 
 	 * @return 定时任务
 	 */
-	public static final ScheduledFuture<?> timer(long delay, TimeUnit unit, Runnable runnable) {
+	public static ScheduledFuture<?> timer(long delay, TimeUnit unit, Runnable runnable) {
 		TimerException.verify(delay);
 		return EXECUTOR_TIMER.schedule(runnable, delay, unit);
 	}
@@ -136,7 +136,7 @@ public final class SystemThreadContext implements IContext {
 	 * 
 	 * @return 定时任务
 	 */
-	public static final ScheduledFuture<?> timerAtFixedRate(long delay, long period, TimeUnit unit, Runnable runnable) {
+	public static ScheduledFuture<?> timerAtFixedRate(long delay, long period, TimeUnit unit, Runnable runnable) {
 		TimerException.verify(delay);
 		TimerException.verify(period);
 		return EXECUTOR_TIMER.scheduleAtFixedRate(runnable, delay, period, unit);
@@ -153,7 +153,7 @@ public final class SystemThreadContext implements IContext {
 	 * 
 	 * @return 定时任务
 	 */
-	public static final ScheduledFuture<?> timerFixedDelay(long delay, long period, TimeUnit unit, Runnable runnable) {
+	public static ScheduledFuture<?> timerFixedDelay(long delay, long period, TimeUnit unit, Runnable runnable) {
 		TimerException.verify(delay);
 		TimerException.verify(period);
 		return EXECUTOR_TIMER.scheduleWithFixedDelay(runnable, delay, period, unit);
@@ -170,7 +170,7 @@ public final class SystemThreadContext implements IContext {
 	 * 
 	 * @return 线程池
 	 */
-	public static final ExecutorService newExecutor(int minPoolSize, int maxPoolSize, int queueSize, long keepAliveTime, String name) {
+	public static ExecutorService newExecutor(int minPoolSize, int maxPoolSize, int queueSize, long keepAliveTime, String name) {
 		return new ThreadPoolExecutor(
 			minPoolSize,
 			maxPoolSize,
@@ -190,7 +190,7 @@ public final class SystemThreadContext implements IContext {
 	 * 
 	 * @return 线程池
 	 */
-	public static final ExecutorService newCacheExecutor(int minPoolSize, long keepAliveTime, String name) {
+	public static ExecutorService newCacheExecutor(int minPoolSize, long keepAliveTime, String name) {
 		return new ThreadPoolExecutor(
 			minPoolSize,
 			Short.MAX_VALUE, // 最大线程数量
@@ -209,7 +209,7 @@ public final class SystemThreadContext implements IContext {
 	 * 
 	 * @return 定时线程池
 	 */
-	public static final ScheduledExecutorService newTimerExecutor(int minPoolSize, String name) {
+	public static ScheduledExecutorService newTimerExecutor(int minPoolSize, String name) {
 		return new ScheduledThreadPoolExecutor(
 			minPoolSize,
 			SystemThreadContext.newThreadFactory(name)
@@ -235,7 +235,7 @@ public final class SystemThreadContext implements IContext {
 	/**
 	 * <p>关闭系统线程池</p>
 	 */
-	public static final void shutdown() {
+	public static void shutdown() {
 		LOGGER.debug("关闭系统线程池");
 		shutdown(EXECUTOR);
 		shutdown(EXECUTOR_TIMER);
@@ -246,7 +246,7 @@ public final class SystemThreadContext implements IContext {
 	 * 
 	 * @param executor 线程池
 	 */
-	public static final void shutdown(ExecutorService executor) {
+	public static void shutdown(ExecutorService executor) {
 		shutdown(false, executor);
 	}
 	
@@ -255,7 +255,7 @@ public final class SystemThreadContext implements IContext {
 	 * 
 	 * @param executor 线程池
 	 */
-	public static final void shutdownNow(ExecutorService executor) {
+	public static void shutdownNow(ExecutorService executor) {
 		shutdown(true, executor);
 	}
 	
@@ -287,7 +287,7 @@ public final class SystemThreadContext implements IContext {
 	 * 
 	 * @param scheduledFuture 定时任务
 	 */
-	public static final void shutdown(ScheduledFuture<?> scheduledFuture) {
+	public static void shutdown(ScheduledFuture<?> scheduledFuture) {
 		shutdown(false, scheduledFuture);
 	}
 	
@@ -296,7 +296,7 @@ public final class SystemThreadContext implements IContext {
 	 * 
 	 * @param scheduledFuture 定时任务
 	 */
-	public static final void shutdownNow(ScheduledFuture<?> scheduledFuture) {
+	public static void shutdownNow(ScheduledFuture<?> scheduledFuture) {
 		shutdown(true, scheduledFuture);
 	}
 	
@@ -324,7 +324,7 @@ public final class SystemThreadContext implements IContext {
 	 * 
 	 * @param group 异步通道线程池
 	 */
-	public static final void shutdown(AsynchronousChannelGroup group) {
+	public static void shutdown(AsynchronousChannelGroup group) {
 		shutdown(false, group);
 	}
 	
@@ -333,7 +333,7 @@ public final class SystemThreadContext implements IContext {
 	 * 
 	 * @param group 异步通道线程池
 	 */
-	public static final void shutdownNow(AsynchronousChannelGroup group) {
+	public static void shutdownNow(AsynchronousChannelGroup group) {
 		shutdown(true, group);
 	}
 	

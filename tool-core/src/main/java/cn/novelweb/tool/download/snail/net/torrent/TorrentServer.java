@@ -13,7 +13,7 @@ public final class TorrentServer extends UdpServer<TorrentAcceptHandler> {
 	
 	private static final TorrentServer INSTANCE = new TorrentServer();
 	
-	public static final TorrentServer getInstance() {
+	public static TorrentServer getInstance() {
 		return INSTANCE;
 	}
 

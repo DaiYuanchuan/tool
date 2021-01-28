@@ -24,7 +24,7 @@ public final class BitfieldUtils {
 	 * 
 	 * @return Piece位图字节数组
 	 */
-	public static final byte[] toBytes(final int pieceSize, final BitSet pieces) {
+	public static byte[] toBytes(final int pieceSize, final BitSet pieces) {
 		final int byteSize = NumberUtils.ceilDiv(pieceSize, 8);
 		final byte[] bitfield = new byte[byteSize];
 		final byte[] value = pieces.toByteArray();
@@ -42,7 +42,7 @@ public final class BitfieldUtils {
 	 * 
 	 * @return Piece位图
 	 */
-	public static final BitSet toBitSet(final byte[] bitfield) {
+	public static BitSet toBitSet(final byte[] bitfield) {
 		for (int index = 0; index < bitfield.length; index++) {
 			bitfield[index] = reverse(bitfield[index]);
 		}

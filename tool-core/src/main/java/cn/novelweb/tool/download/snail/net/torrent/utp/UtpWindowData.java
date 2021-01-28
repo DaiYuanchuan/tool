@@ -55,7 +55,7 @@ public final class UtpWindowData {
 	 * 
 	 * @return 窗口数据
 	 */
-	public static final UtpWindowData newInstance(short seqnr, int timestamp, byte[] data) {
+	public static UtpWindowData newInstance(short seqnr, int timestamp, byte[] data) {
 		return new UtpWindowData(seqnr, timestamp, data);
 	}
 

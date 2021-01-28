@@ -61,7 +61,7 @@ public final class PeerSubMessageHandler implements IMessageCodec<ByteBuffer> {
 	/**
 	 * <p>握手超时时间：{@value}</p>
 	 */
-	public static final int HANDSHAKE_TIMEOUT = SystemConfig.CONNECT_TIMEOUT;
+	public static int HANDSHAKE_TIMEOUT = SystemConfig.CONNECT_TIMEOUT;
 	
 	/**
 	 * <p>是否已经发送握手</p>
@@ -127,7 +127,7 @@ public final class PeerSubMessageHandler implements IMessageCodec<ByteBuffer> {
 	 * 
 	 * @return PeerSubMessageHandler
 	 */
-	public static final PeerSubMessageHandler newInstance() {
+	public static PeerSubMessageHandler newInstance() {
 		return new PeerSubMessageHandler();
 	}
 
@@ -139,7 +139,7 @@ public final class PeerSubMessageHandler implements IMessageCodec<ByteBuffer> {
 	 * 
 	 * @return PeerSubMessageHandler
 	 */
-	public static final PeerSubMessageHandler newInstance(PeerSession peerSession, TorrentSession torrentSession) {
+	public static PeerSubMessageHandler newInstance(PeerSession peerSession, TorrentSession torrentSession) {
 		return new PeerSubMessageHandler(peerSession, torrentSession);
 	}
 

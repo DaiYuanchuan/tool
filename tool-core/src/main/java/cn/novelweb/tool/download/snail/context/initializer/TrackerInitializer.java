@@ -23,7 +23,7 @@ public final class TrackerInitializer extends Initializer {
 	private TrackerInitializer() {
 	}
 	
-	public static final TrackerInitializer newInstance() {
+	public static TrackerInitializer newInstance() {
 		return new TrackerInitializer();
 	}
 	

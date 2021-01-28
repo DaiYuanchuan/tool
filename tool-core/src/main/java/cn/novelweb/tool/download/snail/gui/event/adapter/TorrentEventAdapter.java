@@ -10,7 +10,6 @@ import cn.novelweb.tool.download.snail.gui.event.GuiEventArgs;
 import cn.novelweb.tool.download.snail.pojo.ITaskSession;
 import cn.novelweb.tool.download.snail.pojo.bean.Torrent;
 import cn.novelweb.tool.download.snail.pojo.bean.TorrentFile;
-import cn.novelweb.tool.download.snail.pojo.bean.TorrentInfo;
 import cn.novelweb.tool.download.snail.utils.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,8 +25,8 @@ import java.util.stream.Collectors;
 public class TorrentEventAdapter extends GuiEventArgs {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(TorrentEventAdapter.class);
-	
-	protected TorrentEventAdapter() {
+
+	public TorrentEventAdapter() {
 		super(Type.TORRENT, "种子文件选择事件");
 	}
 
@@ -43,19 +42,19 @@ public class TorrentEventAdapter extends GuiEventArgs {
 			this.executeExtendExtend(taskSession);
 		}
 	}
-	
+
 	/**
 	 * <p>本地消息</p>
-	 * 
+	 *
 	 * @param taskSession 任务信息
 	 */
 	protected void executeNativeExtend(ITaskSession taskSession) {
 		this.executeExtendExtend(taskSession);
 	}
-	
+
 	/**
 	 * <p>扩展消息</p>
-	 * 
+	 *
 	 * @param taskSession 任务信息
 	 */
 	protected void executeExtendExtend(ITaskSession taskSession) {
@@ -69,18 +68,17 @@ public class TorrentEventAdapter extends GuiEventArgs {
 			final Torrent torrent = TorrentContext.getInstance().newTorrentSession(taskSession.getTorrent()).torrent();
 			// 选择文件列表
 			final List<String> selectFiles = decoder.nextList().stream()
-				.map(StringUtils::getString)
-				.collect(Collectors.toList());
+					.map(StringUtils::getString)
+					.collect(Collectors.toList());
 			// 选择文件大小
 			final long size = torrent.getInfo().files().stream()
-				.filter(file -> !file.path().startsWith(TorrentInfo.PADDING_FILE_PREFIX)) // 去掉填充文件
-				.filter(file -> selectFiles.contains(file.path())) // 设置选择下载文件
-				.collect(Collectors.summingLong(TorrentFile::getLength));
+					// 设置选择下载文件
+					.filter(file -> selectFiles.contains(file.path())).mapToLong(TorrentFile::getLength).sum();
 			taskSession.setSize(size);
 			taskSession.setDescription(files);
 		} catch (DownloadException | PacketSizeException e) {
 			LOGGER.error("设置种子文件选择异常：{}", files, e);
 		}
 	}
-	
+
 }

@@ -30,7 +30,7 @@ public final class DownloadConfig extends PropertiesConfig {
 	 * 
 	 * @return 单例对象
 	 */
-	public static final DownloadConfig getInstance() {
+	public static DownloadConfig getInstance() {
 		return INSTANCE;
 	}
 	
@@ -186,7 +186,7 @@ public final class DownloadConfig extends PropertiesConfig {
 	 * 
 	 * @param path 下载目录路径
 	 */
-	public static final void setPath(String path) {
+	public static void setPath(String path) {
 		if(StringUtils.equals(INSTANCE.path, path)) {
 			// 忽略没有修改
 			return;
@@ -202,7 +202,7 @@ public final class DownloadConfig extends PropertiesConfig {
 	 * 
 	 * @return 下载目录路径
 	 */
-	public static final String getPath() {
+	public static String getPath() {
 		String path = INSTANCE.path;
 		final File file = new File(path);
 		if(file.exists()) {
@@ -220,7 +220,7 @@ public final class DownloadConfig extends PropertiesConfig {
 	 * 
 	 * @return 文件路径
 	 */
-	public static final String getPath(String fileName) {
+	public static String getPath(String fileName) {
 		if(StringUtils.isEmpty(fileName)) {
 			throw new IllegalArgumentException("文件名称格式错误：" + fileName);
 		}
@@ -232,7 +232,7 @@ public final class DownloadConfig extends PropertiesConfig {
 	 * 
 	 * @param size 下载数量
 	 */
-	public static final void setSize(int size) {
+	public static void setSize(int size) {
 		if(INSTANCE.size == size) {
 			// 忽略没有修改
 			return;
@@ -248,7 +248,7 @@ public final class DownloadConfig extends PropertiesConfig {
 	 * 
 	 * @return 下载数量
 	 */
-	public static final int getSize() {
+	public static int getSize() {
 		return INSTANCE.size;
 	}
 	
@@ -257,7 +257,7 @@ public final class DownloadConfig extends PropertiesConfig {
 	 * 
 	 * @param notice 是否提示消息
 	 */
-	public static final void setNotice(boolean notice) {
+	public static void setNotice(boolean notice) {
 		if(INSTANCE.notice == notice) {
 			// 忽略没有修改
 			return;
@@ -271,7 +271,7 @@ public final class DownloadConfig extends PropertiesConfig {
 	 * 
 	 * @return 是否提示消息
 	 */
-	public static final boolean getNotice() {
+	public static boolean getNotice() {
 		return INSTANCE.notice;
 	}
 	
@@ -280,7 +280,7 @@ public final class DownloadConfig extends PropertiesConfig {
 	 * 
 	 * @param buffer 下载速度
 	 */
-	public static final void setBuffer(int buffer) {
+	public static void setBuffer(int buffer) {
 		if(INSTANCE.buffer == buffer) {
 			// 忽略没有修改
 			return;
@@ -296,7 +296,7 @@ public final class DownloadConfig extends PropertiesConfig {
 	 * 
 	 * @return 下载速度
 	 */
-	public static final int getBuffer() {
+	public static int getBuffer() {
 		return INSTANCE.buffer;
 	}
 	
@@ -305,7 +305,7 @@ public final class DownloadConfig extends PropertiesConfig {
 	 * 
 	 * @return 上传速度
 	 */
-	public static final int getUploadBufferByte() {
+	public static int getUploadBufferByte() {
 		return INSTANCE.uploadBufferByte;
 	}
 	
@@ -314,7 +314,7 @@ public final class DownloadConfig extends PropertiesConfig {
 	 * 
 	 * @return 下载速度
 	 */
-	public static final int getDownloadBufferByte() {
+	public static int getDownloadBufferByte() {
 		return INSTANCE.downloadBufferByte;
 	}
 	
@@ -331,7 +331,7 @@ public final class DownloadConfig extends PropertiesConfig {
 	 * 
 	 * @param lastPath 最后一次选择目录
 	 */
-	public static final void setLastPath(String lastPath) {
+	public static void setLastPath(String lastPath) {
 		if(StringUtils.equals(INSTANCE.lastPath, lastPath)) {
 			// 忽略没有修改
 			return;
@@ -346,7 +346,7 @@ public final class DownloadConfig extends PropertiesConfig {
 	 * 
 	 * @return 最后一次选择目录
 	 */
-	public static final String getLastPath() {
+	public static String getLastPath() {
 		if(StringUtils.isEmpty(INSTANCE.lastPath)) {
 			return getPath();
 		} else {
@@ -359,7 +359,7 @@ public final class DownloadConfig extends PropertiesConfig {
 	 * 
 	 * @return 最后一次选择目录文件
 	 */
-	public static final File getLastPathFile() {
+	public static File getLastPathFile() {
 		return new File(getLastPath());
 	}
 	
@@ -368,7 +368,7 @@ public final class DownloadConfig extends PropertiesConfig {
 	 * 
 	 * @param memoryBuffer 磁盘缓存
 	 */
-	public static final void setMemoryBuffer(int memoryBuffer) {
+	public static void setMemoryBuffer(int memoryBuffer) {
 		if(INSTANCE.memoryBuffer == memoryBuffer) {
 			// 忽略没有修改
 			return;
@@ -384,7 +384,7 @@ public final class DownloadConfig extends PropertiesConfig {
 	 * 
 	 * @return 磁盘缓存
 	 */
-	public static final int getMemoryBuffer() {
+	public static int getMemoryBuffer() {
 		return INSTANCE.memoryBuffer;
 	}
 
@@ -393,7 +393,7 @@ public final class DownloadConfig extends PropertiesConfig {
 	 * 
 	 * @return 磁盘缓存
 	 */
-	public static final int getMemoryBufferByte() {
+	public static int getMemoryBufferByte() {
 		return INSTANCE.memoryBufferByte;
 	}
 	
@@ -405,7 +405,7 @@ public final class DownloadConfig extends PropertiesConfig {
 	 * 
 	 * @return 磁盘缓存
 	 */
-	public static final int getMemoryBufferByte(final long fileSize) {
+	public static int getMemoryBufferByte(final long fileSize) {
 		final int bufferSize = getMemoryBufferByte();
 		if(fileSize > 0L) {
 			if(bufferSize > fileSize) {

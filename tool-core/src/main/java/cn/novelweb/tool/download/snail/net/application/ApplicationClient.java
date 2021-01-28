@@ -21,7 +21,7 @@ public final class ApplicationClient extends TcpClient<ApplicationMessageHandler
 		super("Application Client", SystemConfig.CONNECT_TIMEOUT, new ApplicationMessageHandler());
 	}
 	
-	public static final ApplicationClient newInstance() {
+	public static ApplicationClient newInstance() {
 		return new ApplicationClient();
 	}
 	
@@ -43,7 +43,7 @@ public final class ApplicationClient extends TcpClient<ApplicationMessageHandler
 	 * <p>唤醒主窗口</p>
 	 * <p>向已经启动的系统实例发送唤醒消息</p>
 	 */
-	public static final void notifyWindow() {
+	public static void notifyWindow() {
 		final ApplicationClient client = ApplicationClient.newInstance();
 		try {
 			final boolean success = client.connect();

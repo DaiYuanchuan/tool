@@ -22,7 +22,7 @@ public final class StunService {
 	
 	private static final StunService INSTANCE = new StunService();
 	
-	public static final StunService getInstance() {
+	public static StunService getInstance() {
 		return INSTANCE;
 	}
 	

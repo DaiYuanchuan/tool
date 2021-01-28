@@ -157,7 +157,7 @@ public final class TorrentSession {
 	 * 
 	 * @see #TorrentSession(InfoHash, Torrent)
 	 */
-	public static final TorrentSession newInstance(InfoHash infoHash, Torrent torrent) throws DownloadException {
+	public static TorrentSession newInstance(InfoHash infoHash, Torrent torrent) throws DownloadException {
 		return new TorrentSession(infoHash, torrent);
 	}
 	

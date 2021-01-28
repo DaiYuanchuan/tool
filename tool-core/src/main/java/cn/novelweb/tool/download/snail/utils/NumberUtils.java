@@ -1,5 +1,8 @@
 package cn.novelweb.tool.download.snail.utils;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.math.BigInteger;
 import java.nio.ByteBuffer;
 import java.security.NoSuchAlgorithmException;
@@ -7,9 +10,6 @@ import java.security.SecureRandom;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.Random;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * <p>数值工具</p>
@@ -48,7 +48,7 @@ public final class NumberUtils {
 	 * 
 	 * @return 编号
 	 */
-	public static final Integer build() {
+	public static Integer build() {
 		final StringBuilder builder = new StringBuilder();
 		synchronized(NumberUtils.class) {
 			int index = NumberUtils.index;
@@ -68,7 +68,7 @@ public final class NumberUtils {
 	 * 
 	 * @return long
 	 */
-	public static final long bytesToLong(byte[] bytes) {
+	public static long bytesToLong(byte[] bytes) {
 		long value = 0L;
 		value |= (bytes[0] & 0xFF);
 		value <<= 8;
@@ -95,7 +95,7 @@ public final class NumberUtils {
 	 * 
 	 * @return 字节数组
 	 */
-	public static final byte[] longToBytes(long value) {
+	public static byte[] longToBytes(long value) {
 		final byte[] bytes = new byte[8];
 		bytes[0] = (byte) ((value >> 56) & 0xFF);
 		bytes[1] = (byte) ((value >> 48) & 0xFF);
@@ -115,7 +115,7 @@ public final class NumberUtils {
 	 * 
 	 * @return int
 	 */
-	public static final int bytesToInt(byte[] bytes) {
+	public static int bytesToInt(byte[] bytes) {
 		int value = 0;
 		value |= (bytes[0] & 0xFF);
 		value <<= 8;
@@ -134,7 +134,7 @@ public final class NumberUtils {
 	 * 
 	 * @return 字节数组
 	 */
-	public static final byte[] intToBytes(int value) {
+	public static byte[] intToBytes(int value) {
 		final byte[] bytes = new byte[4];
 		bytes[0] = (byte) ((value >> 24) & 0xFF);
 		bytes[1] = (byte) ((value >> 16) & 0xFF);
@@ -150,7 +150,7 @@ public final class NumberUtils {
 	 * 
 	 * @return short
 	 */
-	public static final short bytesToShort(byte[] bytes) {
+	public static short bytesToShort(byte[] bytes) {
 		short value = 0;
 		value |= (bytes[0] & 0xFF);
 		value <<= 8;
@@ -165,7 +165,7 @@ public final class NumberUtils {
 	 * 
 	 * @return 字节数组
 	 */
-	public static final byte[] shortToBytes(short value) {
+	public static byte[] shortToBytes(short value) {
 		final byte[] bytes = new byte[2];
 		bytes[0] = (byte) ((value >> 8) & 0xFF);
 		bytes[1] = (byte) (value & 0xFF);
@@ -185,7 +185,7 @@ public final class NumberUtils {
 	 * 
 	 * @return 结果
 	 */
-	public static final int ceilDiv(int dividend, int divisor) {
+	public static int ceilDiv(int dividend, int divisor) {
 		int value = dividend / divisor;
 		if(dividend % divisor != 0) {
 			value++;
@@ -206,7 +206,7 @@ public final class NumberUtils {
 	 * 
 	 * @return 结果
 	 */
-	public static final int ceilMult(int dividend, int divisor) {
+	public static int ceilMult(int dividend, int divisor) {
 		return ceilDiv(dividend, divisor) * divisor;
 	}
 	
@@ -218,7 +218,7 @@ public final class NumberUtils {
 	 * 
 	 * @return 字节数组
 	 */
-	public static final byte[] encodeBigInteger(final BigInteger value, final int length) {
+	public static byte[] encodeBigInteger(final BigInteger value, final int length) {
 		if (length < 1) {
 			throw new IllegalArgumentException("数组长度错误：" + length);
 		}
@@ -245,7 +245,7 @@ public final class NumberUtils {
 	 * 
 	 * @return 大整数
 	 */
-	public static final BigInteger decodeBigInteger(final ByteBuffer buffer, final int length) {
+	public static BigInteger decodeBigInteger(final ByteBuffer buffer, final int length) {
 		if (length < 1 || buffer.remaining() < length) {
 			throw new IllegalArgumentException("数组长度错误：" + length);
 		}
@@ -271,7 +271,7 @@ public final class NumberUtils {
 	 * 
 	 * @return 随机数对象
 	 */
-	public static final Random random() {
+	public static Random random() {
 		try {
 			return SecureRandom.getInstanceStrong();
 		} catch (NoSuchAlgorithmException e) {
@@ -288,7 +288,7 @@ public final class NumberUtils {
 	 * 
 	 * @return 是否相对
 	 */
-	public static final boolean equals(Number source, Number target) {
+	public static boolean equals(Number source, Number target) {
 		return source == null ? target == null : source.equals(target);
 	}
 	

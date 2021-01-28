@@ -24,7 +24,7 @@ public final class HlsProtocol extends Protocol {
 	
 	private static final HlsProtocol INSTANCE = new HlsProtocol();
 	
-	public static final HlsProtocol getInstance() {
+	public static HlsProtocol getInstance() {
 		return INSTANCE;
 	}
 	

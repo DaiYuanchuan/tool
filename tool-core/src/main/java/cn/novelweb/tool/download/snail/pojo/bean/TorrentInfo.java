@@ -21,63 +21,63 @@ public final class TorrentInfo extends TorrentFileMatedata implements Serializab
 	 * <p>填充文件前缀：{@value}</p>
 	 * <p>不需要下载和显示</p>
 	 */
-	public static final String PADDING_FILE_PREFIX = "_____padding_file";
+	public static String PADDING_FILE_PREFIX = "_____padding_file";
 	/**
 	 * <p>私有种子：{@value}</p>
 	 */
-	public static final byte PRIVATE_TORRENT = 1;
+	public static byte PRIVATE_TORRENT = 1;
 	/**
 	 * <p>文件名称：{@value}</p>
 	 */
-	public static final String ATTR_NAME = "name";
+	public static String ATTR_NAME = "name";
 	/**
 	 * <p>文件名称UTF8：{@value}</p>
 	 */
-	public static final String ATTR_NAME_UTF8 = "name.utf-8";
+	public static String ATTR_NAME_UTF8 = "name.utf-8";
 	/**
 	 * <p>文件大小：{@value}</p>
 	 */
-	public static final String ATTR_LENGTH = "length";
+	public static String ATTR_LENGTH = "length";
 	/**
 	 * <p>文件ED2K：{@value}</p>
 	 */
-	public static final String ATTR_ED2K = "ed2k";
+	public static String ATTR_ED2K = "ed2k";
 	/**
 	 * <p>文件Hash：{@value}</p>
 	 */
-	public static final String ATTR_FILEHASH = "filehash";
+	public static String ATTR_FILEHASH = "filehash";
 	/**
 	 * <p>特征信息：{@value}</p>
 	 */
-	public static final String ATTR_PIECES = "pieces";
+	public static String ATTR_PIECES = "pieces";
 	/**
 	 * <p>Piece大小：{@value}</p>
 	 */
-	public static final String ATTR_PIECE_LENGTH = "piece length";
+	public static String ATTR_PIECE_LENGTH = "piece length";
 	/**
 	 * <p>发布者：{@value}</p>
 	 */
-	public static final String ATTR_PUBLISHER = "publisher";
+	public static String ATTR_PUBLISHER = "publisher";
 	/**
 	 * <p>发布者UTF8：{@value}</p>
 	 */
-	public static final String ATTR_PUBLISHER_UTF8 = "publisher.utf-8";
+	public static String ATTR_PUBLISHER_UTF8 = "publisher.utf-8";
 	/**
 	 * <p>发布者URL：{@value}</p>
 	 */
-	public static final String ATTR_PUBLISHER_URL = "publisher-url";
+	public static String ATTR_PUBLISHER_URL = "publisher-url";
 	/**
 	 * <p>发布者URL UTF8：{@value}</p>
 	 */
-	public static final String ATTR_PUBLISHER_URL_UTF8 = "publisher-url.utf-8";
+	public static String ATTR_PUBLISHER_URL_UTF8 = "publisher-url.utf-8";
 	/**
 	 * <p>私有种子：{@value}</p>
 	 */
-	public static final String ATTR_PRIVATE = "private";
+	public static String ATTR_PRIVATE = "private";
 	/**
 	 * <p>文件列表：{@value}</p>
 	 */
-	public static final String ATTR_FILES = "files";
+	public static String ATTR_FILES = "files";
 	
 	//================种子文件自带信息================//
 	
@@ -140,7 +140,7 @@ public final class TorrentInfo extends TorrentFileMatedata implements Serializab
 	 * 
 	 * @return 种子信息
 	 */
-	public static final TorrentInfo valueOf(Map<String, Object> map, String encoding) {
+	public static TorrentInfo valueOf(Map<String, Object> map, String encoding) {
 		Objects.requireNonNull(map, "种子信息为空");
 		final TorrentInfo info = new TorrentInfo();
 		info.setName(BEncodeDecoder.getString(map, ATTR_NAME, encoding));

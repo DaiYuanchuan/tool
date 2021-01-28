@@ -77,7 +77,7 @@ public final class UdpTrackerSession extends TrackerSession {
 	 * 
 	 * @throws NetException 网络异常
 	 */
-	public static final UdpTrackerSession newInstance(String announceUrl) throws NetException {
+	public static UdpTrackerSession newInstance(String announceUrl) throws NetException {
 		return new UdpTrackerSession(announceUrl, announceUrl);
 	}
 	

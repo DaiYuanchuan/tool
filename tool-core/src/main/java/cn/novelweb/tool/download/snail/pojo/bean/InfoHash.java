@@ -64,7 +64,7 @@ public final class InfoHash implements Serializable {
 	 * 
 	 * @return InfoHash
 	 */
-	public static final InfoHash newInstance(byte[] data) {
+	public static InfoHash newInstance(byte[] data) {
 		final InfoHash infoHash = new InfoHash(StringUtils.sha1(data));
 		infoHash.info = data;
 		infoHash.size = data.length;
@@ -80,7 +80,7 @@ public final class InfoHash implements Serializable {
 	 * 
 	 * @throws DownloadException 下载异常
 	 */
-	public static final InfoHash newInstance(String hash) throws DownloadException {
+	public static InfoHash newInstance(String hash) throws DownloadException {
 		if(StringUtils.isEmpty(hash)) {
 			throw new DownloadException("不支持的Hash：" + hash);
 		}

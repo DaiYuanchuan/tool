@@ -90,7 +90,7 @@ public final class HlsSession {
 	 * 
 	 * @return HLS任务信息
 	 */
-	public static final HlsSession newInstance(M3u8 m3u8, ITaskSession taskSession) {
+	public static HlsSession newInstance(M3u8 m3u8, ITaskSession taskSession) {
 		return new HlsSession(m3u8, taskSession);
 	}
 	

@@ -23,7 +23,7 @@ public final class IoUtils {
 	 * 
 	 * @param closeable Closeable
 	 */
-	public static final void close(AutoCloseable closeable) {
+	public static void close(AutoCloseable closeable) {
 		try {
 			if(closeable != null) {
 				closeable.close();

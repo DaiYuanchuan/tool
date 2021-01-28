@@ -139,7 +139,7 @@ public final class M3u8Builder {
 	 * 
 	 * @throws DownloadException 下载异常
 	 */
-	public static final M3u8Builder newInstance(File file, String source) throws DownloadException {
+	public static M3u8Builder newInstance(File file, String source) throws DownloadException {
 		List<String> lines;
 		try {
 			lines = Files.readAllLines(file.toPath());
@@ -157,7 +157,7 @@ public final class M3u8Builder {
 	 * 
 	 * @return M3U8解析器
 	 */
-	public static final M3u8Builder newInstance(String content, String source) {
+	public static M3u8Builder newInstance(String content, String source) {
 		final List<String> lines = StringUtils.readLines(content);
 		return new M3u8Builder(source, lines);
 	}
@@ -428,7 +428,7 @@ public final class M3u8Builder {
 	/**
 	 * <p>标签</p>
 	 */
-	public static final class Label {
+	public static class Label {
 		
 		/**
 		 * <p>标签名称</p>

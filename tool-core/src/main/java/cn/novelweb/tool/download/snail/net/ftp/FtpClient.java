@@ -86,7 +86,7 @@ public final class FtpClient extends TcpClient<FtpMessageHandler> {
 	 * 
 	 * @return FTP客户端
 	 */
-	public static final FtpClient newInstance(String host, int port, String user, String password, String filePath) {
+	public static FtpClient newInstance(String host, int port, String user, String password, String filePath) {
 		return new FtpClient(host, port, user, password, filePath);
 	}
 
@@ -97,7 +97,7 @@ public final class FtpClient extends TcpClient<FtpMessageHandler> {
 	 * 
 	 * @return FTP客户端
 	 */
-	public static final FtpClient newInstance(String url) {
+	public static FtpClient newInstance(String url) {
 		final URIWrapper wrapper = URIWrapper.newInstance(url, DEFAULT_PORT, SystemConfig.getFtpUser(), SystemConfig.getFtpPassword()).decode();
 		return newInstance(wrapper.host(), wrapper.port(), wrapper.user(), wrapper.password(), wrapper.path());
 	}

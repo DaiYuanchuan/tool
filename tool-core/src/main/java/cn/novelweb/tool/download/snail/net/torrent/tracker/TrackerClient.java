@@ -25,7 +25,7 @@ public final class TrackerClient extends UdpClient<TrackerMessageHandler> {
 	 * 
 	 * @return Tracker客户端
 	 */
-	public static final TrackerClient newInstance(InetSocketAddress socketAddress) {
+	public static TrackerClient newInstance(InetSocketAddress socketAddress) {
 		return new TrackerClient(socketAddress);
 	}
 

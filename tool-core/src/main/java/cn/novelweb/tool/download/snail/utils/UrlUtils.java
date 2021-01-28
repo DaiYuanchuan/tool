@@ -1,15 +1,14 @@
 package cn.novelweb.tool.download.snail.utils;
 
+import cn.novelweb.tool.download.snail.config.SystemConfig;
+import cn.novelweb.tool.download.snail.protocol.Protocol;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.util.Objects;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import cn.novelweb.tool.download.snail.config.SystemConfig;
-import cn.novelweb.tool.download.snail.protocol.Protocol;
 
 /**
  * <p>URL工具</p>
@@ -33,7 +32,7 @@ public final class UrlUtils {
 	 * 
 	 * @return 编码后内容
 	 */
-	public static final String encode(String content) {
+	public static String encode(String content) {
 		if(StringUtils.isEmpty(content)) {
 			return content;
 		}
@@ -54,7 +53,7 @@ public final class UrlUtils {
 	 * 
 	 * @return 解码后内容
 	 */
-	public static final String decode(String content) {
+	public static String decode(String content) {
 		if(StringUtils.isEmpty(content)) {
 			return content;
 		}
@@ -75,7 +74,7 @@ public final class UrlUtils {
 	 * 
 	 * @return 完整链接
 	 */
-	public static final String redirect(final String source, String target) {
+	public static String redirect(final String source, String target) {
 		Objects.requireNonNull(source, "原始页面链接不能为空");
 		Objects.requireNonNull(target, "目标页面链接不能为空");
 		// 去掉引号

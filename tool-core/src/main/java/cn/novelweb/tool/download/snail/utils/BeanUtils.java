@@ -1,5 +1,8 @@
 package cn.novelweb.tool.download.snail.utils;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.Date;
@@ -7,9 +10,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Stream;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * <p>Bean工具</p>
@@ -36,7 +36,7 @@ public final class BeanUtils {
 	 * 
 	 * @return 实例
 	 */
-	public static final <T> T newInstance(final Class<T> clazz) {
+	public static <T> T newInstance(final Class<T> clazz) {
 		Objects.requireNonNull(clazz);
 		try {
 			return clazz.getDeclaredConstructor().newInstance();
@@ -69,7 +69,7 @@ public final class BeanUtils {
 	 * 
 	 * @return 转换对象
 	 */
-	public static final Object objectToString(Object object) {
+	public static Object objectToString(Object object) {
 		if (object == null) {
 			return null;
 		} else if (object instanceof Enum<?>) {
@@ -91,7 +91,7 @@ public final class BeanUtils {
 	 * 
 	 * @return toString
 	 */
-	public static final String toString(Object instance, Object ... values) {
+	public static String toString(Object instance, Object ... values) {
 		Objects.requireNonNull(instance);
 		final StringBuilder builder = new StringBuilder(instance.getClass().toString());
 		builder.append("@");
@@ -115,7 +115,7 @@ public final class BeanUtils {
 	 * 
 	 * @return 属性Map
 	 */
-	public static final Map<String, Object> toMap(final Object instance) {
+	public static Map<String, Object> toMap(final Object instance) {
 		Objects.requireNonNull(instance);
 		final Map<String, Object> map = new HashMap<>();
 		final String[] properties = properties(instance.getClass());
@@ -133,7 +133,7 @@ public final class BeanUtils {
 	 * 
 	 * @return 所有属性名称
 	 */
-	public static final String[] properties(final Class<?> clazz) {
+	public static String[] properties(final Class<?> clazz) {
 		Objects.requireNonNull(clazz);
 		String[] properties = null;
 		final Class<?> superClazz = clazz.getSuperclass(); // 父类
@@ -160,7 +160,7 @@ public final class BeanUtils {
 	 * 
 	 * @return 属性值
 	 */
-	public static final Object[] propertiesValue(final Object instance, final String[] properties) {
+	public static Object[] propertiesValue(final Object instance, final String[] properties) {
 		Objects.requireNonNull(instance);
 		Objects.requireNonNull(properties);
 		return Stream.of(properties)
@@ -176,7 +176,7 @@ public final class BeanUtils {
 	 * 
 	 * @return 属性值
 	 */
-	public static final Object propertyValue(final Object instance, final String property) {
+	public static Object propertyValue(final Object instance, final String property) {
 		Objects.requireNonNull(instance);
 		Objects.requireNonNull(property);
 		final Class<?> clazz = instance.getClass();
@@ -198,7 +198,7 @@ public final class BeanUtils {
 	 * @param instance 对象
 	 * @param data 属性
 	 */
-	public static final void properties(Object instance, Map<String, Object> data) {
+	public static void properties(Object instance, Map<String, Object> data) {
 		Objects.requireNonNull(instance);
 		Objects.requireNonNull(data);
 		final Class<?> clazz = instance.getClass();

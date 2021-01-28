@@ -20,7 +20,7 @@ public final class EntityInitializer extends Initializer {
 	private EntityInitializer() {
 	}
 	
-	public static final EntityInitializer newInstance() {
+	public static EntityInitializer newInstance() {
 		return new EntityInitializer();
 	}
 	

@@ -147,7 +147,7 @@ public final class JSON {
 	 * 
 	 * @return JSON对象
 	 */
-	public static final JSON ofMap(Map<Object, Object> map) {
+	public static JSON ofMap(Map<Object, Object> map) {
 		final JSON json = new JSON();
 		json.map = map;
 		json.type = Type.MAP;
@@ -161,7 +161,7 @@ public final class JSON {
 	 * 
 	 * @return JSON对象
 	 */
-	public static final JSON ofList(List<Object> list) {
+	public static JSON ofList(List<Object> list) {
 		final JSON json = new JSON();
 		json.list = list;
 		json.type = Type.LIST;
@@ -175,7 +175,7 @@ public final class JSON {
 	 * 
 	 * @return JSON对象
 	 */
-	public static final JSON ofString(String content) {
+	public static JSON ofString(String content) {
 		if(StringUtils.isEmpty(content)) {
 			throw new IllegalArgumentException("JSON格式错误：" + content);
 		}
@@ -201,14 +201,14 @@ public final class JSON {
 	/**
 	 * <p>使用懒加载</p>
 	 */
-	public static final void lazy() {
+	public static void lazy() {
 		JSON.lazy = true;
 	}
 	
 	/**
 	 * <p>禁用懒加载</p>
 	 */
-	public static final void eager() {
+	public static void eager() {
 		JSON.lazy = false;
 	}
 	

@@ -127,7 +127,7 @@ public class HeaderWrapper {
 	 * 
 	 * @return HeaderWrapper
 	 */
-	public static final HeaderWrapper newInstance(String content) {
+	public static HeaderWrapper newInstance(String content) {
 		return new HeaderWrapper(content);
 	}
 
@@ -138,7 +138,7 @@ public class HeaderWrapper {
 	 * 
 	 * @return HeaderWrapper
 	 */
-	public static final HeaderWrapper newInstance(String headerSeparator, String headerPadding, String content) {
+	public static HeaderWrapper newInstance(String headerSeparator, String headerPadding, String content) {
 		return new HeaderWrapper(headerSeparator, headerPadding, content);
 	}
 
@@ -147,7 +147,7 @@ public class HeaderWrapper {
 	 * 
 	 * @return HeaderWrapper
 	 */
-	public static final HeaderWrapper newBuilder(String protocol) {
+	public static HeaderWrapper newBuilder(String protocol) {
 		return new HeaderWrapper(protocol, new LinkedHashMap<String, List<String>>());
 	}
 	
@@ -157,7 +157,7 @@ public class HeaderWrapper {
 	 * 
 	 * @return HeaderWrapper
 	 */
-	public static final HeaderWrapper newBuilder(String protocol, Map<String, List<String>> headers) {
+	public static HeaderWrapper newBuilder(String protocol, Map<String, List<String>> headers) {
 		return new HeaderWrapper(protocol, headers);
 	}
 	
@@ -168,7 +168,7 @@ public class HeaderWrapper {
 	 * 
 	 * @return HeaderWrapper
 	 */
-	public static final HeaderWrapper newBuilder(String headerSeparator, String headerPadding, String protocol) {
+	public static HeaderWrapper newBuilder(String headerSeparator, String headerPadding, String protocol) {
 		return new HeaderWrapper(headerSeparator, headerPadding, protocol, new LinkedHashMap<String, List<String>>());
 	}
 	
@@ -180,7 +180,7 @@ public class HeaderWrapper {
 	 * 
 	 * @return HeaderWrapper
 	 */
-	public static final HeaderWrapper newBuilder(String headerSeparator, String headerPadding, String protocol, Map<String, List<String>> headers) {
+	public static HeaderWrapper newBuilder(String headerSeparator, String headerPadding, String protocol, Map<String, List<String>> headers) {
 		return new HeaderWrapper(headerSeparator, headerPadding, protocol, headers);
 	}
 	

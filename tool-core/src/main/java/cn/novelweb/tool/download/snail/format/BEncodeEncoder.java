@@ -54,7 +54,7 @@ public final class BEncodeEncoder {
 		this.outputStream = new ByteArrayOutputStream();
 	}
 	
-	public static final BEncodeEncoder newInstance() {
+	public static BEncodeEncoder newInstance() {
 		return new BEncodeEncoder();
 	}
 
@@ -288,7 +288,7 @@ public final class BEncodeEncoder {
 	 * 
 	 * @return B编码字节数组
 	 */
-	public static final byte[] encodeList(List<?> list) {
+	public static byte[] encodeList(List<?> list) {
 		return newInstance().writeList(list).bytes();
 	}
 	
@@ -299,7 +299,7 @@ public final class BEncodeEncoder {
 	 * 
 	 * @return B编码字符串
 	 */
-	public static final String encodeListString(List<?> list) {
+	public static String encodeListString(List<?> list) {
 		return new String(encodeList(list));
 	}
 	
@@ -310,7 +310,7 @@ public final class BEncodeEncoder {
 	 * 
 	 * @return B编码字节数组
 	 */
-	public static final byte[] encodeMap(Map<?, ?> map) {
+	public static byte[] encodeMap(Map<?, ?> map) {
 		return newInstance().writeMap(map).bytes();
 	}
 	
@@ -321,7 +321,7 @@ public final class BEncodeEncoder {
 	 * 
 	 * @return B编码字符串
 	 */
-	public static final String encodeMapString(Map<?, ?> map) {
+	public static String encodeMapString(Map<?, ?> map) {
 		return new String(encodeMap(map));
 	}
 	

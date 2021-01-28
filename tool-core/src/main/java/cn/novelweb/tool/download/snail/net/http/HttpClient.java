@@ -183,7 +183,7 @@ public final class HttpClient {
 	 * 
 	 * @throws NetException 网络异常
 	 */
-	public static final HttpClient newDownloader(String url) throws NetException {
+	public static HttpClient newDownloader(String url) throws NetException {
 		return newInstance(url, SystemConfig.CONNECT_TIMEOUT_MILLIS, SystemConfig.DOWNLOAD_TIMEOUT_MILLIS);
 	}
 	
@@ -196,7 +196,7 @@ public final class HttpClient {
 	 * 
 	 * @throws NetException 网络异常
 	 */
-	public static final HttpClient newInstance(String url) throws NetException {
+	public static HttpClient newInstance(String url) throws NetException {
 		return newInstance(url, SystemConfig.CONNECT_TIMEOUT_MILLIS, SystemConfig.RECEIVE_TIMEOUT_MILLIS);
 	}
 	
@@ -211,7 +211,7 @@ public final class HttpClient {
 	 * 
 	 * @throws NetException 网络异常
 	 */
-	public static final HttpClient newInstance(String url, int connectTimeout, int receiveTimeout) throws NetException {
+	public static HttpClient newInstance(String url, int connectTimeout, int receiveTimeout) throws NetException {
 		return new HttpClient(url, connectTimeout, receiveTimeout);
 	}
 	

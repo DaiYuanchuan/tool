@@ -26,7 +26,7 @@ public final class TaskContext implements IContext {
 	
 	private static final TaskContext INSTANCE = new TaskContext();
 	
-	public static final TaskContext getInstance() {
+	public static TaskContext getInstance() {
 		return INSTANCE;
 	}
 	

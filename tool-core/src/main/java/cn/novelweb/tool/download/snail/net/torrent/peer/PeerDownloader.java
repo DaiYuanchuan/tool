@@ -34,7 +34,7 @@ public final class PeerDownloader extends PeerConnect {
 	 * 
 	 * @return Peer下载
 	 */
-	public static final PeerDownloader newInstance(PeerSession peerSession, TorrentSession torrentSession) {
+	public static PeerDownloader newInstance(PeerSession peerSession, TorrentSession torrentSession) {
 		return new PeerDownloader(peerSession, torrentSession);
 	}
 	

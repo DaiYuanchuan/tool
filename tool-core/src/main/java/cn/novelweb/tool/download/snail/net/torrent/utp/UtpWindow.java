@@ -157,7 +157,7 @@ public final class UtpWindow {
 	 * 
 	 * @return 窗口对象
 	 */
-	public static final UtpWindow newSendInstance() {
+	public static UtpWindow newSendInstance() {
 		return new UtpWindow();
 	}
 	
@@ -169,7 +169,7 @@ public final class UtpWindow {
 	 * 
 	 * @return 窗口对象
 	 */
-	public static final UtpWindow newRecvInstance(IMessageCodec<ByteBuffer> messageCodec) {
+	public static UtpWindow newRecvInstance(IMessageCodec<ByteBuffer> messageCodec) {
 		return new UtpWindow(messageCodec);
 	}
 	

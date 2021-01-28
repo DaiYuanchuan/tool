@@ -20,7 +20,7 @@ public final class NatInitializer extends Initializer {
 	private NatInitializer() {
 	}
 	
-	public static final NatInitializer newInstance() {
+	public static NatInitializer newInstance() {
 		return new NatInitializer();
 	}
 	

@@ -24,7 +24,7 @@ public final class UtpRequestQueue {
 
 	private static final UtpRequestQueue INSTANCE = new UtpRequestQueue();
 	
-	public static final UtpRequestQueue getInstance() {
+	public static UtpRequestQueue getInstance() {
 		return INSTANCE;
 	}
 	

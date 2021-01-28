@@ -71,7 +71,7 @@ public class DhtResponse extends DhtMessage {
 	 * 
 	 * @return 响应
 	 */
-	public static final DhtResponse valueOf(final BEncodeDecoder decoder) {
+	public static DhtResponse valueOf(final BEncodeDecoder decoder) {
 		final byte[] t = decoder.getBytes(DhtConfig.KEY_T);
 		final String y = decoder.getString(DhtConfig.KEY_Y);
 		final Map<String, Object> r = decoder.getMap(DhtConfig.KEY_R);
@@ -233,7 +233,7 @@ public class DhtResponse extends DhtMessage {
 	 * 
 	 * @return 错误响应
 	 */
-	public static final DhtResponse buildErrorResponse(byte[] id, int code, String message) {
+	public static DhtResponse buildErrorResponse(byte[] id, int code, String message) {
 		final List<Object> list = new ArrayList<>(2);
 		list.add(code);
 		list.add(message);

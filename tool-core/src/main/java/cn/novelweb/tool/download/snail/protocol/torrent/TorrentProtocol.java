@@ -23,7 +23,7 @@ public final class TorrentProtocol extends Protocol {
 
     private static final TorrentProtocol INSTANCE = new TorrentProtocol();
 
-    public static final TorrentProtocol getInstance() {
+    public static TorrentProtocol getInstance() {
         return INSTANCE;
     }
 

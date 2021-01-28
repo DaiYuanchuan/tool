@@ -26,7 +26,7 @@ public final class NatContext implements IContext {
 	
 	private static final NatContext INSTANCE = new NatContext();
 	
-	public static final NatContext getInstance() {
+	public static NatContext getInstance() {
 		return INSTANCE;
 	}
 	

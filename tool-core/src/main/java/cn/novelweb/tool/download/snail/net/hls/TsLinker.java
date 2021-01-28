@@ -66,7 +66,7 @@ public final class TsLinker {
 	 * 
 	 * @return TS连接器
 	 */
-	public static final TsLinker newInstance(String name, String path, Cipher cipher, List<String> links) {
+	public static TsLinker newInstance(String name, String path, Cipher cipher, List<String> links) {
 		return new TsLinker(name, path, cipher, links);
 	}
 	

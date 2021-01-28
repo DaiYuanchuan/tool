@@ -53,7 +53,7 @@ public final class XML {
 	 * 
 	 * @return XML
 	 */
-	public static final XML build() {
+	public static XML build() {
 		final XML xml = new XML();
 		final DocumentBuilderFactory factory = buildFactory();
 		try {
@@ -71,7 +71,7 @@ public final class XML {
 	 * 
 	 * @return XML
 	 */
-	public static final XML load(String content) {
+	public static XML load(String content) {
 		Objects.requireNonNull(content, "XML内容为空");
 		final XML xml = new XML();
 		final DocumentBuilderFactory factory = buildFactory();

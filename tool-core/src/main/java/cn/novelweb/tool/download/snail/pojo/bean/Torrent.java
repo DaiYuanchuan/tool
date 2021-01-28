@@ -24,39 +24,39 @@ public final class Torrent implements Serializable {
 	/**
 	 * <p>注释：{@value}</p>
 	 */
-	public static final String ATTR_COMMENT = "comment";
+	public static String ATTR_COMMENT = "comment";
 	/**
 	 * <p>注释UTF8：{@value}</p>
 	 */
-	public static final String ATTR_COMMENT_UTF8 = "comment.utf-8";
+	public static String ATTR_COMMENT_UTF8 = "comment.utf-8";
 	/**
 	 * <p>编码：{@value}</p>
 	 */
-	public static final String ATTR_ENCODING = "encoding";
+	public static String ATTR_ENCODING = "encoding";
 	/**
 	 * <p>创建者：{@value}</p>
 	 */
-	public static final String ATTR_CREATED_BY = "created by";
+	public static String ATTR_CREATED_BY = "created by";
 	/**
 	 * <p>创建时间：{@value}</p>
 	 */
-	public static final String ATTR_CREATION_DATE = "creation date";
+	public static String ATTR_CREATION_DATE = "creation date";
 	/**
 	 * <p>Tracker服务器：{@value}</p>
 	 */
-	public static final String ATTR_ANNOUNCE = "announce";
+	public static String ATTR_ANNOUNCE = "announce";
 	/**
 	 * <p>Tracker服务器列表：{@value}</p>
 	 */
-	public static final String ATTR_ANNOUNCE_LIST = "announce-list";
+	public static String ATTR_ANNOUNCE_LIST = "announce-list";
 	/**
 	 * <p>文件信息：{@value}</p>
 	 */
-	public static final String ATTR_INFO = "info";
+	public static String ATTR_INFO = "info";
 	/**
 	 * <p>DHT节点：{@value}</p>
 	 */
-	public static final String ATTR_NODES = "nodes";
+	public static String ATTR_NODES = "nodes";
 	
 	// ============== 种子文件自带信息 ============== //
 	
@@ -115,7 +115,7 @@ public final class Torrent implements Serializable {
 	 * 
 	 * @return 种子信息
 	 */
-	public static final Torrent valueOf(BEncodeDecoder decoder) {
+	public static Torrent valueOf(BEncodeDecoder decoder) {
 		Objects.requireNonNull(decoder, "种子信息为空");
 		final Torrent torrent = new Torrent();
 		// 原始编码

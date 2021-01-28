@@ -115,7 +115,7 @@ public abstract class TcpServer<T extends TcpMessageHandler> {
 	/**
 	 * <p>关闭TCP Server线程池</p>
 	 */
-	public static final void shutdown() {
+	public static void shutdown() {
 		LOGGER.debug("关闭TCP Server线程池");
 		SystemThreadContext.shutdown(GROUP);
 	}

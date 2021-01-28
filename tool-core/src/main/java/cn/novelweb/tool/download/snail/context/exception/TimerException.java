@@ -14,7 +14,7 @@ public final class TimerException extends IllegalArgumentException {
 	 * 
 	 * @param time 时间周期
 	 */
-	public static final void verify(long time) {
+	public static void verify(long time) {
 		if(time < 0) {
 			throw new TimerException(time);
 		}

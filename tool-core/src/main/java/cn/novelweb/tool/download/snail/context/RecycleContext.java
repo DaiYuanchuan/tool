@@ -48,7 +48,7 @@ public final class RecycleContext implements IContext {
 	 * 
 	 * @return 回收站
 	 */
-	public static final Recycle newInstance(String path) {
+	public static Recycle newInstance(String path) {
 		if(BUILDER == null) {
 			return null;
 		}
@@ -62,7 +62,7 @@ public final class RecycleContext implements IContext {
 	 * 
 	 * @return 是否删除成功
 	 */
-	public static final boolean recycle(final String filePath) {
+	public static boolean recycle(final String filePath) {
 		if(StringUtils.isEmpty(filePath)) {
 			LOGGER.warn("删除文件路径错误：{}", filePath);
 			return false;

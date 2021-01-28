@@ -40,7 +40,7 @@ public final class MSEKeyPairBuilder {
 	 * 
 	 * @return MSE密钥对Builder
 	 */
-	public static final MSEKeyPairBuilder newInstance() {
+	public static MSEKeyPairBuilder newInstance() {
 		return new MSEKeyPairBuilder();
 	}
 
@@ -60,7 +60,7 @@ public final class MSEKeyPairBuilder {
 	 * 
 	 * @author acgist
 	 */
-	public static final class MSEPublicKey implements PublicKey {
+	public static class MSEPublicKey implements PublicKey {
 
 		private static final long serialVersionUID = 1L;
 		
@@ -108,7 +108,7 @@ public final class MSEKeyPairBuilder {
 	 * 
 	 * @author acgist
 	 */
-	public static final class MSEPrivateKey implements PrivateKey {
+	public static class MSEPrivateKey implements PrivateKey {
 
 		private static final long serialVersionUID = 1L;
 		

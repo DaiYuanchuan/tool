@@ -20,7 +20,7 @@ public final class PingRequest extends DhtRequest {
 	 * 
 	 * @return 请求
 	 */
-	public static final PingRequest newRequest() {
+	public static PingRequest newRequest() {
 		return new PingRequest();
 	}
 
@@ -31,7 +31,7 @@ public final class PingRequest extends DhtRequest {
 	 * 
 	 * @return 响应
 	 */
-	public static final PingResponse execute(DhtRequest request) {
+	public static PingResponse execute(DhtRequest request) {
 		return PingResponse.newInstance(request);
 	}
 	

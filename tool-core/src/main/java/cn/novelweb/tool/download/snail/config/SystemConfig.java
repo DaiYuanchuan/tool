@@ -25,7 +25,7 @@ public final class SystemConfig extends PropertiesConfig {
 	 * 
 	 * @return 单例对象
 	 */
-	public static final SystemConfig getInstance() {
+	public static SystemConfig getInstance() {
 		return INSTANCE;
 	}
 	
@@ -36,67 +36,67 @@ public final class SystemConfig extends PropertiesConfig {
 	/**
 	 * <p>数据大小比例：{@value}</p>
 	 */
-	public static final int DATA_SCALE = 1024;
+	public static int DATA_SCALE = 1024;
 	/**
 	 * <p>1KB数据大小：{@value}</p>
 	 * <p>1KB = 1024B</p>
 	 */
-	public static final int ONE_KB = DATA_SCALE;
+	public static int ONE_KB = DATA_SCALE;
 	/**
 	 * <p>1MB数据大小：{@value}</p>
 	 * <p>1MB = 1024KB = 1024 * 1024B</p>
 	 */
-	public static final int ONE_MB = DATA_SCALE * ONE_KB;
+	public static int ONE_MB = DATA_SCALE * ONE_KB;
 	/**
 	 * <p>时间大小比例：{@value}</p>
 	 */
-	public static final int TIME_SCALE = 1000;
+	public static int TIME_SCALE = 1000;
 	/**
 	 * <p>一秒钟（毫秒）：{@value}</p>
 	 */
-	public static final int ONE_SECOND_MILLIS = TIME_SCALE;
+	public static int ONE_SECOND_MILLIS = TIME_SCALE;
 	/**
 	 * <p>一分钟（秒数）：{@value}</p>
 	 */
-	public static final long ONE_MINUTE = 60L;
+	public static long ONE_MINUTE = 60L;
 	/**
 	 * <p>一分钟（毫数）：{@value}</p>
 	 */
-	public static final long ONE_MINUTE_MILLIS = ONE_MINUTE * ONE_SECOND_MILLIS;
+	public static long ONE_MINUTE_MILLIS = ONE_MINUTE * ONE_SECOND_MILLIS;
 	/**
 	 * <p>一小时（秒数）：{@value}</p>
 	 */
-	public static final long ONE_HOUR = ONE_MINUTE * 60;
+	public static long ONE_HOUR = ONE_MINUTE * 60;
 	/**
 	 * <p>一小时（毫数）：{@value}</p>
 	 */
-	public static final long ONE_HOUR_MILLIS = ONE_HOUR * ONE_SECOND_MILLIS;
+	public static long ONE_HOUR_MILLIS = ONE_HOUR * ONE_SECOND_MILLIS;
 	/**
 	 * <p>一天（秒数）：{@value}</p>
 	 */
-	public static final long ONE_DAY = ONE_HOUR * 24;
+	public static long ONE_DAY = ONE_HOUR * 24;
 	/**
 	 * <p>一天（毫数）：{@value}</p>
 	 */
-	public static final long ONE_DAY_MILLIS = ONE_DAY * ONE_SECOND_MILLIS;
+	public static long ONE_DAY_MILLIS = ONE_DAY * ONE_SECOND_MILLIS;
 	/**
 	 * <p>最小下载速度：{@value}</p>
 	 * <p>16KB</p>
 	 */
-	public static final int MIN_DOWNLOAD_BUFFER_KB = 16;
+	public static int MIN_DOWNLOAD_BUFFER_KB = 16;
 	/**
 	 * <p>IP和端口占用字节大小：{@value}</p>
 	 */
-	public static final int IP_PORT_LENGTH = 6;
+	public static int IP_PORT_LENGTH = 6;
 	/**
 	 * <p>TCP消息缓冲大小：{@value}</p>
 	 * <p>大小和Piece交换Slice大小一样</p>
 	 */
-	public static final int TCP_BUFFER_LENGTH = 16 * ONE_KB;
+	public static int TCP_BUFFER_LENGTH = 16 * ONE_KB;
 	/**
 	 * <p>UDP消息缓存大小：{@value}</p>
 	 */
-	public static final int UDP_BUFFER_LENGTH = 2 * ONE_KB;
+	public static int UDP_BUFFER_LENGTH = 2 * ONE_KB;
 	/**
 	 * <p>数据传输默认大小：{@value}</p>
 	 * <p>一般IO读写缓冲数据大小</p>
@@ -104,90 +104,90 @@ public final class SystemConfig extends PropertiesConfig {
 	 * 
 	 * @see #MIN_DOWNLOAD_BUFFER_KB
 	 */
-	public static final int DEFAULT_EXCHANGE_BYTES_LENGTH = MIN_DOWNLOAD_BUFFER_KB * ONE_KB;
+	public static int DEFAULT_EXCHANGE_BYTES_LENGTH = MIN_DOWNLOAD_BUFFER_KB * ONE_KB;
 	/**
 	 * <p>连接超时时间（秒）：{@value}</p>
 	 */
-	public static final int CONNECT_TIMEOUT = 5;
+	public static int CONNECT_TIMEOUT = 5;
 	/**
 	 * <p>连接超时时间（毫秒）：{@value}</p>
 	 */
-	public static final int CONNECT_TIMEOUT_MILLIS = CONNECT_TIMEOUT * ONE_SECOND_MILLIS;
+	public static int CONNECT_TIMEOUT_MILLIS = CONNECT_TIMEOUT * ONE_SECOND_MILLIS;
 	/**
 	 * <p>接收超时时间（秒）：{@value}</p>
 	 */
-	public static final int RECEIVE_TIMEOUT = 5;
+	public static int RECEIVE_TIMEOUT = 5;
 	/**
 	 * <p>接收超时时间（毫秒）：{@value}</p>
 	 */
-	public static final int RECEIVE_TIMEOUT_MILLIS = RECEIVE_TIMEOUT * ONE_SECOND_MILLIS;
+	public static int RECEIVE_TIMEOUT_MILLIS = RECEIVE_TIMEOUT * ONE_SECOND_MILLIS;
 	/**
 	 * <p>下载超时时间（秒）：{@value}</p>
 	 */
-	public static final int DOWNLOAD_TIMEOUT = 30;
+	public static int DOWNLOAD_TIMEOUT = 30;
 	/**
 	 * <p>下载超时时间（毫秒）：{@value}</p>
 	 */
-	public static final int DOWNLOAD_TIMEOUT_MILLIS = DOWNLOAD_TIMEOUT * ONE_SECOND_MILLIS;
+	public static int DOWNLOAD_TIMEOUT_MILLIS = DOWNLOAD_TIMEOUT * ONE_SECOND_MILLIS;
 	/**
 	 * <p>最大的网络包大小：{@value}</p>
 	 * <p>如果创建byte[]和ByteBuffer对象的长度是由外部数据决定时需要验证长度：防止太长导致内存泄漏</p>
 	 */
-	public static final int MAX_NET_BUFFER_LENGTH = 4 * ONE_MB;
+	public static int MAX_NET_BUFFER_LENGTH = 4 * ONE_MB;
 	/**
 	 * <p>SHA-1散列值长度：{@value}</p>
 	 */
-	public static final int SHA1_HASH_LENGTH = 20;
+	public static int SHA1_HASH_LENGTH = 20;
 	/**
 	 * <p>编码：{@value}</p>
 	 */
-	public static final String CHARSET_GBK = "GBK";
+	public static String CHARSET_GBK = "GBK";
 	/**
 	 * <p>编码：{@value}</p>
 	 */
-	public static final String CHARSET_UTF8 = "UTF-8";
+	public static String CHARSET_UTF8 = "UTF-8";
 	/**
 	 * <p>编码：{@value}</p>
 	 */
-	public static final String CHARSET_ASCII = "ASCII";
+	public static String CHARSET_ASCII = "ASCII";
 	/**
 	 * <p>编码：{@value}</p>
 	 */
-	public static final String CHARSET_ISO_8859_1 = "ISO-8859-1";
+	public static String CHARSET_ISO_8859_1 = "ISO-8859-1";
 	/**
 	 * <p>系统默认编码（file.encoding）：{@value}</p>
 	 */
-	public static final String DEFAULT_CHARSET = CHARSET_UTF8;
+	public static String DEFAULT_CHARSET = CHARSET_UTF8;
 	/**
 	 * <p>无符号BYTE最大值：{@value}</p>
 	 */
-	public static final int UNSIGNED_BYTE_MAX = 2 << 7;
+	public static int UNSIGNED_BYTE_MAX = 2 << 7;
 	/**
 	 * <p>数值：{@value}</p>
 	 */
-	public static final String DIGIT = "0123456789";
+	public static String DIGIT = "0123456789";
 	/**
 	 * <p>字符（小写）：{@value}</p>
 	 */
-	public static final String LETTER = "abcdefghijklmnopqrstuvwxyz";
+	public static String LETTER = "abcdefghijklmnopqrstuvwxyz";
 	/**
 	 * <p>字符（大写）</p>
 	 * 
 	 * @see #LETTER
 	 */
-	public static final String LETTER_UPPER = LETTER.toUpperCase();
+	public static String LETTER_UPPER = LETTER.toUpperCase();
 	/**
 	 * <p>任务列表刷新时间（秒）：{@value}</p>
 	 */
-	public static final int TASK_REFRESH_INTERVAL = 4;
+	public static int TASK_REFRESH_INTERVAL = 4;
 	/**
 	 * <p>换行分隔符：{@value}</p>
 	 */
-	public static final String LINE_SEPARATOR = "\n";
+	public static String LINE_SEPARATOR = "\n";
 	/**
 	 * <p>换行分隔符（兼容）：{@value}</p>
 	 */
-	public static final String LINE_SEPARATOR_COMPAT = "\r\n";
+	public static String LINE_SEPARATOR_COMPAT = "\r\n";
 	/**
 	 * <p>用户工作目录</p>
 	 * <p>注意：初始化为常量（不能使用类变量：本类初始化时会使用）</p>
@@ -405,7 +405,7 @@ public final class SystemConfig extends PropertiesConfig {
 	 * 
 	 * @return 软件名称
 	 */
-	public static final String getName() {
+	public static String getName() {
 		return INSTANCE.name;
 	}
 
@@ -414,7 +414,7 @@ public final class SystemConfig extends PropertiesConfig {
 	 * 
 	 * @return 软件名称（英文）
 	 */
-	public static final String getNameEn() {
+	public static String getNameEn() {
 		return INSTANCE.nameEn;
 	}
 
@@ -423,7 +423,7 @@ public final class SystemConfig extends PropertiesConfig {
 	 * 
 	 * @return 软件版本
 	 */
-	public static final String getVersion() {
+	public static String getVersion() {
 		return INSTANCE.version;
 	}
 
@@ -432,7 +432,7 @@ public final class SystemConfig extends PropertiesConfig {
 	 * 
 	 * @return FTP匿名用户
 	 */
-	public static final String getFtpUser() {
+	public static String getFtpUser() {
 		return INSTANCE.ftpUser;
 	}
 
@@ -441,7 +441,7 @@ public final class SystemConfig extends PropertiesConfig {
 	 * 
 	 * @return FTP匿名密码
 	 */
-	public static final String getFtpPassword() {
+	public static String getFtpPassword() {
 		return INSTANCE.ftpPassword;
 	}
 	
@@ -450,7 +450,7 @@ public final class SystemConfig extends PropertiesConfig {
 	 * 
 	 * @return 作者
 	 */
-	public static final String getAuthor() {
+	public static String getAuthor() {
 		return INSTANCE.author;
 	}
 
@@ -459,7 +459,7 @@ public final class SystemConfig extends PropertiesConfig {
 	 * 
 	 * @return 官网与源码
 	 */
-	public static final String getSource() {
+	public static String getSource() {
 		return INSTANCE.source;
 	}
 
@@ -468,7 +468,7 @@ public final class SystemConfig extends PropertiesConfig {
 	 * 
 	 * @return 问题与建议
 	 */
-	public static final String getSupport() {
+	public static String getSupport() {
 		return INSTANCE.support;
 	}
 	
@@ -477,7 +477,7 @@ public final class SystemConfig extends PropertiesConfig {
 	 * 
 	 * @return 最新稳定版本
 	 */
-	public static final String getLatestRelease() {
+	public static String getLatestRelease() {
 		return INSTANCE.latestRelease;
 	}
 
@@ -486,7 +486,7 @@ public final class SystemConfig extends PropertiesConfig {
 	 * 
 	 * @return STUN服务器
 	 */
-	public static final String getStunServer() {
+	public static String getStunServer() {
 		return INSTANCE.stunServer;
 	}
 	
@@ -495,7 +495,7 @@ public final class SystemConfig extends PropertiesConfig {
 	 * 
 	 * @return 删除任务是否删除文件
 	 */
-	public static final boolean getTaskFileDelete() {
+	public static boolean getTaskFileDelete() {
 		return INSTANCE.taskFileDelete;
 	}
 	
@@ -504,7 +504,7 @@ public final class SystemConfig extends PropertiesConfig {
 	 * 
 	 * @return 系统服务端口（本地服务：启动检测）
 	 */
-	public static final int getServicePort() {
+	public static int getServicePort() {
 		return INSTANCE.servicePort;
 	}
 
@@ -513,7 +513,7 @@ public final class SystemConfig extends PropertiesConfig {
 	 * 
 	 * @return BT服务端口（本地端口：Peer、DHT、UTP、STUN）
 	 */
-	public static final int getTorrentPort() {
+	public static int getTorrentPort() {
 		return INSTANCE.torrentPort;
 	}
 	
@@ -523,7 +523,7 @@ public final class SystemConfig extends PropertiesConfig {
 	 * 
 	 * @return BT服务端口（外网端口：Peer、DHT、UTP、STUN）
 	 */
-	public static final int getTorrentPortExt() {
+	public static int getTorrentPortExt() {
 		if(INSTANCE.torrentPortExt == 0) {
 			return getTorrentPort();
 		}
@@ -536,7 +536,7 @@ public final class SystemConfig extends PropertiesConfig {
 	 * 
 	 * @param torrentPortExt BT服务端口（外网端口：Peer、DHT、UTP、STUN）
 	 */
-	public static final void setTorrentPortExt(int torrentPortExt) {
+	public static void setTorrentPortExt(int torrentPortExt) {
 		LOGGER.debug("设置BT服务端口（外网端口：Peer、DHT、UTP、STUN）：{}", torrentPortExt);
 		INSTANCE.torrentPortExt = torrentPortExt;
 	}
@@ -546,7 +546,7 @@ public final class SystemConfig extends PropertiesConfig {
 	 * 
 	 * @return BT服务端口（外网端口：Peer、DHT、UTP、STUN）
 	 */
-	public static final short getTorrentPortExtShort() {
+	public static short getTorrentPortExtShort() {
 		return NetUtils.portToShort(getTorrentPortExt());
 	}
 	
@@ -555,7 +555,7 @@ public final class SystemConfig extends PropertiesConfig {
 	 * 
 	 * @return 单个任务Peer数量（同时下载）
 	 */
-	public static final int getPeerSize() {
+	public static int getPeerSize() {
 		return INSTANCE.peerSize;
 	}
 	
@@ -564,7 +564,7 @@ public final class SystemConfig extends PropertiesConfig {
 	 * 
 	 * @return 单个任务Tracker数量
 	 */
-	public static final int getTrackerSize() {
+	public static int getTrackerSize() {
 		return INSTANCE.trackerSize;
 	}
 
@@ -573,7 +573,7 @@ public final class SystemConfig extends PropertiesConfig {
 	 * 
 	 * @return 任务即将完成时可以重复下载的Piece数量
 	 */
-	public static final int getPieceRepeatSize() {
+	public static int getPieceRepeatSize() {
 		return INSTANCE.pieceRepeatSize;
 	}
 	
@@ -582,7 +582,7 @@ public final class SystemConfig extends PropertiesConfig {
 	 * 
 	 * @return HLS下载线程数量
 	 */
-	public static final int getHlsThreadSize() {
+	public static int getHlsThreadSize() {
 		return INSTANCE.hlsThreadSize;
 	}
 
@@ -591,7 +591,7 @@ public final class SystemConfig extends PropertiesConfig {
 	 * 
 	 * @return DHT执行周期（秒）
 	 */
-	public static final int getDhtInterval() {
+	public static int getDhtInterval() {
 		return INSTANCE.dhtInterval;
 	}
 	
@@ -600,7 +600,7 @@ public final class SystemConfig extends PropertiesConfig {
 	 * 
 	 * @return PEX执行周期（秒）
 	 */
-	public static final int getPexInterval() {
+	public static int getPexInterval() {
 		return INSTANCE.pexInterval;
 	}
 	
@@ -609,7 +609,7 @@ public final class SystemConfig extends PropertiesConfig {
 	 * 
 	 * @return 本地发现执行周期（秒）
 	 */
-	public static final int getLsdInterval() {
+	public static int getLsdInterval() {
 		return INSTANCE.lsdInterval;
 	}
 	
@@ -618,7 +618,7 @@ public final class SystemConfig extends PropertiesConfig {
 	 * 
 	 * @return Have消息执行周期（秒）
 	 */
-	public static final int getHaveInterval() {
+	public static int getHaveInterval() {
 		return INSTANCE.haveInterval;
 	}
 	
@@ -627,7 +627,7 @@ public final class SystemConfig extends PropertiesConfig {
 	 * 
 	 * @return Tracker执行周期（秒）
 	 */
-	public static final int getTrackerInterval() {
+	public static int getTrackerInterval() {
 		return INSTANCE.trackerInterval;
 	}
 	
@@ -636,7 +636,7 @@ public final class SystemConfig extends PropertiesConfig {
 	 * 
 	 * @return Peer（连接、接入）优化周期（秒）
 	 */
-	public static final int getPeerOptimizeInterval() {
+	public static int getPeerOptimizeInterval() {
 		return INSTANCE.peerOptimizeInterval;
 	}
 
@@ -645,7 +645,7 @@ public final class SystemConfig extends PropertiesConfig {
 	 * 
 	 * @return 用户工作目录
 	 */
-	public static final String userDir() {
+	public static String userDir() {
 		return SystemConfig.USER_DIR;
 	}
 	
@@ -656,7 +656,7 @@ public final class SystemConfig extends PropertiesConfig {
 	 * 
 	 * @return 用户工作目录中的文件路径
 	 */
-	public static final String userDir(String path) {
+	public static String userDir(String path) {
 		return Paths.get(userDir(), path).toString();
 	}
 	
@@ -665,7 +665,7 @@ public final class SystemConfig extends PropertiesConfig {
 	 * 
 	 * @return 软件信息
 	 */
-	public static final String getNameEnAndVersion() {
+	public static String getNameEnAndVersion() {
 		return INSTANCE.nameEnAndVersion;
 	}
 
@@ -674,7 +674,7 @@ public final class SystemConfig extends PropertiesConfig {
 	 * 
 	 * @param externalIpAddress 外网IP地址
 	 */
-	public static final void setExternalIpAddress(String externalIpAddress) {
+	public static void setExternalIpAddress(String externalIpAddress) {
 		LOGGER.debug("设置外网IP地址：{}", externalIpAddress);
 		INSTANCE.externalIpAddress = externalIpAddress;
 	}
@@ -684,7 +684,7 @@ public final class SystemConfig extends PropertiesConfig {
 	 * 
 	 * @return 外网IP地址
 	 */
-	public static final String getExternalIpAddress() {
+	public static String getExternalIpAddress() {
 		return INSTANCE.externalIpAddress;
 	}
 	

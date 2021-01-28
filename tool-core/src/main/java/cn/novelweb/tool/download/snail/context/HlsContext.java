@@ -21,7 +21,7 @@ public final class HlsContext implements IContext {
 	
 	private static final HlsContext INSTANCE = new HlsContext();
 	
-	public static final HlsContext getInstance() {
+	public static HlsContext getInstance() {
 		return INSTANCE;
 	}
 

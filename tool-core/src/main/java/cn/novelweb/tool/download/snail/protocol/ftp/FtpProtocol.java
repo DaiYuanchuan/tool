@@ -17,7 +17,7 @@ public final class FtpProtocol extends Protocol {
 	
 	private static final FtpProtocol INSTANCE = new FtpProtocol();
 	
-	public static final FtpProtocol getInstance() {
+	public static FtpProtocol getInstance() {
 		return INSTANCE;
 	}
 	

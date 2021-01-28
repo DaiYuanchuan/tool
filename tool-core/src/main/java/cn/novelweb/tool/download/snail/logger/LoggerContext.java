@@ -23,7 +23,7 @@ public final class LoggerContext implements ILoggerFactory {
 
 	private static final LoggerContext INSTANCE = new LoggerContext();
 
-	public static final LoggerContext getInstance() {
+	public static LoggerContext getInstance() {
 		return INSTANCE;
 	}
 
@@ -93,7 +93,7 @@ public final class LoggerContext implements ILoggerFactory {
 	 * 
 	 * @param t 异常
 	 */
-	public static final void error(Throwable t) {
+	public static void error(Throwable t) {
 		try(FileOutputStream outputStream = new FileOutputStream(new File("logs/snail.logger.log"), true)) {
 			final PrintWriter printWriter = new PrintWriter(outputStream);
 			t.printStackTrace(printWriter);
@@ -106,7 +106,7 @@ public final class LoggerContext implements ILoggerFactory {
 	/**
 	 * <p>关闭日志</p>
 	 */
-	public static final void shutdown() {
+	public static void shutdown() {
 		INSTANCE.adapters.forEach(LoggerAdapter::release);
 	}
 

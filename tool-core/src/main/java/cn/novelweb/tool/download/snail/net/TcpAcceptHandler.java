@@ -39,7 +39,7 @@ public final class TcpAcceptHandler<T extends TcpMessageHandler> implements Comp
 	 * 
 	 * @return TCP客户端接收代理
 	 */
-	public static final <T extends TcpMessageHandler> TcpAcceptHandler<T> newInstance(Class<T> clazz) {
+	public static <T extends TcpMessageHandler> TcpAcceptHandler<T> newInstance(Class<T> clazz) {
 		return new TcpAcceptHandler<>(clazz);
 	}
 	

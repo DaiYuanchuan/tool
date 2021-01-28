@@ -53,7 +53,7 @@ public final class StringUtils {
 	 * 
 	 * @return true-空；false-非空；
 	 */
-	public static final boolean isEmpty(String value) {
+	public static boolean isEmpty(String value) {
 		return value == null || value.isEmpty();
 	}
 
@@ -64,7 +64,7 @@ public final class StringUtils {
 	 * 
 	 * @return true-非空；false-空；
 	 */
-	public static final boolean isNotEmpty(String value) {
+	public static boolean isNotEmpty(String value) {
 		return !isEmpty(value);
 	}
 	
@@ -76,7 +76,7 @@ public final class StringUtils {
 	 * 
 	 * @return true-是；false-不是；
 	 */
-	public static final boolean isNumeric(String value) {
+	public static boolean isNumeric(String value) {
 		return StringUtils.regex(value, NUMERIC_REGEX, true);
 	}
 
@@ -88,7 +88,7 @@ public final class StringUtils {
 	 * 
 	 * @return true-是；false-不是；
 	 */
-	public static final boolean isDecimal(String value) {
+	public static boolean isDecimal(String value) {
 		return StringUtils.regex(value, DECIMAL_REGEX, true);
 	}
 	
@@ -100,7 +100,7 @@ public final class StringUtils {
 	 * 
 	 * @return true-是；false-不是；
 	 */
-	public static final boolean startsWith(String value, String prefix) {
+	public static boolean startsWith(String value, String prefix) {
 		return value != null && prefix != null && value.startsWith(prefix);
 	}
 	
@@ -112,7 +112,7 @@ public final class StringUtils {
 	 * 
 	 * @return true-是；false-不是；
 	 */
-	public static final boolean endsWith(String value, String suffix) {
+	public static boolean endsWith(String value, String suffix) {
 		return value != null && suffix != null && value.endsWith(suffix);
 	}
 	
@@ -123,7 +123,7 @@ public final class StringUtils {
 	 * 
 	 * @return 十六进制字符串
 	 */
-	public static final String hex(byte[] bytes) {
+	public static String hex(byte[] bytes) {
 		if(bytes == null) {
 			return null;
 		}
@@ -146,7 +146,7 @@ public final class StringUtils {
 	 * 
 	 * @return 字节数组
 	 */
-	public static final byte[] unhex(String content) {
+	public static byte[] unhex(String content) {
 		if(content == null) {
 			return null;
 		}
@@ -172,7 +172,7 @@ public final class StringUtils {
 	 * 
 	 * @return SHA-1散列值
 	 */
-	public static final byte[] sha1(byte[] bytes) {
+	public static byte[] sha1(byte[] bytes) {
 		final MessageDigest digest = DigestUtils.sha1();
 		digest.update(bytes);
 		return digest.digest();
@@ -185,7 +185,7 @@ public final class StringUtils {
 	 * 
 	 * @return 十六进制SHA-1散列值字符串
 	 */
-	public static final String sha1Hex(byte[] bytes) {
+	public static String sha1Hex(byte[] bytes) {
 		return StringUtils.hex(sha1(bytes));
 	}
 	
@@ -199,7 +199,7 @@ public final class StringUtils {
 	 * 
 	 * @see #charset(String, String, String)
 	 */
-	public static final String charsetFrom(String value, String from) {
+	public static String charsetFrom(String value, String from) {
 		return charset(value, from, null);
 	}
 	
@@ -213,7 +213,7 @@ public final class StringUtils {
 	 * 
 	 * @see #charset(String, String, String)
 	 */
-	public static final String charsetTo(String value, String to) {
+	public static String charsetTo(String value, String to) {
 		return charset(value, null, to);
 	}
 	
@@ -226,7 +226,7 @@ public final class StringUtils {
 	 * 
 	 * @return 字符串
 	 */
-	public static final String charset(String value, String from, String to) {
+	public static String charset(String value, String from, String to) {
 		if(StringUtils.isEmpty(value)) {
 			return value;
 		}
@@ -255,7 +255,7 @@ public final class StringUtils {
 	 * 
 	 * @return true-匹配；false-不匹配；
 	 */
-	public static final boolean regex(String value, String regex, boolean ignoreCase) {
+	public static boolean regex(String value, String regex, boolean ignoreCase) {
 		if(value == null || regex == null) {
 			return false;
 		}
@@ -277,7 +277,7 @@ public final class StringUtils {
 	 * 
 	 * @return true-相等；false-不等；
 	 */
-	public static final boolean equals(String source, String target) {
+	public static boolean equals(String source, String target) {
 		if(source == null) {
 			return target == null;
 		} else {
@@ -293,7 +293,7 @@ public final class StringUtils {
 	 * 
 	 * @return true-相等；false-不等；
 	 */
-	public static final boolean equalsIgnoreCase(String source, String target) {
+	public static boolean equalsIgnoreCase(String source, String target) {
 		if(source == null) {
 			return target == null;
 		} else {
@@ -308,7 +308,7 @@ public final class StringUtils {
 	 * 
 	 * @return Unicode字符串
 	 */
-	public static final String toUnicode(String content) {
+	public static String toUnicode(String content) {
 		char value;
 		final StringBuilder builder = new StringBuilder();
 		for (int index = 0; index < content.length(); index++) {
@@ -329,7 +329,7 @@ public final class StringUtils {
 	 * 
 	 * @return 字符串
 	 */
-	public static final String ofUnicode(String unicode) {
+	public static String ofUnicode(String unicode) {
 		final String[] hex = unicode.split("\\\\u");
 		final StringBuilder builder = new StringBuilder();
 		for (int index = 1; index < hex.length; index++) {
@@ -348,7 +348,7 @@ public final class StringUtils {
 	 * 
 	 * @see #ofByteBuffer(ByteBuffer, String)
 	 */
-	public static final String ofByteBuffer(ByteBuffer buffer) {
+	public static String ofByteBuffer(ByteBuffer buffer) {
 		return ofByteBuffer(buffer, SystemConfig.DEFAULT_CHARSET);
 	}
 	
@@ -360,7 +360,7 @@ public final class StringUtils {
 	 * 
 	 * @return 字符串
 	 */
-	public static final String ofByteBuffer(ByteBuffer buffer, String charset) {
+	public static String ofByteBuffer(ByteBuffer buffer, String charset) {
 		if(buffer == null) {
 			return null;
 		}
@@ -391,7 +391,7 @@ public final class StringUtils {
 	 * 
 	 * @return 字符串
 	 */
-	public static final String ofInputStream(InputStream input, String charset) {
+	public static String ofInputStream(InputStream input, String charset) {
 		if(input == null) {
 			return null;
 		}
@@ -420,7 +420,7 @@ public final class StringUtils {
 	 * 
 	 * @return 参数值
 	 */
-	public static final String argValue(final String arg, final String key) {
+	public static String argValue(final String arg, final String key) {
 		String value = arg;
 		if(startsWith(value, key)) {
 			// 去掉键
@@ -443,7 +443,7 @@ public final class StringUtils {
 	 * 
 	 * @return 编码格式
 	 */
-	public static final String getCharset(String content) {
+	public static String getCharset(String content) {
 		if(StringUtils.isEmpty(content)) {
 			return SystemConfig.CHARSET_UTF8;
 		}
@@ -467,7 +467,7 @@ public final class StringUtils {
 	 * 
 	 * @return 字符串
 	 */
-	public static final String getString(Object object) {
+	public static String getString(Object object) {
 		return getString(object, null);
 	}
 	
@@ -479,7 +479,7 @@ public final class StringUtils {
 	 * 
 	 * @return 字符串
 	 */
-	public static final String getString(Object object, String encoding) {
+	public static String getString(Object object, String encoding) {
 		if(object == null) {
 			return null;
 		}
@@ -507,7 +507,7 @@ public final class StringUtils {
 	 * 
 	 * @return 字符串
 	 */
-	public static final String getStringCharset(Object object, String encoding) {
+	public static String getStringCharset(Object object, String encoding) {
 		if(encoding != null) {
 			return getString(object, encoding);
 		} else {
@@ -528,7 +528,7 @@ public final class StringUtils {
 	 * 
 	 * @return 去掉空白字符的字符串
 	 */
-	public static final String trimAllBlank(String content) {
+	public static String trimAllBlank(String content) {
 		if(content == null) {
 			return content;
 		}
@@ -542,7 +542,7 @@ public final class StringUtils {
 	 * 
 	 * @return 每行列表
 	 */
-	public static final List<String> readLines(String content) {
+	public static List<String> readLines(String content) {
 		if(content == null) {
 			return new ArrayList<>();
 		}

@@ -36,7 +36,7 @@ public final class PeerUploader extends PeerConnect {
 	 * 
 	 * @return Peer接入
 	 */
-	public static final PeerUploader newInstance(PeerSession peerSession, TorrentSession torrentSession, PeerSubMessageHandler peerSubMessageHandler) {
+	public static PeerUploader newInstance(PeerSession peerSession, TorrentSession torrentSession, PeerSubMessageHandler peerSubMessageHandler) {
 		return new PeerUploader(peerSession, torrentSession, peerSubMessageHandler);
 	}
 

@@ -12,7 +12,7 @@ public final class ApplicationServer extends TcpServer<ApplicationMessageHandler
 
 	private static final ApplicationServer INSTANCE = new ApplicationServer();
 	
-	public static final ApplicationServer getInstance() {
+	public static ApplicationServer getInstance() {
 		return INSTANCE;
 	}
 	
