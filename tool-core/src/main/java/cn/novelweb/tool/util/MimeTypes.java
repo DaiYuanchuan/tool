@@ -33,6 +33,9 @@ public class MimeTypes {
      */
     private final HashMap<String, String> extensionToMimetypeMap = new HashMap<>();
 
+    /**
+     * 禁止实例化
+     */
     private MimeTypes() {
     }
 
