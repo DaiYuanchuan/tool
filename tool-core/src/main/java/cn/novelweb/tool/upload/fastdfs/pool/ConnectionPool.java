@@ -18,7 +18,7 @@ public class ConnectionPool extends GenericKeyedObjectPool<InetSocketAddress, Co
     /**
      * 默认构造函数
      */
-    public ConnectionPool(KeyedPooledObjectFactory<InetSocketAddress, Connection> factory, GenericKeyedObjectPoolConfig config) {
+    public ConnectionPool(KeyedPooledObjectFactory<InetSocketAddress, Connection> factory, GenericKeyedObjectPoolConfig<Connection> config) {
         super(factory, config);
     }
 

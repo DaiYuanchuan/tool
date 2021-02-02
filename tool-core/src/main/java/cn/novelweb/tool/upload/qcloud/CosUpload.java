@@ -7,14 +7,13 @@ import com.alibaba.fastjson.JSONObject;
 import com.qcloud.cos.COSClient;
 import com.qcloud.cos.ClientConfig;
 import com.qcloud.cos.auth.BasicCOSCredentials;
-import com.qcloud.cos.auth.BasicSessionCredentials;
+import com.qcloud.cos.auth.COSCredentials;
 import com.qcloud.cos.exception.MultiObjectDeleteException;
 import com.qcloud.cos.model.*;
+import com.qcloud.cos.region.Region;
 import com.qcloud.cos.transfer.TransferManager;
 import com.qcloud.cos.transfer.Upload;
-import com.qcloud.cos.auth.COSCredentials;
 import lombok.extern.slf4j.Slf4j;
-import com.qcloud.cos.region.Region;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
@@ -22,8 +21,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.TreeMap;
-import java.util.concurrent.*;
+import java.util.concurrent.ExecutorService;
 
 /**
  * <p>腾讯云上传</p>

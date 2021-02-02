@@ -1,23 +1,26 @@
 package cn.novelweb.tool.upload.local;
 
-import cn.hutool.core.io.FileTypeUtil;
 import cn.hutool.core.io.FileUtil;
+import cn.hutool.core.io.file.FileNameUtil;
+import cn.novelweb.tool.http.Result;
 import cn.novelweb.tool.upload.file.FileInfo;
+import cn.novelweb.tool.upload.local.pojo.UploadFileParam;
+import cn.novelweb.tool.util.MimeTypes;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
-import cn.novelweb.tool.http.Result;
-import cn.novelweb.tool.upload.local.pojo.UploadFileParam;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
+import java.io.RandomAccessFile;
 import java.text.SimpleDateFormat;
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -50,9 +53,9 @@ public class LocalUpload {
      * @throws Exception 抛出自定义Exception异常
      */
     public static Result<JSONArray> checkFileMd5(String fileMd5,
-                                         String fileName,
-                                         String confFilePath,
-                                         String tmpFilePath) throws Exception {
+                                                 String fileName,
+                                                 String confFilePath,
+                                                 String tmpFilePath) throws Exception {
         boolean isParamEmpty = StringUtils.isBlank(fileMd5)
                 || StringUtils.isBlank(fileName)
                 || StringUtils.isBlank(confFilePath)
@@ -70,16 +73,15 @@ public class LocalUpload {
         // 分片记录文件 和 文件缓存文件 同时存在 则 状态码定义为 206
         if (confFile.exists() && isTmpFileEmpty) {
             byte[] completeList = FileUtils.readFileToByteArray(confFile);
-            List<String> missChunkList = new LinkedList<String>();
+            List<String> missChunkList = new ArrayList<>();
             for (int i = 0; i < completeList.length; i++) {
                 if (completeList[i] != Byte.MAX_VALUE) {
                     missChunkList.add(Integer.toString(i));
                 }
             }
-            JSONArray jsonArray = JSON.parseArray(JSONObject.toJSONString(missChunkList));
 
             return Result.ok(HttpStatus.PARTIAL_CONTENT.value(), "文件已经上传了一部分",
-                    jsonArray);
+                    JSONArray.parseArray(JSON.toJSONString(missChunkList)));
         }
 
         // 布尔值:上传的文件对象是否存在
@@ -105,7 +107,7 @@ public class LocalUpload {
      * @throws Exception 抛出自定义Exception异常
      */
     public static Result<JSONArray> checkFileMd5(String fileMd5,
-                                         String fileName) throws Exception {
+                                                 String fileName) throws Exception {
         return checkFileMd5(fileMd5, fileName,
                 defaultPath + File.separatorChar + fileMd5
                 , defaultPath + File.separatorChar + fileMd5);
@@ -124,7 +126,7 @@ public class LocalUpload {
      * @param request      HTTP Servlet请求
      * @return 返回文件上传状态
      * 200:文件上传成功、单个分片文件上传成功、未全部上传成功
-     * 201:文件全部上传完成、所有分片全部上传完成、文件完成合并后重命名操作(同时返回cn.novelweb.tool.upload.file.FileInfo信息)
+     * 201:文件全部上传完成、所有分片全部上传完成、文件完成合并后重命名操作(同时返回 {@link FileInfo} 信息)
      * 500:文件上传失败、文件上传异常
      * @throws Exception 抛出自定义Exception异常
      */
@@ -180,7 +182,7 @@ public class LocalUpload {
             FileInfo fileInfo = FileInfo.builder()
                     .hash(param.getMd5())
                     .name(param.getName())
-                    .type(param.getFile().getContentType())
+                    .type(MimeTypes.getInstance().getMimeTypes(param.getName()))
                     .path(tmpFile.getParent() + File.separatorChar + param.getName())
                     .createTime(System.currentTimeMillis())
                     .build();
@@ -199,12 +201,12 @@ public class LocalUpload {
      * @param request   HTTP Servlet请求
      * @return 返回文件上传状态
      * 200:文件上传成功、单个分片文件上传成功、未全部上传成功
-     * 201:文件全部上传完成、所有分片全部上传完成、文件完成合并后重命名操作(同时返回com.dai.pojo.file.Files信息)
+     * 201:文件全部上传完成、所有分片全部上传完成、文件完成合并后重命名操作(同时返回 {@link FileInfo} 信息)
      * 500:文件上传失败、文件上传异常
      * @throws Exception 抛出自定义Exception异常
      */
     public static Result<FileInfo> fragmentFileUploader(UploadFileParam param, long chunkSize,
-                                                 HttpServletRequest request) throws Exception {
+                                                        HttpServletRequest request) throws Exception {
         return fragmentFileUploader(param, defaultPath + File.separatorChar + param.getMd5(),
                 defaultPath + File.separatorChar + param.getMd5(),
                 chunkSize, request);
@@ -215,7 +217,7 @@ public class LocalUpload {
      *
      * @param param    上传文件时 需要接收的基本参数信息
      * @param filePath 上传文件的路径,不包含文件名 log/uploader
-     * @return 返回文件上传状态和com.dai.pojo.file.Files信息
+     * @return 返回文件上传状态和 {@link FileInfo} 信息
      * 201:文件上传完成
      * 500:文件上传失败、传输异常
      * @throws Exception 抛出自定义Exception异常
@@ -249,7 +251,7 @@ public class LocalUpload {
         FileInfo fileInfo = FileInfo.builder()
                 .hash(param.getMd5())
                 .name(param.getName())
-                .type(param.getFile().getContentType())
+                .type(MimeTypes.getInstance().getMimeTypes(param.getName()))
                 .path(uploadFile.getPath())
                 .createTime(System.currentTimeMillis())
                 .build();
@@ -260,7 +262,7 @@ public class LocalUpload {
      * 普通的文件上传程序、使用默认上传路径(/log/uploader/年/月/日/当前时间毫秒数.mp4)
      *
      * @param param 上传文件时 需要接收的基本参数信息
-     * @return 返回文件上传状态和com.dai.pojo.file.Files信息
+     * @return 返回文件上传状态和 {@link FileInfo} 信息
      * 201:文件上传完成
      * 500:文件上传失败、传输异常
      * @throws Exception 抛出自定义Exception异常
@@ -272,7 +274,7 @@ public class LocalUpload {
         }
 
         // 重构文件名
-        param.setName(System.currentTimeMillis() + "." + FileTypeUtil.getType(param.getFile().getInputStream()));
+        param.setName(System.currentTimeMillis() + "." + FileNameUtil.extName(param.getFile().getOriginalFilename()));
 
         // 重构文件路径
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(
@@ -280,6 +282,22 @@ public class LocalUpload {
 
         return regularFileUploader(param, defaultPath + File.separatorChar
                 + simpleDateFormat.format(System.currentTimeMillis()));
+    }
+
+    /**
+     * 普通的文件上传程序、使用默认上传路径(/log/uploader/年/月/日/当前时间毫秒数.mp4)
+     *
+     * @param file 文件流信息
+     * @return 返回文件上传状态和 {@link FileInfo} 信息
+     * 201:文件上传完成
+     * 500:文件上传失败、传输异常
+     * @throws Exception 抛出自定义Exception异常
+     */
+    public static Result<FileInfo> regularFileUploader(MultipartFile file) throws Exception {
+        return regularFileUploader(UploadFileParam.builder()
+                .file(file)
+                .name(file.getOriginalFilename())
+                .build());
     }
 
     /**

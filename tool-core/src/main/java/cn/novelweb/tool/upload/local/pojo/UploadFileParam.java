@@ -29,7 +29,7 @@ public class UploadFileParam {
     @ApiModelProperty(value = "总分片数量", example = "0", required = true)
     private int chunks;
 
-    @ApiModelProperty(value = "当前为第几块分片", example = "0", required = true)
+    @ApiModelProperty(value = "当前为第几块分片(第一个块是 0，注意不是从 1 开始的)", example = "0", required = true)
     private int chunk;
 
     @ApiModelProperty(value = "当前分片大小", example = "0", required = true)

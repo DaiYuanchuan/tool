@@ -10,6 +10,7 @@ import cn.novelweb.tool.upload.fastdfs.client.DefaultTrackerClient;
 import cn.novelweb.tool.upload.fastdfs.client.StorageClient;
 import cn.novelweb.tool.upload.fastdfs.client.TrackerClient;
 import cn.novelweb.tool.upload.fastdfs.config.FastDfsConfig;
+import cn.novelweb.tool.upload.fastdfs.conn.Connection;
 import cn.novelweb.tool.upload.fastdfs.conn.DefaultCommandExecutor;
 import cn.novelweb.tool.upload.fastdfs.model.FileInfo;
 import cn.novelweb.tool.upload.fastdfs.model.MateData;
@@ -59,7 +60,7 @@ public class FastDfsClient {
         Log.debugLog = fastDfsConfig.getDebugLog();
         PooledConnectionFactory pooledConnectionFactory = new PooledConnectionFactory(
                 fastDfsConfig.getSoTimeout(), fastDfsConfig.getConnectTimeout());
-        GenericKeyedObjectPoolConfig<?> conf = new GenericKeyedObjectPoolConfig<>();
+        GenericKeyedObjectPoolConfig<Connection> conf = new GenericKeyedObjectPoolConfig<>();
         conf.setMaxTotal(fastDfsConfig.getMaxTotal());
         conf.setMaxTotalPerKey(fastDfsConfig.getMaxTotalPerKey());
         conf.setMaxIdlePerKey(fastDfsConfig.getMaxIdlePerKey());
