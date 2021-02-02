@@ -8,7 +8,6 @@ import cn.novelweb.tool.upload.local.pojo.UploadFileParam;
 import cn.novelweb.tool.util.MimeTypes;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.commons.io.FileUtils;
@@ -21,7 +20,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.text.SimpleDateFormat;
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -74,16 +73,15 @@ public class LocalUpload {
         // 分片记录文件 和 文件缓存文件 同时存在 则 状态码定义为 206
         if (confFile.exists() && isTmpFileEmpty) {
             byte[] completeList = FileUtils.readFileToByteArray(confFile);
-            List<String> missChunkList = new LinkedList<String>();
+            List<String> missChunkList = new ArrayList<>();
             for (int i = 0; i < completeList.length; i++) {
                 if (completeList[i] != Byte.MAX_VALUE) {
                     missChunkList.add(Integer.toString(i));
                 }
             }
-            JSONArray jsonArray = JSON.parseArray(JSONObject.toJSONString(missChunkList));
 
             return Result.ok(HttpStatus.PARTIAL_CONTENT.value(), "文件已经上传了一部分",
-                    jsonArray);
+                    JSONArray.parseArray(JSON.toJSONString(missChunkList)));
         }
 
         // 布尔值:上传的文件对象是否存在
