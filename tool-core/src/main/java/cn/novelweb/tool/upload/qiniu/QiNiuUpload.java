@@ -680,6 +680,19 @@ public class QiNiuUpload {
     }
 
     /**
+     * 生成token
+     * 自定义上传策略、指定有效时长
+     *
+     * @param expires 有效时长，单位秒。默认3600s
+     * @param policy  上传策略的其它参数，如 new StringMap().put("endUser", "uid").putNotEmpty("returnBody", "")。
+     *                scope通过 bucket、key间接设置，deadline 通过 expires 间接设置
+     * @return 生成的上传token
+     */
+    public static String getUploadToken(long expires, StringMap policy) {
+        return Auth.create(accessKey, secretKey).uploadToken(bucket, null, expires, policy, true);
+    }
+
+    /**
      * 生成上传token
      *
      * @param key     key，可为 null
@@ -689,7 +702,7 @@ public class QiNiuUpload {
      * @param strict  是否去除非限定的策略字段，默认true
      * @return 生成的上传token
      */
-    public String getUploadToken(String key, long expires, StringMap policy, boolean strict) {
+    public static String getUploadToken(String key, long expires, StringMap policy, boolean strict) {
         return Auth.create(accessKey, secretKey).uploadToken(bucket, key, expires, policy, strict);
     }
 
