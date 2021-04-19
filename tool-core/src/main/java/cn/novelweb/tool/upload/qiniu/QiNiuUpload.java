@@ -707,6 +707,20 @@ public class QiNiuUpload {
     }
 
     /**
+     * <p>验证回调签名是否正确<p/>
+     * <p>具体参考:https://developer.qiniu.com/kodo/1653/callback<p/>
+     *
+     * @param authorization 待验证签名字符串，以 "QBox "作为起始字符
+     * @param url           回调地址
+     * @param body          回调请求体。原始请求体，不要解析后再封装成新的请求体--可能导致签名不一致。
+     * @param contentType   回调ContentType
+     * @return 返回当前回调签名是否正确 true:正确
+     */
+    public static boolean isValidCallback(String authorization, String url, byte[] body, String contentType) {
+        return Auth.create(accessKey, secretKey).isValidCallback(authorization, url, body, contentType);
+    }
+
+    /**
      * 计算输入流的etag，如果计算完毕不需要这个InputStream对象，请自行关闭流
      * etag算法是七牛用来标志数据唯一性的算法。
      *
