@@ -680,6 +680,19 @@ public class QiNiuUpload {
     }
 
     /**
+     * 生成token
+     * 自定义上传策略、指定有效时长
+     *
+     * @param expires 有效时长，单位秒。默认3600s
+     * @param policy  上传策略的其它参数，如 new StringMap().put("endUser", "uid").putNotEmpty("returnBody", "")。
+     *                scope通过 bucket、key间接设置，deadline 通过 expires 间接设置
+     * @return 生成的上传token
+     */
+    public static String getUploadToken(long expires, StringMap policy) {
+        return Auth.create(accessKey, secretKey).uploadToken(bucket, null, expires, policy, true);
+    }
+
+    /**
      * 生成上传token
      *
      * @param key     key，可为 null
@@ -689,8 +702,22 @@ public class QiNiuUpload {
      * @param strict  是否去除非限定的策略字段，默认true
      * @return 生成的上传token
      */
-    public String getUploadToken(String key, long expires, StringMap policy, boolean strict) {
+    public static String getUploadToken(String key, long expires, StringMap policy, boolean strict) {
         return Auth.create(accessKey, secretKey).uploadToken(bucket, key, expires, policy, strict);
+    }
+
+    /**
+     * <p>验证回调签名是否正确<p/>
+     * <p>具体参考:https://developer.qiniu.com/kodo/1653/callback<p/>
+     *
+     * @param authorization 待验证签名字符串，以 "QBox "作为起始字符
+     * @param url           回调地址
+     * @param body          回调请求体。原始请求体，不要解析后再封装成新的请求体--可能导致签名不一致。
+     * @param contentType   回调ContentType
+     * @return 返回当前回调签名是否正确 true:正确
+     */
+    public static boolean isValidCallback(String authorization, String url, byte[] body, String contentType) {
+        return Auth.create(accessKey, secretKey).isValidCallback(authorization, url, body, contentType);
     }
 
     /**

@@ -134,24 +134,24 @@ public class DateUtils {
             if (timeDifference < DateUnit.SECOND.getMillis() * just) {
                 return "刚刚";
             } else {
-                return DateUtil.formatBetween(timeDifference, BetweenFormater.Level.SECOND) + "前";
+                return DateUtil.formatBetween(timeDifference, BetweenFormatter.Level.SECOND) + "前";
             }
         }
 
         // 一小时内
         if (timeDifference > DateUnit.MINUTE.getMillis() && timeDifference < DateUnit.HOUR.getMillis()) {
-            return DateUtil.formatBetween(timeDifference, BetweenFormater.Level.MINUTE) + "钟前";
+            return DateUtil.formatBetween(timeDifference, BetweenFormatter.Level.MINUTE) + "钟前";
         }
 
         // 一天内
         if (timeDifference >= DateUnit.HOUR.getMillis() && timeDifference < DateUnit.DAY.getMillis()) {
-            return DateUtil.formatBetween(timeDifference, BetweenFormater.Level.HOUR) + "前";
+            return DateUtil.formatBetween(timeDifference, BetweenFormatter.Level.HOUR) + "前";
         }
 
         // 二十天内
         long twentyDays = DateUnit.DAY.getMillis() * 20;
         if (timeDifference >= DateUnit.DAY.getMillis() && timeDifference < twentyDays) {
-            return DateUtil.formatBetween(timeDifference, BetweenFormater.Level.DAY) + "前";
+            return DateUtil.formatBetween(timeDifference, BetweenFormatter.Level.DAY) + "前";
         }
         return DateUtil.format(time, "yyyy-MM-dd");
     }
