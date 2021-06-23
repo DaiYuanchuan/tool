@@ -6,7 +6,6 @@ import cn.hutool.core.util.ReUtil;
 import cn.novelweb.config.ConstantConfiguration;
 import lombok.extern.slf4j.Slf4j;
 import net.coobird.thumbnailator.Thumbnails;
-import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
 
 import javax.imageio.ImageIO;
@@ -18,10 +17,8 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.*;
 import java.net.URL;
-import java.util.*;
-import java.io.File;
-import java.io.IOException;
 import java.util.List;
+import java.util.*;
 
 /**
  * <p>图片处理工具类</p>
@@ -71,8 +68,7 @@ public class ImagesUtil {
         // 设置宽高最小值为1
         width = Math.max(width, 1);
         height = Math.max(height, 1);
-        ByteArrayOutputStream outputStream = null;
-        try {
+        try (ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
             //压缩至指定图片尺寸（例如：横500高500），保持图片不变形，多余部分裁剪掉
             BufferedImage image = ImageIO.read(input);
             Thumbnails.Builder<BufferedImage> builder;
@@ -90,15 +86,12 @@ public class ImagesUtil {
             } else {
                 builder = Thumbnails.of(image).size(width, height);
             }
-            outputStream = new ByteArrayOutputStream();
             builder.outputFormat(suffix).toOutputStream(outputStream);
             return outputStream;
         } catch (IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
             log.error("压缩指定宽高图片出错:{}", e.getMessage());
-        } finally {
-            IOUtils.closeQuietly(outputStream);
         }
         return null;
     }
@@ -129,17 +122,13 @@ public class ImagesUtil {
             log.error("url不符合规则");
             return null;
         }
-        BufferedInputStream bufferedInputStream = null;
-        try {
-            bufferedInputStream = new BufferedInputStream(new URL(url).openStream());
+        try (BufferedInputStream bufferedInputStream = new BufferedInputStream(new URL(url).openStream())) {
             return compressPicturesOutStream(bufferedInputStream, FileTypeUtil.getType(new URL(url).openStream()),
                     Math.max(width, 1), Math.max(height, 1));
         } catch (Exception e) {
             e.printStackTrace();
             log.error("压缩网络图片出错:{}", e.getMessage());
             return null;
-        } finally {
-            IOUtils.closeQuietly(bufferedInputStream);
         }
     }
 
@@ -165,17 +154,13 @@ public class ImagesUtil {
      * @return 返回图片的字节数组输出流
      */
     public static ByteArrayOutputStream scaleToScaleOutStream(InputStream imgFile, String suffix, double scaling) {
-        ByteArrayOutputStream outputStream = null;
-        try {
-            outputStream = new ByteArrayOutputStream();
+        try (ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
             Thumbnails.of(imgFile).scale(scaling).outputFormat(suffix).toOutputStream(outputStream);
             return outputStream;
         } catch (IOException e) {
             e.printStackTrace();
             log.error("压缩网络图片出错:{}", e.getMessage());
             return null;
-        } finally {
-            IOUtils.closeQuietly(outputStream);
         }
     }
 
@@ -205,17 +190,13 @@ public class ImagesUtil {
      * @return 返回图片的字节数组输出流
      */
     public static ByteArrayOutputStream scaleToScaleOutStream(InputStream imgFile, String suffix, Integer width, Integer height, boolean isScaling) {
-        ByteArrayOutputStream outputStream = null;
-        try {
-            outputStream = new ByteArrayOutputStream();
+        try (ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
             Thumbnails.of(imgFile).size(width, height).keepAspectRatio(isScaling).outputFormat(suffix).toOutputStream(outputStream);
             return outputStream;
         } catch (IOException e) {
             e.printStackTrace();
             log.error("不按照比例缩放图片出错:{}", e.getMessage());
             return null;
-        } finally {
-            IOUtils.closeQuietly(outputStream);
         }
     }
 
@@ -241,19 +222,15 @@ public class ImagesUtil {
      * @return 返回图片的字节数组输出流
      */
     public static ByteArrayOutputStream compressionSizeOutStream(InputStream imgFile, String suffix, double compressionRatio, double scaling) {
-        ByteArrayOutputStream outputStream = null;
-        try {
+        try (ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
             compressionRatio = Math.max(compressionRatio, 0.0);
             scaling = Math.min(1.0, Math.max(scaling, 0.0));
-            outputStream = new ByteArrayOutputStream();
             Thumbnails.of(imgFile).scale(compressionRatio).outputQuality(scaling).outputFormat(suffix).toOutputStream(outputStream);
             return outputStream;
         } catch (IOException e) {
             e.printStackTrace();
             log.error("压缩图片大小图片尺寸不变出错:{}", e.getMessage());
             return null;
-        } finally {
-            IOUtils.closeQuietly(outputStream);
         }
     }
 

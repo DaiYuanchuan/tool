@@ -10,7 +10,7 @@
     <!-- 1）主版本号：产品方向改变，或者大规模 API 不兼容，或者架构不兼容升级。 -->
     <!-- 2）次版本号：保持相对兼容性，增加主要功能特性，影响范围极小的 API 不兼容修改。 -->
     <!-- 3）修订号：保持完全兼容性，修复 BUG、新增次要功能特性等。-->
-    <version>1.3.18</version>
+    <version>1.3.19</version>
 
     <!-- 子项目 -->
     <modules>
@@ -218,7 +218,7 @@
             <dependency>
                 <groupId>com.qiniu</groupId>
                 <artifactId>qiniu-java-sdk</artifactId>
-                <version>[7.2.0, 7.2.99]</version>
+                <version>[7.6.0, 7.6.99]</version>
             </dependency>
             <!-- 七牛云SDK包end -->
 
