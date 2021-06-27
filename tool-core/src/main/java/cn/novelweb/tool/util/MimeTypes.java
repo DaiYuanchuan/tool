@@ -5,7 +5,10 @@ import cn.hutool.core.util.StrUtil;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.StringTokenizer;
 
@@ -110,6 +113,16 @@ public class MimeTypes {
         }
 
         return DEFAULT_MIMETYPE;
+    }
+
+    /**
+     * 向mime类型的映射Map中添加新的值
+     *
+     * @param key   key
+     * @param value value
+     */
+    public void setMimeTypes(String key, String value) {
+        extensionToMimetypeMap.put(key, value);
     }
 
     /**

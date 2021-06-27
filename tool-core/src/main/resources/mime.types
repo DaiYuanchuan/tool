@@ -117,6 +117,7 @@ wmv    video/x-ms-wmv
 wmx    video/x-ms-wmx
 wvx    video/x-ms-wvx
 avi    video/x-msvideo
+mkv    video/x-matroska
 movie    video/x-sgi-movie
 ice    x-conference/x-cooltalk
 3gp    video/3gpp
@@ -219,6 +220,7 @@ txt    text/plain
 vrml    model/vrml
 vxml    application/voicexml+xml
 webm    video/webm
+ogg    audio/ogg
 wrl    model/vrml
 xht    application/xhtml+xml
 xhtml    application/xhtml+xml
