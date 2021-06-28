@@ -469,7 +469,7 @@ public class FormatConversion {
     private static void taskCallback(Frame capturedFrame, List<BufferedImage> bufferedImages,
                                      VideoFrameDrawingCallback callback, AtomicInteger atomicInteger, int count) {
         // 绘制图片流信息
-        BufferedImage image = Java2DFrameUtils.toBufferedImage(capturedFrame);
+        BufferedImage image = Java2dFrameUtils.toBufferedImage(capturedFrame);
         // 绘制图片
         bufferedImages.add(image);
         // 任务回调
