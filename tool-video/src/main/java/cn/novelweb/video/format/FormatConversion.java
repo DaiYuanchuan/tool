@@ -5,6 +5,7 @@ import cn.hutool.core.date.DateUnit;
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.thread.ThreadUtil;
 import cn.hutool.core.util.ArrayUtil;
+import cn.hutool.core.util.RandomUtil;
 import cn.novelweb.video.format.callback.ProgressCallback;
 import cn.novelweb.video.format.callback.VideoFrameDrawingCallback;
 import cn.novelweb.video.pojo.Preset;
@@ -225,6 +226,8 @@ public class FormatConversion {
         converter(input, output, parameters, callback);
     }
 
+    // ==================================================== 视频取帧 ====================================================
+
     /**
      * 异步视频指定间隔帧采样
      * 指定抽取帧的间隔数 ，对视频进行抽帧，将抽取出来的帧转为图片文件，保存至参数output
@@ -233,15 +236,15 @@ public class FormatConversion {
      * @param output   帧转为图片文件后需要保存到的图片路径
      * @param interval 抽帧间隔，默认值25，最大不能超过当前视频总帧数
      */
-    public static void asynchronousVideoSamplingIntervalFrame(String input, String output, Integer interval) {
+    public static void asyncVideoSamplingIntervalFrame(String input, String output, Integer interval) {
         // 图片输出路径
         File imagesOutputPath = FileUtil.mkdir(output);
         File inputFile = new File(input);
-        asynchronousVideoSamplingIntervalFrame(inputFile, interval, (image, images, index, count) -> {
+        asyncVideoSamplingIntervalFrame(inputFile, interval, (image, images, index, count) -> {
             try {
                 ImageIO.write(image, "png", FileUtil.file(imagesOutputPath, String.format("%d.png", index)));
             } catch (IOException e) {
-                e.printStackTrace();
+                log.error(e.getMessage(), e);
             }
         });
     }
@@ -254,7 +257,7 @@ public class FormatConversion {
      * @param interval 抽帧间隔，默认值25，最大不能超过当前视频总帧数
      * @param callback 任务信息回调接口
      */
-    public static void asynchronousVideoSamplingIntervalFrame(File input, Integer interval, VideoFrameDrawingCallback callback) {
+    public static void asyncVideoSamplingIntervalFrame(File input, Integer interval, VideoFrameDrawingCallback callback) {
         if (!input.exists()) {
             log.error("file {} does not exist", input.getName());
             return;
@@ -276,14 +279,14 @@ public class FormatConversion {
      * @param output 转换后输出的视频文件
      * @param frame  需要进行抽取的帧数组
      */
-    public static void asynchronousVideoSpecifiedFrameSampling(String input, String output, Integer... frame) {
+    public static void asyncVideoSpecifiedFrameSampling(String input, String output, Integer... frame) {
         // 图片输出路径
         File imagesOutputPath = FileUtil.mkdir(output);
-        asynchronousVideoSpecifiedFrameSampling(new File(input), (image, images, index, count) -> {
+        asyncVideoSpecifiedFrameSampling(new File(input), (image, images, index, count) -> {
             try {
                 ImageIO.write(image, "png", FileUtil.file(imagesOutputPath, String.format("%d.png", index)));
             } catch (IOException e) {
-                e.printStackTrace();
+                log.error(e.getMessage(), e);
             }
         }, frame);
     }
@@ -296,7 +299,7 @@ public class FormatConversion {
      * @param callback 任务进度的回调接口
      * @param frame    需要进行抽取的帧数组
      */
-    public static void asynchronousVideoSpecifiedFrameSampling(File input, VideoFrameDrawingCallback callback, Integer... frame) {
+    public static void asyncVideoSpecifiedFrameSampling(File input, VideoFrameDrawingCallback callback, Integer... frame) {
         if (!input.exists()) {
             log.error("file {} does not exist", input.getName());
             return;
@@ -311,22 +314,79 @@ public class FormatConversion {
             log.error("frame array is empty");
             return;
         }
-        ThreadUtil.execAsync(() -> videoSpecifiedFrameSampling(input, callback, frame));
+        ThreadUtil.execAsync(() -> {
+            try {
+                // 对需要进行抽取的帧数组正序排序后去重
+                List<Integer> frameList = Arrays.stream(frame).sorted().distinct().collect(Collectors.toList());
+                // FFmpeg帧捕获器
+                FFmpegFrameGrabber grabber = new FFmpegFrameGrabber(input);
+                grabber.start();
+                videoSpecifiedFrameSampling(grabber, frameList, callback);
+            } catch (FrameGrabber.Exception e) {
+                log.error(e.getMessage(), e);
+            }
+        });
     }
+
+    /**
+     * 视频中间帧取样
+     *
+     * @param input         需要进行取样的源视频文件
+     * @param floatingValue 浮动值 0 ~ 1，对应着百分比，取到中间帧后 依据此值 进行前后一定比例的浮动
+     * @param number        需要进行取样的帧数量
+     * @param callback      任务进度的回调接口
+     */
+    public static void videoInBetweenSampling(File input, double floatingValue, int number, VideoFrameDrawingCallback callback) {
+        if (!input.exists()) {
+            log.error("file {} does not exist", input.getName());
+            return;
+        }
+
+        if (callback == null) {
+            log.error("callback interface is null");
+            return;
+        }
+
+        try {
+            FFmpegFrameGrabber grabber = new FFmpegFrameGrabber(input);
+            grabber.start();
+
+            // 获取当前视频总帧数
+            int totalVideoFrames = grabber.getLengthInFrames();
+
+            // 获取到的中间帧
+            int inBetween = totalVideoFrames / 2;
+
+            // 浮动值处于 0 ~ 1 之间
+            floatingValue = Math.min(1, Math.max(floatingValue, 0));
+            // 浮动值
+            int percentage = Convert.convert(int.class, inBetween * floatingValue);
+
+            // 需要进行抽取的帧数组
+            List<Integer> frame = new ArrayList<>();
+            for (int i = 0; i < number; i++) {
+                // 获得指定范围内的随机数
+                frame.add(RandomUtil.randomInt(inBetween - percentage, inBetween + percentage));
+            }
+            // 对需要进行抽取的帧数组正序排序后去重
+            videoSpecifiedFrameSampling(grabber, frame.stream().sorted().distinct().collect(Collectors.toList()), callback);
+        } catch (FrameGrabber.Exception e) {
+            log.error(e.getMessage(), e);
+        }
+    }
+
+    // ==================================================== private ====================================================
 
     /**
      * 同步视频指定帧采样
      * 指定需要进行采样的帧，对视频进行抽帧，将抽取出来的帧转为BufferedImage，通过callback回调接口转出
      *
-     * @param input    需要进行抽帧的源视频文件
-     * @param callback 任务进度的回调接口
-     * @param frame    需要进行抽取的帧数组
+     * @param grabber   FFmpeg帧捕获器
+     * @param frameList 需要进行抽取的帧数组
+     * @param callback  任务进度的回调接口
      */
-    private static void videoSpecifiedFrameSampling(File input, VideoFrameDrawingCallback callback, Integer... frame) {
+    private static void videoSpecifiedFrameSampling(FFmpegFrameGrabber grabber, List<Integer> frameList, VideoFrameDrawingCallback callback) {
         try {
-            // 对需要进行抽取的帧数组正序排序后去重
-            List<Integer> frameList = Arrays.stream(frame).sorted().distinct().collect(Collectors.toList());
-
             // 获取数组中最大值
             int maxValue = frameList.stream().max(Integer::compareTo).orElse(5);
 
@@ -335,8 +395,6 @@ public class FormatConversion {
             // 线程安全的自增
             AtomicInteger atomicInteger = new AtomicInteger(0);
 
-            FFmpegFrameGrabber grabber = new FFmpegFrameGrabber(input);
-            grabber.start();
             Frame capturedFrame;
             for (int i = 1; i <= maxValue; i++) {
                 // 获取到该帧的图片流
@@ -352,7 +410,7 @@ public class FormatConversion {
             grabber.release();
             grabber.close();
         } catch (FrameGrabber.Exception e) {
-            e.printStackTrace();
+            log.error(e.getMessage(), e);
         }
     }
 
@@ -395,7 +453,7 @@ public class FormatConversion {
             grabber.release();
             grabber.close();
         } catch (FrameGrabber.Exception e) {
-            e.printStackTrace();
+            log.error(e.getMessage(), e);
         }
     }
 
@@ -410,10 +468,8 @@ public class FormatConversion {
      */
     private static void taskCallback(Frame capturedFrame, List<BufferedImage> bufferedImages,
                                      VideoFrameDrawingCallback callback, AtomicInteger atomicInteger, int count) {
-        // 构造帧转换器
-        Java2DFrameConverter converter = new Java2DFrameConverter();
         // 绘制图片流信息
-        BufferedImage image = converter.getBufferedImage(capturedFrame);
+        BufferedImage image = Java2dFrameUtils.toBufferedImage(capturedFrame);
         // 绘制图片
         bufferedImages.add(image);
         // 任务回调
