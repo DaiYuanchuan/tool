@@ -468,10 +468,8 @@ public class FormatConversion {
      */
     private static void taskCallback(Frame capturedFrame, List<BufferedImage> bufferedImages,
                                      VideoFrameDrawingCallback callback, AtomicInteger atomicInteger, int count) {
-        // 构造帧转换器
-        Java2DFrameConverter converter = new Java2DFrameConverter();
         // 绘制图片流信息
-        BufferedImage image = converter.getBufferedImage(capturedFrame);
+        BufferedImage image = Java2DFrameUtils.toBufferedImage(capturedFrame);
         // 绘制图片
         bufferedImages.add(image);
         // 任务回调
