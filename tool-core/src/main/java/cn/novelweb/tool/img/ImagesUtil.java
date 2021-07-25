@@ -234,6 +234,41 @@ public class ImagesUtil {
         }
     }
 
+    /**
+     * 转换图片格式
+     * 改变图片文件的输出格式、可以保持图片大小不变
+     *
+     * @param imgFile    文件流
+     * @param formatName 包含格式非正式名称的 String：如JPG、JPEG、GIF等
+     * @param scaling    缩放比例(1为最高质量,大于1就是变大,小于1就是缩小)
+     * @return 返回图片的byte类型数组
+     */
+    public static byte[] convertOutByte(InputStream imgFile, String formatName, double scaling) {
+        ByteArrayOutputStream byteArrayOutputStream = convertOutStream(imgFile, formatName, scaling);
+        return byteArrayOutputStream == null ? null : byteArrayOutputStream.toByteArray();
+    }
+
+    /**
+     * 转换图片格式
+     * 改变图片文件的输出格式、可以保持图片大小不变
+     *
+     * @param imgFile    文件流
+     * @param formatName 包含格式非正式名称的 String：如JPG、JPEG、GIF等
+     * @param scaling    缩放比例(1为最高质量,大于1就是变大,小于1就是缩小)
+     * @return 返回图片的字节数组输出流
+     */
+    public static ByteArrayOutputStream convertOutStream(InputStream imgFile, String formatName, double scaling) {
+        try (ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
+            scaling = Math.max(scaling, 0.0);
+            Thumbnails.of(imgFile).scale(scaling).outputFormat(formatName).toOutputStream(outputStream);
+            return outputStream;
+        } catch (IOException e) {
+            e.printStackTrace();
+            log.error("转换图片格式出错:{}", e.getMessage());
+            return null;
+        }
+    }
+
     // -------------------------------------------------------------------------- 图片背景图替换
 
     /**

@@ -1,7 +1,6 @@
 package cn.novelweb.video.format.callback;
 
-import java.awt.image.BufferedImage;
-import java.util.List;
+import java.io.InputStream;
 
 /**
  * <p>视频抽取帧绘制图片任务回调接口</p>
@@ -14,11 +13,10 @@ public interface VideoFrameDrawingCallback {
     /**
      * 视频抽取帧绘制图片任务回调接口
      *
-     * @param image  当前图片流信息
-     * @param images 当前任务的图片流信息集合
-     * @param index  当前图片流下标
-     * @param count  当前任务需要截取的帧总数量
+     * @param inputStream 当前图片流信息
+     * @param index       当前图片流下标
+     * @param isEnd       是否完成帧的获取
      */
-    void frameDrawingInfo(BufferedImage image, List<BufferedImage> images, int index, int count);
+    void frameDrawingInfo(InputStream inputStream, int index, boolean isEnd);
 
 }

@@ -17,8 +17,7 @@ import org.bytedeco.javacv.*;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -240,13 +239,8 @@ public class FormatConversion {
         // 图片输出路径
         File imagesOutputPath = FileUtil.mkdir(output);
         File inputFile = new File(input);
-        asyncVideoSamplingIntervalFrame(inputFile, interval, (image, images, index, count) -> {
-            try {
-                ImageIO.write(image, "png", FileUtil.file(imagesOutputPath, String.format("%d.png", index)));
-            } catch (IOException e) {
-                log.error(e.getMessage(), e);
-            }
-        });
+        asyncVideoSamplingIntervalFrame(inputFile, interval, (inputStream, index, count) -> FileUtil.writeFromStream(inputStream,
+                FileUtil.file(imagesOutputPath, String.format("%d.png", index))));
     }
 
     /**
@@ -282,13 +276,8 @@ public class FormatConversion {
     public static void asyncVideoSpecifiedFrameSampling(String input, String output, Integer... frame) {
         // 图片输出路径
         File imagesOutputPath = FileUtil.mkdir(output);
-        asyncVideoSpecifiedFrameSampling(new File(input), (image, images, index, count) -> {
-            try {
-                ImageIO.write(image, "png", FileUtil.file(imagesOutputPath, String.format("%d.png", index)));
-            } catch (IOException e) {
-                log.error(e.getMessage(), e);
-            }
-        }, frame);
+        asyncVideoSpecifiedFrameSampling(new File(input), (inputStream, index, count) -> FileUtil.writeFromStream(inputStream,
+                FileUtil.file(imagesOutputPath, String.format("%d.png", index))), frame);
     }
 
     /**
@@ -390,21 +379,19 @@ public class FormatConversion {
             // 获取数组中最大值
             int maxValue = frameList.stream().max(Integer::compareTo).orElse(5);
 
-            // 图像buffer流信息集合
-            List<BufferedImage> bufferedImages = new ArrayList<>();
             // 线程安全的自增
             AtomicInteger atomicInteger = new AtomicInteger(0);
 
-            Frame capturedFrame;
             for (int i = 1; i <= maxValue; i++) {
                 // 获取到该帧的图片流
-                capturedFrame = grabber.grabImage();
+                Frame capturedFrame = grabber.grabImage();
                 // 如果当前帧包含在了指定帧内，则进行images绘制
                 boolean isContains = frameList.contains(i) && (capturedFrame != null && capturedFrame.image != null);
                 if (isContains) {
-                    taskCallback(capturedFrame, bufferedImages, callback, atomicInteger, frameList.size());
+                    taskCallback(capturedFrame, callback, atomicInteger.incrementAndGet(), false);
                 }
             }
+            taskCallback(null, callback, atomicInteger.get(), true);
             // 释放捕获器
             grabber.stop();
             grabber.release();
@@ -432,22 +419,18 @@ public class FormatConversion {
             int defaultInterval = 25;
             // 对 interval 间隔帧做校验
             interval = interval == null ? Math.min(totalVideoFrames, defaultInterval) : Math.min(totalVideoFrames, Math.max(interval, 1));
-            // 图像buffer流信息集合
-            List<BufferedImage> bufferedImages = new ArrayList<>();
             // 线程安全的自增
             AtomicInteger atomicInteger = new AtomicInteger(0);
-            // 总次数(一共生成的图片数量)
-            int count = totalVideoFrames / interval;
-            Frame capturedFrame;
             for (int i = 1; i <= totalVideoFrames; i++) {
                 // 获取到该帧的图片流
-                capturedFrame = grabber.grabImage();
+                Frame capturedFrame = grabber.grabImage();
                 // 根据当前抽帧间隔，只获取间隔的倍数
                 boolean isMultiple = (i % interval == 0) && (capturedFrame != null && capturedFrame.image != null);
                 if (isMultiple) {
-                    taskCallback(capturedFrame, bufferedImages, callback, atomicInteger, count);
+                    taskCallback(capturedFrame, callback, atomicInteger.incrementAndGet(), false);
                 }
             }
+            taskCallback(null, callback, atomicInteger.get(), true);
             // 释放捕获器
             grabber.stop();
             grabber.release();
@@ -460,19 +443,30 @@ public class FormatConversion {
     /**
      * 视频帧截取成功后的任务回调方法
      *
-     * @param capturedFrame  当前截取的帧
-     * @param bufferedImages 当前截取的帧转为图像buffer流的信息集合
-     * @param callback       任务信息回调接口
-     * @param atomicInteger  线程安全的自增
-     * @param count          总次数(一共生成的图片数量)
+     * @param capturedFrame 当前截取的帧
+     * @param callback      任务信息回调接口
+     * @param index         当前图片流下标
+     * @param isEnd         是否完成帧的获取
      */
-    private static void taskCallback(Frame capturedFrame, List<BufferedImage> bufferedImages,
-                                     VideoFrameDrawingCallback callback, AtomicInteger atomicInteger, int count) {
-        // 绘制图片流信息
-        BufferedImage image = Java2dFrameUtils.toBufferedImage(capturedFrame);
-        // 绘制图片
-        bufferedImages.add(image);
-        // 任务回调
-        ThreadUtil.execAsync(() -> callback.frameDrawingInfo(image, bufferedImages, atomicInteger.incrementAndGet(), count));
+    private static void taskCallback(Frame capturedFrame, VideoFrameDrawingCallback callback, int index, boolean isEnd) {
+        if (capturedFrame != null) {
+            // 绘制图片流信息
+            BufferedImage image = Java2dFrameUtils.toBufferedImage(capturedFrame);
+            try (ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
+                ImageIO.write(image, "jpeg", outputStream);
+                try (InputStream inputStream = new ByteArrayInputStream(outputStream.toByteArray())) {
+                    callback.frameDrawingInfo(inputStream, index, isEnd);
+                }
+            } catch (IOException e) {
+                log.error(e.getMessage(), e);
+            }
+            // 释放当前截取的帧
+            capturedFrame.close();
+            // 释放当前图片流
+            image = null;
+        } else {
+            callback.frameDrawingInfo(null, index, isEnd);
+            System.gc();
+        }
     }
 }
