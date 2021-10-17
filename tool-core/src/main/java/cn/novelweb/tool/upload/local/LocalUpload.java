@@ -240,7 +240,7 @@ public class LocalUpload {
         File uploadFile = new File(filePath + File.separatorChar + param.getName());
 
         // 写入文件
-        param.getFile().transferTo(uploadFile);
+        FileUtils.copyInputStreamToFile(param.getFile().getInputStream(), uploadFile);
 
         // 校验文件是否上传成功
         if (uploadFile.length() != param.getFile().getSize()) {
@@ -273,8 +273,10 @@ public class LocalUpload {
             throw new Exception("参数值为空");
         }
 
-        // 重构文件名
-        param.setName(System.currentTimeMillis() + "." + FileNameUtil.extName(param.getFile().getOriginalFilename()));
+        if (StringUtils.isBlank(param.getName())) {
+            // 重构文件名
+            param.setName(System.currentTimeMillis() + "." + FileNameUtil.extName(param.getFile().getOriginalFilename()));
+        }
 
         // 重构文件路径
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(
